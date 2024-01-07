@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: "clinicaapp-1"
-        image: "gcr.io/clinica-410018/github.com/bi-dall/clinicaapp:$SHORT_SHA"
+        image: "gcr.io/clinica-410018/github.com/bi-dall/clinicaapp"
 ---
 apiVersion: "autoscaling/v2"
 kind: "HorizontalPodAutoscaler"
