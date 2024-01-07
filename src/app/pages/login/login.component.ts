@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
   private userData!: User | null;
   private resposta: boolean | undefined = undefined;
   private UnserN: number = 0;
-  public btnSalvar = false;
   public txtSalvar = "Entrar";
 
 
@@ -48,7 +47,8 @@ export class LoginComponent implements OnInit {
     }
     Validar(user: User | null){
       if (user !== null){
-        if(user.deslig == '' && user.valid == 'True'){
+
+        if(user.prov == null && user.valid == 'True'){  //if(user.deslig == '' && user.valid == 'True'){
           return true;
         }else{
           return false;
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
 
   login(email: string, password: string) {
     this.txtSalvar = 'Aguarde...'
-    this.btnSalvar = true
+    this.userService.btnEntrar = true
     this.authService.authenticate(email, password).subscribe(
       (success) => {
         if (success) {
@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
           });
           alert('OOoOOOooOOoPs! Não foi possível fazer o Login... :(');
           this.txtSalvar = 'Entrar'
-          this.btnSalvar = false
+          this.userService.btnEntrar = false
           }
 
         } else {
@@ -95,15 +95,26 @@ export class LoginComponent implements OnInit {
         console.error(err);
         alert('OOoOOOooOOoPs! Não foi possível fazer o Login... :(');
           this.txtSalvar = 'Entrar'
-          this.btnSalvar = false
+          this.userService.btnEntrar = false
       }
     );
     this.txtSalvar = 'Login...'
-    this.btnSalvar = false
+    this.userService.btnEntrar = true;
   }
 
 
+  alterarSenha(email: string){
+    if(email == null || email == undefined || email == ''){
+      this.userService.btnEntrar = true;
 
+
+
+
+
+    }else{
+      console.log('o email é válido')
+    }
+  }
 
   async Dados1(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {

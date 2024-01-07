@@ -215,10 +215,9 @@ export class ColaboradorService {
         Senha: password
       };
       const apiurl = `${environment.ApiUrl}/Colaborador/AltSen`;
-      console.log(apiurl)
       return this.http.post<Response<string>>(apiurl, body);
 
-      }
+    }
 
 
 

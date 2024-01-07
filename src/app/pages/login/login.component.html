@@ -7,10 +7,13 @@
         <input [type]="visibilidadeSenha ? 'text' : 'password'" id="password" class="campo" #password >
         <span (mousedown)="toggleVisibilidadeSenha()" (mouseup)="toggleVisibilidadeSenha()">
           <i class="material-symbols-outlined" [ngClass]="{'fa-eye': visibilidadeSenha, 'fa-eye-slash': !visibilidadeSenha}">visibility</i>
+        <!-- <span class="olho" (mousedown)="toggleVisibilidadeSenha()" (mouseup)="toggleVisibilidadeSenha()">Ꙭ -->
+
         </span>
-        <p id="Esqueci" style="font-size: 1.8vh;; text-emphasis: true;" >v1.A.05.01</p>
+        <p id="Esqueci" style="font-size: 1.8vh; font-weight: bold; cursor: pointer;" (click)="alterarSenha(email.value)" >{{userService.troca}}</p>
         <div>
         </div>
-        <button (click)="login(email.value, password.value)" class="botao" [disabled]="this.btnSalvar">{{this.txtSalvar}}</button>
+        <button (click)="login(email.value, password.value)" class="botao" [disabled]="userService.btnEntrar">{{this.txtSalvar}}</button>
+        <p style="font-size: 1.2vh;" >v1.0.2</p>
     </div>
 </div>

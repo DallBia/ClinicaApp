@@ -19,6 +19,13 @@ import { MatDialog } from '@angular/material/dialog';
   providedIn:'root'
 })
 export class UserService {
+
+  public troca: string = 'Esqueci a senha / Trocar senha'
+  public btnEntrar: boolean = false;
+
+
+
+
   public usuario = new BehaviorSubject<string>('new User');
   usuario$ = this.usuario.asObservable();
   setUsuario(name: string) {
