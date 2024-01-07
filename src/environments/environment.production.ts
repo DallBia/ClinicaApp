@@ -4,7 +4,6 @@
 // };
 
 
-
 export const environment = {
   production: true,
   ApiUrl: 'http://34.41.197.205:80/api'
