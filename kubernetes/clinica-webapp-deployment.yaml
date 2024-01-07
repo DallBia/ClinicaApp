@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   annotations:
     autopilot.gke.io/resource-adjustment: >-
-      {"input":{"containers":[{"name":"clinicaapp-1"}]},"output":{"containers":[{"limits":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"clinicaapp-1"}]},"modified":true}
+      {"input":{"containers":[{"name":"clinica-webapp"}]},"output":{"containers":[{"limits":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"clinica-webapp"}]},"modified":true}
     autopilot.gke.io/warden-version: 2.7.41
   labels:
     app: app
@@ -40,7 +40,7 @@ metadata:
                 'f:app': {}
             'f:spec':
               'f:containers':
-                'k:{"name":"clinicaapp-1"}':
+                'k:{"name":"clinica-webapp"}':
                   .: {}
                   'f:image': {}
                   'f:imagePullPolicy': {}
@@ -108,9 +108,9 @@ spec:
         app: app
     spec:
       containers:
-        - image: gcr.io/clincasagrande-410516/github.com/bi-dall/clinicaapp
+        - image: gcr.io/clincasagrande-410018/github.com/bi-dall/clinicaapp
           imagePullPolicy: IfNotPresent
-          name: clinicaapp-1
+          name: clinica-webapp
           resources:
             limits:
               cpu: 500m
