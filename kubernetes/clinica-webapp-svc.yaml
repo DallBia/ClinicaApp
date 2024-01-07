@@ -7,7 +7,7 @@ metadata:
   finalizers:
   - service.kubernetes.io/load-balancer-cleanup
   labels:
-    app: app
+    app: clinica-webapp-deployment
   managedFields:
   - apiVersion: v1
     fieldsType: FieldsV1
@@ -47,7 +47,7 @@ metadata:
     operation: Update
     subresource: status
     time: "2024-01-07T17:09:29Z"
-  name: app-service
+  name: clinica-webapp-svc
   namespace: default
   resourceVersion: "32260"
   uid: e727a72c-bbf0-4771-aa91-90eacb1f5ae3
@@ -67,7 +67,7 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: app
+    rm -r: clinica-webapp-deployment
   sessionAffinity: None
   type: LoadBalancer
 status:

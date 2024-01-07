@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   annotations:
     autopilot.gke.io/resource-adjustment: >-
-      {"input":{"containers":[{"name":"clinica-webapp"}]},"output":{"containers":[{"limits":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"clinica-webapp"}]},"modified":true}
+      {"input":{"containers":[{"name":"clinica-webapp-deployment"}]},"output":{"containers":[{"limits":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"clinica-webapp-deployment"}]},"modified":true}
     autopilot.gke.io/warden-version: 2.7.41
   labels:
-    app: app
+    app: clinica-webapp-deployment
   managedFields:
     - apiVersion: apps/v1
       fieldsType: FieldsV1
@@ -40,7 +40,7 @@ metadata:
                 'f:app': {}
             'f:spec':
               'f:containers':
-                'k:{"name":"clinica-webapp"}':
+                'k:{"name":"clinica-webapp-deployment"}':
                   .: {}
                   'f:image': {}
                   'f:imagePullPolicy': {}
@@ -90,13 +90,13 @@ metadata:
       operation: Update
       subresource: status
       time: '2024-01-07T17:13:14Z'
-  name: app
+  name: clinica-webapp-deployment
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app
+      app: clinica-webapp-deployment
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -105,12 +105,12 @@ spec:
   template:
     metadata:
       labels:
-        app: app
+        app: clinica-webapp-deployment
     spec:
       containers:
         - image: gcr.io/clincasagrande-410018/github.com/bi-dall/clinicaapp
           imagePullPolicy: IfNotPresent
-          name: clinica-webapp
+          name: clinica-webapp-deployment
           resources:
             limits:
               cpu: 500m
@@ -137,7 +137,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
-    app: app
+    app: clinica-webapp-deployment
   managedFields:
     - apiVersion: autoscaling/v2
       fieldsType: FieldsV1
@@ -192,7 +192,7 @@ metadata:
       operation: Update
       subresource: status
       time: '2024-01-07T17:22:45Z'
-  name: app-hpa-frgn
+  name: clinica-webapp-deployment
   namespace: default
 spec:
   maxReplicas: 5
@@ -207,7 +207,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: app
+    name: clinica-webapp-deployment
 ---
 apiVersion: v1
 kind: Service
@@ -217,7 +217,7 @@ metadata:
   finalizers:
     - service.kubernetes.io/load-balancer-cleanup
   labels:
-    app: app
+    app: clinica-webapp-deployment
   managedFields:
     - apiVersion: v1
       fieldsType: FieldsV1
@@ -257,7 +257,7 @@ metadata:
       operation: Update
       subresource: status
       time: '2024-01-07T17:09:29Z'
-  name: app-service
+  name: clinica-webapp-svc
   namespace: default
 spec:
   allocateLoadBalancerNodePorts: true
@@ -275,6 +275,6 @@ spec:
       protocol: TCP
       targetPort: 80
   selector:
-    app: app
+    app: clinica.webapp-deployment
   sessionAffinity: None
   type: LoadBalancer
