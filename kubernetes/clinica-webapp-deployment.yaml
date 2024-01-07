@@ -2,19 +2,19 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "nginx-1"
+  name: "app"
   namespace: "default"
   labels:
-    app: "nginx-1"
+    app: "app"
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: "nginx-1"
+      app: "app"
   template:
     metadata:
       labels:
-        app: "nginx-1"
+        app: "app"
     spec:
       containers:
       - name: "clinicaapp-1"
@@ -23,14 +23,14 @@ spec:
 apiVersion: "autoscaling/v2"
 kind: "HorizontalPodAutoscaler"
 metadata:
-  name: "nginx-1-hpa-hbbm"
+  name: "app-hpa-rhlk"
   namespace: "default"
   labels:
-    app: "nginx-1"
+    app: "app"
 spec:
   scaleTargetRef:
     kind: "Deployment"
-    name: "nginx-1"
+    name: "app"
     apiVersion: "apps/v1"
   minReplicas: 1
   maxReplicas: 5
