@@ -8,7 +8,6 @@
         <span (mousedown)="toggleVisibilidadeSenha()" (mouseup)="toggleVisibilidadeSenha()">
           <i class="material-symbols-outlined" [ngClass]="{'fa-eye': visibilidadeSenha, 'fa-eye-slash': !visibilidadeSenha}">visibility</i>
         <!-- <span class="olho" (mousedown)="toggleVisibilidadeSenha()" (mouseup)="toggleVisibilidadeSenha()">Ꙭ -->
-
         </span>
         <p id="Esqueci" style="font-size: 1.8vh; font-weight: bold; cursor: pointer;" (click)="alterarSenha(email.value)" >{{userService.troca}}</p>
         <div>
