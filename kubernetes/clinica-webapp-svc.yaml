@@ -253,9 +253,9 @@ metadata:
   namespace: default
 spec:
   allocateLoadBalancerNodePorts: true
-  clusterIP: 34.118.226.167
-  clusterIPs:
-    - 34.118.226.167
+  # clusterIP: 34.118.226.167
+  # clusterIPs:
+  #   - 34.118.226.167
   externalTrafficPolicy: Cluster
   internalTrafficPolicy: Cluster
   ipFamilies:

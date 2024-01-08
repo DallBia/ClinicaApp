@@ -15,5 +15,6 @@ export interface Colaborador{
     ativo?: boolean;
     areaSession?: string;
     senhaHash: string;
+    senhaProv?: string;
     foto?: string;
 }

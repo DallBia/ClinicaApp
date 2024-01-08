@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     Validar(user: User | null){
       if (user !== null){
 
-        if(user.prov == null && user.valid == 'True'){  //if(user.deslig == '' && user.valid == 'True'){
+        if(user.prov == '' && user.valid == 'True'){  //if(user.deslig == '' && user.valid == 'True'){
           return true;
         }else{
           return false;
