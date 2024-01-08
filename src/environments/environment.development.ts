@@ -3,7 +3,6 @@
 // export const environment = {
 //   ApiUrl: "https://localhost:7298/api"
 // };
-//git teste 01
 
 
 export const environment = {
