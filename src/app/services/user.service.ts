@@ -185,5 +185,11 @@ export class UserService {
   }
 
 
+  AlteraSenha(email: string) : Observable<Response<Colaborador>>{
+    const apiurllogin = `${environment.ApiUrl}/Colaborador/Altera`;
+    return this.http.post<Response<Colaborador>>(apiurllogin, email);
+  }
+
+
 
 }

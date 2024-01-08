@@ -103,18 +103,6 @@ export class LoginComponent implements OnInit {
   }
 
 
-  alterarSenha(email: string){
-    if(email == null || email == undefined || email == ''){
-      this.userService.btnEntrar = true;
-
-
-
-
-
-    }else{
-      console.log('o email é válido')
-    }
-  }
 
   async Dados1(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
@@ -173,5 +161,110 @@ DefinirUsuario(n: User){
   }
   return n.name + ' *(' + this.Perf + ')'
 }
+
+
+//==================================================
+
+
+
+alterarSenha(email: string){
+  if(email == null || email == undefined || email == ''){
+    this.userService.btnEntrar = true;
+    alert('Você deve informar um e-mail válido.')
+  }else{
+    this.userService.btnEntrar = false;
+    this.userService.troca = 'Aguarde...'
+    this.salvar(email);
+  }
+}
+async salvar(email: string){
+
+
+const senha = this.gerarSenha();
+
+const corpoX: string = "<p><strong><span style='color: blue; font-size: 24px;'> Caro usuário,</span></strong></p>"
+ + "<p>Foi solicitada a alteração da sua senha no sistema <b>Clínica Casagrande. </b></p>"
+ + "<p>Seu login é o e-mail <strong><span style='color: blue; font-size: 18px;'>"
+ + email + ".</span></strong></p>"
+ + "<p>Foi gerada uma nova senha <b>provisória</b>: <strong><span style='color: blue; font-size: 18px;'>"
+ + senha + "</span></strong></p>"
+ + "<p>Acesse o link do <a href='http://35.232.35.159'>aplicativo</a> e <b> utilize-a para atualizar seu login. </b>"
+  + "Troque-a por uma senha que seja fácil para você decorar.</p>"
+  + "<p>Caso você não tenha solicitado a alteração de senha, ou tenha se lembrado da senha anterior,</p>"
+  + "basta utilizá-la normalmente, e desconsiderar este e-mail."
+
+
+const variavel = email + '֍' + corpoX + '֍' + senha
+
+ const resp1 = await this.userService.AlteraSenha(variavel).subscribe(async (data) => {
+     const time1 = this.delay(500)
+
+        alert('ALTERAÇÃO DE SENHA SOLICITADA!\nVocê receberá a senha provisória, no e-mail '
+        + email + '.\nA senha deverá ser trocada no próximo login.\n'
+        +'\nSomente após o usuário entrar no sistema e alterar a senha é que ele aparecerá como ATIVO no cadastro.')
+
+        location.reload()
+    }, error => {
+     console.error('Erro no envio dos dados', error);
+     this.userService.troca = 'Erro no envio dos dados'
+     this.delay(2000);
+     location.reload();
+    });
+
+}
+
+
+
+
+
+
+delay(time:number): boolean {
+setTimeout(() => {
+
+}, time);
+return true;
+}
+
+
+reDatas(dataO: string){
+
+    const [dia, mes, ano] = dataO.split('/');
+    if(dia.length == 2){
+      const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
+      const dataFormatada = data.toISOString().split('T')[0];
+      return (dataFormatada);
+    }
+    else{
+      return (dataO);
+    }
+
+}
+
+
+gerarSenha() {
+  const caracteresMaiusculos = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const caracteresMinusculos = 'abcdefghijklmnopqrstuvwxyz';
+  const numeros = '0123456789';
+  const caracteresEspeciais = '!@#$%^&*()-_+=<>?';
+
+  const todosCaracteres = caracteresMaiusculos + caracteresMinusculos + numeros + caracteresEspeciais;
+
+  let senha = '';
+  senha += caracteresMaiusculos[Math.floor(Math.random() * caracteresMaiusculos.length)];
+  senha += caracteresMinusculos[Math.floor(Math.random() * caracteresMinusculos.length)];
+  senha += numeros[Math.floor(Math.random() * numeros.length)];
+  senha += caracteresEspeciais[Math.floor(Math.random() * caracteresEspeciais.length)];
+
+  for (let i = 4; i < 8; i++) {
+      senha += todosCaracteres[Math.floor(Math.random() * todosCaracteres.length)];
+  }
+
+  // Embaralhe a senha para garantir aleatoriedade
+  senha = senha.split('').sort(() => Math.random() - 0.5).join('');
+
+  return senha;
+}
+
+
 }
 
