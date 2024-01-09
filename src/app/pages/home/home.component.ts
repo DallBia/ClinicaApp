@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
     //  const dados = data.dados;
     //  this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
     //});
-  
+
     this.Carregar();
     this.perfilService.GetPerfil().subscribe(data => {
       const dados = data.dados;
@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit {
   }
 
 async Carregar(){
-
+this.userService.btnEntrar = false;
   try {
         const r1 = await this.clienteService.BuscaClientes();
         this.clienteService.setClienteA(0);
