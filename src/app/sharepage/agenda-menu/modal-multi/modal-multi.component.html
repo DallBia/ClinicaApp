@@ -1,0 +1,55 @@
+
+  <div class="mat-dialog-content">
+    <div class="titulo">
+      <span class="titulo2">{{agenda.numReserva}}</span>
+      <span class="titulo1">{{this.agenda.celSelect.nome}}</span>
+      <span class="titulo2">{{this.agenda.celSelect.subtitulo}}</span>
+      <div>
+        <span class="titulo2">Valor do pacote (R$): </span>
+        <input appCurrencyInput [(ngModel)]="this.agenda.celSelect.valor" [ngModelOptions]="{updateOn: 'blur'}">
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Sessão</th>
+          <th>Profissional</th>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Valor</th>
+          <th>Status</th>
+
+        </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let i of ListaAgenda">
+            <td style="text-align: center; font-weight: bolder;">{{i.sessao}}</td>
+            <td><input type="text" id="prof-select{{ i }}" list="valores1"  class="fCampo" [(ngModel)]="i.profis" (blur)="buscaData(i.id)">
+              <datalist id="valores1">
+                <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+              </datalist></td>
+            <td><input type="date" id="dia-select{{ i }}" class="fCampo" [(ngModel)]="i.dia" (blur)="buscaHora(i.id)"></td>
+            <td><input type="text" id="hor-select{{ i }}" list="val1" class="fCampo" [(ngModel)]="i.hora" (blur)="buscaStatus(i.id)">
+              <datalist id="val1">
+                <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+              </datalist></td>
+            <td><input type="text" id="vlr-select{{ i }}" list="val1" class="fCampo" appCurrencyInput [(ngModel)]="i.valor" (blur)="ajustaValor(i.id)"></td>
+            <td *ngIf="i.status == '○'" class="nao">{{i.status}}</td>
+            <td *ngIf="i.status == '●'" class="sim">{{i.status}}</td>
+          </tr>
+      </tbody>
+    </table>
+    <div mat-dialog-actions>
+      <div class="titulo"></div>
+      <div class="subt">
+        <button class="botão" mat-button (click)="onReserveClick()">Reservar</button>
+        <button class="botão" mat-button (click)="onSaveClick()">Agendar</button>
+        <button class="botão" mat-button (click)="onCancelClick()">Cancelar Reserva</button>
+        <button class="botão" mat-button (click)="onCloseClick()">Fechar</button>
+      </div>
+      <span>{{informacao}}</span>
+      <div class="titulo"></div>
+    </div>
+  </div>
+
+

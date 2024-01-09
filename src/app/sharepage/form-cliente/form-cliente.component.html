@@ -1,0 +1,151 @@
+<div Forml class="Interior">
+  <div class="superior">
+    <div class="EspacoFoto" >
+      <img [src]="this.Atual.foto" id="minhaImagem" class="Foto" (click)="fileInput.click()">
+      <input id="file-input" #fileInput type="file" style="display: none;" (change)="onFileSelected($event)">
+    </div>
+    <div class="EspacoDoctos">
+      <app-arquivos></app-arquivos>
+    </div>
+  </div>
+  <form [formGroup]="clienteform" (ngSubmit)="submit()" #formDit="ngForm">
+    <div class="input_box">
+      <span class="fLabel">Nome:</span>
+      <input type="text"  class="fCampo" formControlName="nome" placeholder="(insira o nome do cliente)" required>
+    </div>
+    <div>
+      <span class="fLabel">Data de Nascim.:</span>
+      <input [(ngModel)]="this.shared.data" appDateMask type="text"  class="fCampo" formControlName="dtNascim" placeholder="(dd/mm/aaaa)" required>
+    </div>
+    <div>
+      <input type="checkbox"  class="fCheck" style="margin-right:4px;" formControlName="saiSozinho">
+      <span  style="width: 40%; height: 20px;">Pode sair sozinho?</span>
+      <span  style="width: 30%; height: 20px;">Resp. Financeiro:</span>
+      <select formControlName="respFinanc" >
+        <option>Pai</option>
+        <option>Mãe</option>
+        <option>Cliente</option>
+      </select>
+   </div>
+   <div *ngIf="clienteform.get('respFinanc')?.value === 'Cliente'">
+    <span class="fLabel2">DADOS DO CLIENTE</span>
+    <div>
+      <span class="fLabel">Identidade:</span>
+      <input type="text"  class="fCampo" formControlName="identidade" placeholder="(apenas números)" required>
+    </div>
+    <div>
+      <span class="fLabel">CPF:</span>
+      <input type="text"  class="fCampo" formControlName="cpf" placeholder="(apenas números)" required>
+    </div>
+    <div>
+      <span class="fLabel">Endereço:</span>
+      <input type="text"  class="fCampo" formControlName="endereco" placeholder="(rua, número, complemento, bairro, cidade)" required>
+      </div>
+    <div>
+      <span  class="fLabel">Telefone Fixo:</span>
+      <input type="text"  class="fCampo" formControlName="telFixo" placeholder="(apenas números)" required>
+    </div>
+    <div>
+        <span class="fLabel">Celular:</span>
+        <input type="text"  class="fCampo" formControlName="celular" placeholder="(apenas números)" required>
+    </div>
+    <div>
+      <span  class="fLabel">Telefone Comercial:</span>
+      <input type="text"  class="fCampo" formControlName="telComercial" placeholder="(apenas números)">
+    </div>
+    <div>
+      <span  class="fLabel">E-mail:</span>
+      <input type="email"  class="fCampo" formControlName="email" placeholder="(email.de@exemplo.com)" required>
+    </div>
+   </div>
+
+
+
+
+
+   <div *ngIf="clienteform.get('respFinanc')?.value !== 'Cliente'">
+    <label class="fLabel2">DADOS DA MÃE</label>
+    <div>
+      <label class="fLabel">Nome:</label>
+      <input type="text"  class="fCampo" formControlName="mae" placeholder="(nome completo)" required>
+    </div>
+    <input type="checkbox" class="fCheck" style="margin-right:4px;" formControlName="maeRestric">
+    <Label>A mãe possui restrição judicial e não pode se aproximar da criança</Label>
+    <div>
+      <label class="fLabel">Identidade:</label>
+      <input type="text"  class="fCampo" formControlName="maeIdentidade" placeholder="(apenas números)" required>
+    </div>
+    <div>
+      <label class="fLabel">CPF:</label>
+      <input type="text"  class="fCampo" formControlName="maeCpf" placeholder="(apenas números)" required>
+    </div>
+    <div>
+    <div>
+      <label class="fLabel">Endereço:</label>
+      <input type="text"  class="fCampo" formControlName="maeEndereco" placeholder="(rua, número, complemento, bairro, cidade)" required>
+      </div>
+    <div>
+      <label class="fLabel">Telefone Fixo:</label>
+      <input type="text"  class="fCampo" formControlName="maeTelFixo" placeholder="(apenas números)" required>
+    </div>
+    <div>
+        <label class="fLabel">Celular:</label>
+        <input type="text"  class="fCampo" formControlName="maeCelular" placeholder="(apenas números)" required>
+    </div>
+    <div>
+      <label class="fLabel">Telefone Comercial:</label>
+      <input type="text"  class="fCampo" formControlName="maeTelComercial" placeholder="(apenas números)">
+    </div>
+    <div>
+      <label class="fLabel">E-mail:</label>
+      <input type="email"  class="fCampo" formControlName="maeEmail" placeholder="(emai.de@exemplo.com)" required>
+    </div>
+   </div>
+
+   <div *ngIf="clienteform.get('respFinanc')?.value !== 'Cliente'">
+    <label class="fLabel2">DADOS DO PAI</label>
+    <div>
+      <label class="fLabel">Nome:</label>
+      <input type="text"  class="fCampo" formControlName="pai" placeholder="(nome completo)" required>
+    </div>
+    <input type="checkbox" class="fCheck" style="margin-right:4px;" formControlName="paiRestric">
+    <Label>O pai possui restrição judicial e não pode se aproximar da criança</Label>
+    <div>
+      <label class="fLabel">Identidade:</label>
+      <input type="text"  class="fCampo" formControlName="paiIdentidade" placeholder="(apenas números)" required>
+    </div>
+    <div>
+      <label class="fLabel">CPF:</label>
+      <input type="text"  class="fCampo" formControlName="paiCpf" placeholder="(apenas números)" required>
+    </div>
+    <div>
+      <label class="fLabel">Endereço:</label>
+      <input type="text"  class="fCampo" formControlName="paiEndereco" placeholder="(rua, número, complemento, bairro, cidade)" required>
+      </div>
+    <div>
+      <label class="fLabel">Telefone Fixo:</label>
+      <input type="text"  class="fCampo" formControlName="paiTelFixo" placeholder="(apenas números)" required>
+    </div>
+    <div>
+        <label class="fLabel">Celular:</label>
+        <input type="text"  class="fCampo" formControlName="paiCelular" placeholder="(apenas números)" required>
+    </div>
+    <div>
+      <label  class="fLabel">Telefone Comercial:</label>
+      <input type="text"  class="fCampo" formControlName="paiTelComercial" placeholder="(apenas números)">
+    </div>
+    <div>
+      <label class="fLabel">E-mail:</label>
+      <input type="email"  class="fCampo" formControlName="paiEmail" placeholder="(emai.de@exemplo.com)" required>
+    </div>
+   </div>
+  </div>
+
+<div style="Display: none">
+  <input type="text" style="Display: none" class="fCampo" formControlName="id" placeholder="(apenas números)">
+  <input type="text" style="Display: none" class="fCampo" formControlName="dtInclusao" placeholder="(apenas números)">
+  <input type="text" style="Display: none" class="fCampo" formControlName="areaSession" placeholder="(apenas números)">
+  <input type="checkbox" style="Display: none" class="fCheck" style="margin-right:4px;" formControlName="ativo">
+</div>
+</form>
+</div>

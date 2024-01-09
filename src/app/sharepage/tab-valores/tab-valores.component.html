@@ -1,0 +1,16 @@
+<table style="width: 100%;">
+  <thead class="cabeçalho">
+    <th class="t03">Select</th>
+    <th class="t01">Tipo de Sessão</th>
+    <th class="t02">Valor (R$)</th>
+    <th class="t02">Data de Alt.</th>
+  </thead>
+  <tbody class="corpo">
+    <tr *ngFor="let l of this.shared.ListaValores" [class.linhaDestacada]="l.selecionada">
+      <td><input type="checkbox" [(ngModel)]="l.selecionada" (click)="Selec(l, $event, l.nome, l.valor)"></td>
+      <td>{{l.nome}}</td>
+      <td class="t02">{{l.valor | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+      <td class="t02">{{l.data | date:'MM/dd/yyyy' }}</td>
+    </tr>
+  </tbody>
+</table>

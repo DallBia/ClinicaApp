@@ -1,0 +1,52 @@
+<div class="main-container">
+    <div class="lado-esquerdo">
+      <div class="superior-e">
+        <div class="se-left">
+          <button class="Novo">{{this.Ficha}} </button>
+        </div>
+        <div class="se-right" >
+          <label class="Nome">{{this.NomeCliente}}</label>
+        </div>
+      </div>
+      <div class="inferior-e">
+        <div class="bloco-antigo" [style.height]="shared.MostraInfo ? '63%' : '100%'">
+          <div class="listagem">
+            <app-form-pront></app-form-pront>
+          </div>
+        </div>
+        <div class="bloco-input" *ngIf="shared.MostraInfo">
+          <app-bloco-notas #blocoNotas></app-bloco-notas>
+        </div>
+      </div>
+    </div>
+
+    <div class="lado-direito">
+      <div class="superior-d">
+        <app-filtro style="width: 100%; height: 100%; font-size:medium;" ></app-filtro>
+      </div>
+      <div class="e-foto">
+        <img *ngIf="this.clienteService.ClienteA.getValue() !== 0" [src]="this.Atual.foto" id="minhaImagem" class="id-Foto">
+        <img *ngIf="this.clienteService.ClienteA.getValue() == 0" [src]="this.fotoService.semfoto2" id="minhaImagem" class="id-Foto">
+      </div>
+      <div class="botoes">
+        <button class="btnBranco">
+          Anexar Documento
+        </button>
+        <button class="btnBranco">
+          Ver Documento
+        </button>
+        <button class="btnBranco" (click)="this.abrirModal()">
+          Imprimir Relatório
+        </button>
+        <button class="btnBranco">
+          Buscar neste Prontuário
+        </button>
+        <button class="btnBranco" [style.color]="shared.MostraInfo ? 'white' : 'black'" [style.background-color]="shared.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(shared.MostraInfo)">
+          {{shared.MostraInfo ? 'Cancelar nova informação' : 'Inserir nova informação'}}
+        </button>
+        <button class="Salvar" (click)="this.blocoNotas.Enviar()">
+          Salvar
+        </button>
+      </div>
+    </div>
+</div>

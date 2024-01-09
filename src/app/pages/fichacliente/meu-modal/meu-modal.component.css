@@ -1,0 +1,59 @@
+.modal-inteiro {
+    width: 50vw;
+    height: 50vh;
+    background-color: rgb(255, 240, 248);
+    font-size: 1.5vh;
+}
+.modal-inteiro::backdrop{
+    background-color: var(--cor-escura);
+}
+
+.cabecalho{
+  height: 10%;
+  width: 100%;
+  background-color: rgb(253, 205, 237);
+  display: flex;
+  direction: rtl;
+  align-items: center;
+}
+
+.btn {
+  margin: 2vh;
+}
+.conteudo {
+  height: 70%;
+  width: 90%;
+  border: solid 2px rgb(253, 216, 245);
+  border-radius: 2vh;
+  margin: 5%;
+  margin-top: 2%;
+  padding: 3%;
+}
+.label {
+  font-size: 1.5vh;
+  margin:2%;
+}
+
+.opcoes{
+  margin-left: 2%;
+}
+.linha{
+  margin:4%;
+}
+.titulo{
+  font-size: 2.2vh;
+  font-weight: bold;
+  color: var(--cor-escura)
+}
+.btnAnexar {
+  height: 6vh;
+  width: 8vw;
+  padding: 1vh;
+  background-color:white;
+  border-radius: 1.5vh;
+  border: solid 2px var(--cor-media);
+  border-left: none;
+  border-right: none;
+  font-size: 1.6vh;
+  color: var(--cor-escura);
+}

@@ -1,0 +1,42 @@
+.mat-dialog-content {
+  background-color: rgb(253, 234, 238);
+  padding: 10px;
+}
+
+.titulo{
+  color: var(--cor-escura);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.titulo1{
+  color: var(--cor-escura);
+  font-size: 2.5vh;
+  font-weight: bold;
+  margin: 1vh;
+  width: 90%;
+}
+
+.titulo2{
+  font-size: 2vh;
+  font-weight: normal;
+  margin: 1vh;
+  width: 90%;
+  text-align: center;
+}
+.botão {
+  height: auto;
+  width: 90%;
+  border-radius: 5px;
+  background-color: white;
+  border-bottom: solid 2px var(--cor-media);
+  border-top: solid 2px var(--cor-media);
+  border-left: none;
+  border-right: none;
+  font-size: 10pt;
+  margin: 10px;
+  color: black;
+
+}

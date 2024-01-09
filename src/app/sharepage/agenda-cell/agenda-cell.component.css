@@ -1,0 +1,92 @@
+
+.Hora {
+height: 10vh;
+width: 5vw;
+padding: 1px;
+border: solid 2px var(--cor-media);
+border-radius: 10px;
+background-color: var(--cor-clara);
+margin: 1px;
+border-left: none;
+border-right: none;
+font-size: 1.5vh;
+text-align: center;
+font-weight: bolder;
+color: var(--cor-escura);
+display: flex; /* Ativa o modelo de layout flex */
+justify-content: center; /* Alinha horizontalmente o conteúdo no centro */
+align-items: center; /* Alinha verticalmente o conteúdo no centro */
+}
+.Textoz {
+height: calc(100% - 1.5px);
+width: 75%;
+font-size: 1.4vh;
+margin-left: 3px;
+
+}
+.Textos {
+  height: calc(100% - 1.5px);
+  width: 80%;
+  font-size: 1.3vh;
+  margin-left: 3px;
+}
+.Nome {
+  height: 50%;
+  font-size: var(--font);
+  margin-left: 3px;
+}
+.Sessao {
+  height: 50%;
+  font-size: 1.3vh;
+  margin-left: 3px;
+}
+.Tag {
+  height: 90%;
+  width: 15%;
+  border-radius: 5px;
+  background-color: rgb(255, 255, 255);
+  border: solid 1px rgb(210, 210, 210);
+  margin: 3px;
+}
+
+.sl {
+height: 90%;
+width: 20%;
+border-radius: 5px;
+background-color: rgb(255, 203, 227);
+border: solid 1px rgb(210, 210, 210);
+margin: 2px;
+font-size: 2.5vh;
+font-weight: bolder;
+color: var(--cor-escura);
+display: flex; /* Ativa o modelo de layout flex */
+justify-content: center; /* Alinha horizontalmente o conteúdo no centro */
+align-items: center;
+}
+.Contorno {
+  height: 10vh;
+  width: 12vw;
+  padding: 1px;
+  border: solid 2px rgb(232, 172, 210);
+  border-radius: 10px;
+  background-color: white;
+  display: inline-flex;
+  margin: 1px;
+  border-left: none;
+  border-right: none;
+  font-size: var(--font);
+}
+.Titulo {
+height: 10vh;
+width: 12vw;
+padding: 1px;
+border: solid 2px var(--cor-media);
+border-radius: 10px;
+background-color: var(--cor-clara);
+display: inline-flex;
+margin: 1px;
+border-left: none;
+border-right: none;
+text-align: center;
+font-size: var(--font);
+}

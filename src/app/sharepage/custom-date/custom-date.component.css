@@ -1,0 +1,57 @@
+.date-display {
+  cursor: pointer;
+  border: solid 2px var(--cor-media);
+  border-radius:1.5vh;
+  height: 5vh;
+  width: 10vw;
+  display: flex;
+  background: #fddfed;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 2px;
+  color:var(--cor-escura);
+  font-weight: bold;
+ }
+.mat-datepicker-content .mat-calendar-header {
+  background-color: #f1aee4;
+  color: #6e0459;
+}
+/* .date-text{
+  margin-right: 10px;
+}
+.date-dia-da-semana{
+  margin-right: 10px;
+}
+.date-calendario{
+  margin-right: 10px;
+} */
+.sem{
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  border-radius: 1.2vh;
+  border: solid 1px var(--cor-media);
+  padding: 3px;
+}
+.sem2{
+  background: var(--cor-escura);
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  border-radius: 1.2vh;
+  border: solid 1px var(--cor-media);
+  padding: 3px;
+}
+.dia{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  /* border-radius: 1.2vh;
+  border: solid 1px var(--cor-media); */
+  padding: 3px;
+}

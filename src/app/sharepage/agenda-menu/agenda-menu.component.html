@@ -1,0 +1,86 @@
+<div class="superior">
+  <div (click)="teste()" class="foto" *ngIf="this.agendaService.horario !== 'manhã' && this.agendaService.horario !== 'tarde'">
+    <div class="id-Foto" *ngIf="this.agendaService.fotografia == true"><img [src]="this.agendaService.Cliente.foto" id="minhaImagem" class="id-Foto"></div>
+    <div class="id-Foto" *ngIf="this.agendaService.fotografia == false"><img [src]="this.foto.semfoto2" id="minhaImagem" class="id-Foto"></div>
+  </div>
+  <div class="foto" *ngIf="this.agendaService.horario == 'manhã' || this.agendaService.horario == 'tarde'">
+    <div class="id-Foto" *ngIf="this.agendaService.fotografia == true"><img [src]="this.agendaService.Equipe.foto" id="minhaImagem" class="id-Foto"></div>
+    <div class="id-Foto" *ngIf="this.agendaService.fotografia == false"><img [src]="this.foto.semfoto2" id="minhaImagem" class="id-Foto"></div>
+  </div>
+  <div class="info">
+
+    <!-- <div class="unidade" style="align-items: center; justify-content: center;display: flex;"><app-custom-date></app-custom-date></div> -->
+    <div class="unidade" style="align-items: center; justify-content: center;display: flex;"><app-cel-agenda></app-cel-agenda></div>
+    <!-- <div class="unidade" style="align-items: center; justify-content: center;display: flex;"><app-unidade></app-unidade></div> -->
+    <div class="nome"*ngIf="this.agendaService.sala !== 0">SALA {{this.agendaService.sala}}</div>
+    <div class="nome">{{this.agendaService.horario}}</div>
+    <div class="nome" style="font-weight: bold; color:var(--cor-media)">{{this.agendaService.celSelect.nome}}</div>
+   </div>
+</div>
+<div class="inferior" *ngIf="this.agendaService.sala !== 0">
+  <div *ngIf="this.agendaService.horario !== 'manhã' && this.agendaService.horario !== 'tarde'">
+    <span class="fLabel" for="cliente-select">Cliente:</span>
+    <input type="text" id="cliente-select" list="valores" class="fCampo" [(ngModel)]="this.agendaService.celSelect.nome" (blur)="buscaFoto()">
+    <datalist id="valores">
+      <option *ngFor="let valor of this.agendaService.ListaCLientes" [value]="valor.nome"></option>
+    </datalist>
+  </div>
+
+  <div *ngIf="this.agendaService.horario == 'manhã' || this.agendaService.horario == 'tarde'">
+    <span class="fLabel" for="colab-select">Colaborador:</span>
+    <input type="text" id="colab-select" list="valores1" class="fCampo" [(ngModel)]="this.agendaService.celSelect.nome">
+    <datalist id="valores1">
+      <option *ngFor="let valor of this.agendaService.ListaEquipe" [value]="valor.nome"></option>
+    </datalist>
+  </div>
+  <div>
+    <span class="fLabel" for="sessao-select">Sessão:</span>
+    <input type="text" id="sessao-select" list="valores2" class="fCampo" style="width: 65%;" [(ngModel)]="this.agendaService.celSelect.subtitulo" (blur)="buscaValor()">
+    <datalist id="valores2">
+      <option *ngFor="let valor of this.shared.ListaValores" [value]="valor.nome" ></option>
+      <option value="Devolutiva de avaliação"></option>
+      <option value="Devolutiva de tratamento"></option>
+      <option value="Reunião"></option>
+      <option value="Entrevista"></option>
+    </datalist>
+    <button *ngIf="this.agendaService.botaoVer !== ''" class="botVER" (click)="openModal(0, this.agendaService.botaoVer)" >VER</button>
+  </div>
+  <div style="display: flex; vertical-align: middle;" *ngIf="this.agendaService.horario !== 'manhã' && this.agendaService.horario !== 'tarde'">
+    <span class="fLabel" for="valor">Valor (R$):</span>
+    <input type="text" *ngIf="this.Vlr == false" class="fCampo" style="width: 25%;" (blur)="altVlr()" [(ngModel)]="this.agendaService.celSelect.valor" [ngModelOptions]="{updateOn: 'blur'}" appCurrencyInput />
+    <div (click)="altVlr()" *ngIf="this.Vlr == true && this.agendaService.celSelect.valor !== undefined" class="fLabel" >{{ (this.agendaService.celSelect.valor > 0 ? this.agendaService.celSelect.valor : 0).toFixed(2) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
+  </div>
+  <div class="repetition">
+    <span class="fLabel" for="Repet">Repetição:</span>
+    <select id="Repet" class="fCampo" [(ngModel)]="this.agendaService.celSelect.repeticao">
+      <option>Sessão única</option>
+      <option>Diária</option>
+      <option>Semanal</option>
+      <option>Quinzenal</option>
+      <option>Mensal</option>
+      <option>Cancelar Repetição</option>
+    </select>
+  </div>
+  <div class="seletores" *ngIf="this.agendaService.horario !== 'manhã' && this.agendaService.horario !== 'tarde'">
+    <div class="tags" (click)="setStatus('Realizado')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Realizado' ? true : false}" style="background-color: lawngreen;">Realizada</div>
+    <div class="tags" (click)="setStatus('Desmarcado')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Desmarcado' ? true : false}" style="background-color:khaki;">Desmarcada</div>
+    <div class="tags" (click)="setStatus('Falta')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Falta' ? true : false}" style="background-color:indianred;">Falta</div>
+    <div class="tags" (click)="setStatus('Pendente')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Pendente' ? true : false}" style="background-color:lightblue;">Pendente</div>
+    <div class="tags" (click)="setStatus('Vago')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Vago' || '' ? true : false}" style="background-color:white;">Limpar Hora</div>
+    <div class="tags" (click)="setStatus('Bloqueado')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Bloqueado' ? true : false}" style="background-color:rgb(42, 42, 55); color:azure">Bloquear Hora</div>
+    <div class="tags" (click)="setStatus('Reservado')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Reservado' || '' ? true : false}" style="background-color:silver;">Reservar</div>
+  </div>
+  <div>
+    <span class="fLabel">Observações:</span>
+    <div class="Obs1" id="Obs">
+      <textarea #obsTextarea [(ngModel)]="this.agendaService.celSelect.obs"
+      placeholder="Digite aqui..." class="box-Obs1"
+      ></textarea>
+    </div>
+    <span class="fLabel">Histórico:</span>
+      <pre id="Hist" class="Obs1">{{ this.agendaService.celSelect.historico }}</pre>
+  </div>
+</div>
+<div class="bot" *ngIf="this.agendaService.sala !== 0">
+<button class="rosa" (click)="salvaSessao()">Salvar</button>
+</div>

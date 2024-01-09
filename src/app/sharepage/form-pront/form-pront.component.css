@@ -1,0 +1,27 @@
+.inicio{
+  color: var(--cor-media);
+  font-size: large;
+}
+.corpo{
+  color: black;
+  font-size: medium;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+
+}
+.fim{
+  color: var(--cor-media);
+  font-size: medium;
+  text-align: right;
+  width: 100%;
+}
+.Bloco{
+  height:fit-content;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.tabela {
+  width: 100%;
+}

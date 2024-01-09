@@ -1,0 +1,40 @@
+.cabeçalho {
+  font-size: large;
+  color:rgb(106, 0, 94);
+  background-color: pink;
+}
+
+.linha{
+border-bottom: solid 1px  pink;
+}
+
+.t01{
+  font-family: 'Roboto', monospace;
+  width: 55%;
+}
+.t02 {
+  font-family: 'Roboto', monospace;
+  width: 10%;
+  font-size: 1.5vh;
+  text-align: end;
+}
+.t04{
+  font-family: 'Roboto', monospace;
+  width: 10%;
+  font-size: 1.5vh;
+  text-align: end;
+}
+.t03 {
+  font-family: 'Roboto', monospace;
+  font-size: 1.5vh;
+  width: 2.5%;
+}
+.corpo {
+  font-size: large;
+  color:rgb(82, 12, 74);
+}
+
+.linhaDestacada {
+  font-weight: bold;
+  color:rgb(139, 0, 100)
+}

@@ -1,0 +1,84 @@
+
+.areatotal{
+  margin:2vh;
+  height: 80%;
+  width: 95%;
+  display: flex;
+}
+.detalhes{
+  height: 100%;
+  width: 25%;
+  padding:5px;
+}
+.area{
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: auto;
+  width: 75%;
+}
+
+
+.area::-webkit-scrollbar-thumb {
+  background-color: #fddfed;
+  border-radius: 6px;
+}
+
+.area::-webkit-scrollbar {
+  width: 14px;
+  background-color:#ffffff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ffb6b6;
+  border-radius: 6px;
+  padding: 2px;
+}
+
+
+
+
+
+.Informacoes {
+    height: 100%;
+    width: 15vw;
+}
+
+.Grade {
+    overflow: auto;
+    max-height: 75vh; /* Ajuste para o valor desejado */
+    max-width: 80vw;
+
+}
+
+table {
+    position:sticky;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    /*border: 1px solid black;/*/
+    padding: 8px;
+    text-align: left;
+    min-width: 11vw; /* Ajuste para o valor desejado */
+  }
+
+  /* Fixa o cabeçalho no topo */
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1; /* Garante que o cabeçalho fique acima das linhas da tabela */
+    background: white; /* Faz o fundo opaco para sobrepor conteúdo */
+  }
+
+  /* Fixa a primeira coluna à esquerda */
+  tbody td:first-child, thead th:first-child {
+    position: sticky;
+    left: 0;
+    display: flex; /* Ativa o modelo de layout flex */
+    justify-content: center; /* Alinha horizontalmente o conteúdo no centro */
+    align-items: center;
+    z-index: 2; /* Garante que a primeira coluna fique acima das outras colunas */
+    /* background: white;  */
+    background: linear-gradient(to right,white 0%,white 80%,rgba(255, 255, 255, 0) 100%);
+  }

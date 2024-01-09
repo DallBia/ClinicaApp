@@ -1,0 +1,72 @@
+
+
+#selectedOpcao {
+  border-radius: 2px;
+  border: solid 1px rgb(216, 194, 206);
+  /*width: 15vw;*/
+}
+.labelfrm{
+margin-right: 5px;
+font-size: 1.4vh;
+}
+.ctrlformulario {
+margin-left: 1%;
+height:50%;
+border-radius: 2px;
+border: solid 1px rgb(216, 194, 206);
+width: 65%;
+font-size: 1.4vh;
+}
+input:focus {
+outline: none;
+box-shadow: 0 0 10px #ff66b2;
+font-size: 1.4vh;
+}
+.ti-controles {
+  height: 95%;
+  width: 80%;
+  padding: 1%;
+  font-size: 1.4vh;
+}
+
+.interna {
+  height: 100%;
+  width: 100%;
+  padding: 1%;
+  display: flex;
+  font-size: 1.4vh;
+}
+.ti-select {
+  height: 90%;
+  width: 100%;
+  align-content:center;
+  display: block;
+  font-size: 1.4vh;
+}
+.lin {
+  height: 80%;
+  width: 100%;
+  display:flex;
+  font-size: 1.4vh;
+}
+.material-icons {
+  font-size: 4.5vh;
+  color: var(--cor-escura);
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+.material-icons:hover {
+box-shadow: 0 0 5px 5px pink;
+background-color: pink;
+font-size: 4.5vh;
+}
+.ti-check {
+  height: 80%;
+  width: 25%;
+}
+.ti-img {
+  height: 80%;
+  width: 15%;
+  padding: 1%;
+  font-size: 1.4vh;
+}

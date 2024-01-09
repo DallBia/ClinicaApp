@@ -1,0 +1,21 @@
+<table style="width: 100%;">
+  <thead class="cabeçalho">
+    <th class="t03">Select</th>
+
+    <th class="t01">Movimento</th>
+    <th class="t02">Valor (R$)</th>
+    <th class="t02">Pagamento (R$)</th>
+    <th class="t02">Data Pagto</th>
+  </thead>
+  <tbody class="corpo">
+    <tr *ngFor="let l of this.finService.tabFinanceira" [class.linhaDestacada]="l.selecionada" class="linha" (click)="Selec(l, l.id, $event, l.nome, l.valor)">
+      <td><input type="checkbox" [(ngModel)]="l.selecionada"></td>
+      <td>{{l.nome}}</td>
+      <td *ngIf="l.valor >=0" class="t02">{{l.valor | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+      <td *ngIf="l.valor < 0" class="t02">.</td>
+      <td *ngIf="l.valor >=0" class="t02">.</td>
+      <td *ngIf="l.valor < 0" class="t02">{{l.valor | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+      <td class="t02">{{l.data | date:'dd/MM/yyyy' }}</td>
+    </tr>
+  </tbody>
+</table>

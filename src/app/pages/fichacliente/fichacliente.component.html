@@ -1,0 +1,61 @@
+<div class="linha01">
+    <div class="ti-botao">
+        <button class="Rosa" (click)="CliqueNovo()" [disabled]="this.btnNovo" > <!-- [disabled]="!this.vNovo" -->
+            <!-- {{this.selectedFicha}} -->
+            NOVO
+        </button>
+    </div>
+    <div class="ti-container">
+        <app-filtro style="width: 100%; height: 100%;"></app-filtro>
+    </div>
+    <div class="nome-area" margin-left="2vh">
+        <div class="nome-selec"><label *ngIf="this.nCliente!==0">Ficha Nº {{this.Atual.Ficha}} - {{this.Atual.nome}}</label></div>
+        <div class="linhadebaixo">
+            <div class="desde">
+                <label *ngIf="this.nCliente>0">Cliente desde {{this.Atual.clienteDesde}}</label>
+            </div>
+            <div class="idade">
+                <label *ngIf="this.nCliente>0">Idade: {{this.Atual.Idade}}</label>
+            </div>
+            <div class="proxses">
+                <label *ngIf="this.nCliente>0">Próxima sessão: 28/07/2023</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="corpo">
+  <div class="lado-esquerdo">
+    <div class="grid-result">
+      <app-grid01></app-grid01>
+    </div>
+    <div class="botoes1">
+      <button class="Branco1" id="ant" [disabled]="this.clienteService.btnA" (click)="this.clienteService.anterior()">Anterior</button>
+      <button class="Branco1" id="prox" [disabled]="this.clienteService.btnP" (click)="this.clienteService.proximo()">Próximo</button>
+    </div>
+  </div>
+    <div class="lado-direito">
+      <div class="formul-result">
+        <div *ngIf="this.nCliente!=0">
+        <app-form-cliente (onSubmit)="buscarAlteracoes($event)" *ngIf="nChanges"></app-form-cliente>
+      </div>
+    </div>
+    <div class="botoes-finais">
+      <div class="btnAnexar">
+        <button class="Branco" id="Anexar" (click)="abrirModal()" [disabled]="!this.sharedService.btnAnexCli">
+          Anexar Arquivos
+        </button>
+          </div>
+          <div class="btnSalvar">
+              <button class="Rosa" [disabled]="this.btnSalva" (click)="this.salvarPessoa()">
+                  {{this.txtSalva}}
+              </button>
+          </div>
+          <div class="btnFechar">
+              <button class="RosaEscuro" (click)="this.cancela()" id="Cancelar">
+                Cancelar
+              </button>
+          </div>
+      </div>
+
+</div>

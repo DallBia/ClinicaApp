@@ -1,0 +1,96 @@
+
+<div class="main-container">
+  <div class="lado-esquerdo">
+    <div class="superior-e">
+      <div class="se-left">
+        <button class="Novo">{{this.Ficha}}</button>
+      </div>
+      <div class="se-right" >
+        <label class="Nome">{{this.NomeCliente}}</label>
+      </div>
+    </div>
+    <div class="inferior-e">
+      <div class="bloco-antigo">
+        <div class="listagem">
+          <app-tab-fin  *ngIf="this.tela == 'padrão'"></app-tab-fin>
+          <app-tab-valores  *ngIf="this.tela == 'valores'"></app-tab-valores>
+        </div>
+        </div>
+        <div class="totais">
+          <span class="tot01">TOTAIS:</span>
+          <span class="tot02">{{this.finService.entradas}}</span>
+          <span class="tot02">{{this.finService.saidas}}</span>
+          <span class="tot02" style="font-weight: bold;" >{{this.finService.saldo}}</span>
+        </div>
+
+        <!-- AQUI SÃO MOSTRADOS OS COMPONENTES PARA EDIÇÃO -->
+
+      <div class="bloco-input" *ngIf="this.finService.MostraInfo">
+        <div class="inp-sup" style="top: 0;">
+          <div class="cjt1">
+            <span class="cjtLbl">Movimento</span>
+            <input class="cjtInp" [(ngModel)]="this.finService.info_Movimento">
+          </div>
+          <div class="cjt2">
+            <span class="cjtLbl">Valor</span>
+            <span class="cjtLbl2" (click)="this.finService.AltCD()" [style.color]="this.finService.info_Credito ? 'white' : 'black'" [style.background-color]="this.finService.info_Credito ? 'var(--cor-media)' : 'white'">Custo</span>
+            <span class="cjtLbl2" (click)="this.finService.AltCD()" [style.color]="!this.finService.info_Credito ? 'white' : 'black'" [style.background-color]="!this.finService.info_Credito ? 'var(--cor-media)' : 'white'">Pagto</span>
+            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info_Valor" appCurrency>
+          </div>
+          <div class="cjt2" style="width: 15%;">
+            <span class="cjtLbl">Data</span>
+            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info_Data">
+          </div>
+          <div class="cjt2">
+            <span class="cjtLbl">Atualizado por:</span>
+            <span class="cjtLbl2">{{this.finService.info_AtualizadoPor}}</span>
+          </div>
+        </div>
+        <div class="inp-sup" style="top: 50%;">
+          <div class="cjt1">
+            <span class="cjtLbl">Descrição</span>
+            <input class="cjtInp" [(ngModel)]="this.finService.info_Descricao">
+          </div>
+          <div class="cjt2" style="width: 15%;" *ngIf="this.finService.idLinha > 0">
+            <span class="cjtLbl">Gerar Pagamento</span>
+            <input class="cjtInp" appCurrencyInput [(ngModel)]="this.finService.info_GeraPagto" (focus)="receberPagto(this.finService.info_Valor)" [ngModelOptions]="{updateOn: 'blur'}">
+          </div>
+          <div class="cjt2" style="width: 15%;">
+            <span class="cjtLbl">Data</span>
+            <input class="cjtInp" appDateMask [(ngModel)]="this.finService.info_DataAt">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lado-direito">
+    <div class="superior-d">
+      <!-- <app-filtro style="width: 100%; height: 100%; font-size:medium;" ></app-filtro> -->
+    </div>
+    <div class="e-foto">
+      <img *ngIf="this.clienteService.ClienteA.getValue() !== 0" [src]="this.finService.Atual.foto" id="minhaImagem" class="id-Foto">
+      <img *ngIf="this.clienteService.ClienteA.getValue() == 0" [src]="this.fotoService.semfoto2" id="minhaImagem" class="id-Foto">
+    </div>
+    <div class="botoes">
+      <button class="btnBranco">
+        Anexar Documento
+      </button>
+      <button class="btnBranco" (click)="this.altCliFunc()">
+        {{this.btnCliFunc}}
+      </button>
+      <button class="btnBranco">
+        Imprimir Relatório
+      </button>
+      <button class="btnBranco" (click)="this.altTab()">
+        {{this.btnTab}}
+      </button>
+      <button class="btnBranco" [style.color]="this.finService.MostraInfo ? 'white' : 'black'" [style.background-color]="this.finService.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(this.finService.MostraInfo)">
+        {{this.finService.MostraInfo ? 'Cancelar nova informação' : 'Inserir nova informação'}}
+      </button>
+      <button class="Salvar" (disabled)="!this.finService.MostraInfo" (click)="this.Enviar()">
+        Salvar
+      </button>
+    </div>
+  </div>
+</div>

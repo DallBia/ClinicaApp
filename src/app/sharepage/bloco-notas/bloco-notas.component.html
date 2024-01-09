@@ -1,0 +1,12 @@
+<div *ngIf="this.linkA !== 'CONTROLE FINANCEIRO'">
+  <textarea [(ngModel)]="processedText" name="texto" rows="10" cols="50" class="bloco-input"(keydown)="onKeydown($event)">Texto</textarea>
+</div>
+<div *ngIf="this.linkA == 'CONTROLE FINANCEIRO'" class="bloco-input">
+  <span>Insira os valores que serão alterados (para o valor, insira apenas números e vírgulas):</span><br>
+  <input class="xtexto" [(ngModel)]="this.shared.texto" placeholder=this.shared.texto>
+  <span>R$</span>
+  <input class="xvalor" inputmode="numeric" pattern="[0-9]*" (input)="formatarNumero($event)" [(ngModel)]="this.shared.xvalor" placeholder=this.shared.xvalor>
+</div>
+
+
+

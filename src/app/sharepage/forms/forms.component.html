@@ -1,0 +1,126 @@
+<div Forml class="Interior">
+  <div class="superior">
+    <div class="EspacoFoto" >
+      <img [src]="this.Atual.foto" id="minhaImagem" class="Foto" (click)="fileInput.click()">
+      <input id="file-input" #fileInput type="file" style="display: none;" (change)="onFileSelected($event)">
+    </div>
+    <div class="EspacoDoctos">
+      <div>
+        <app-arquivos></app-arquivos>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="equipeform" (ngSubmit)="submitE()" #formDit="ngForm" style="padding-right: 15px;">
+    <div class="input_box" style="vertical-align: middle; display: flex; justify-content: space-between;">
+      <label class="fLabel">Nome:</label>
+      <input type="text"  style="font-weight: bold; font-size: medium;" class="fCampo" formControlName="nome" placeholder="(insira o nome do profissional)" required>
+    </div>
+    <label class="fLabel2">DADOS PESSOAIS</label>
+    <div style="vertical-align: middle; display: flex; justify-content: space-between;">
+      <label class="fLabel">Data de Nascim.:</label>
+      <input type="text"  appDateMask class="fCampo" formControlName="nascimento" placeholder="(dd/mm/aaaa)" required>
+    </div>
+    <div style="vertical-align: middle; display: flex; justify-content: space-between;">
+      <label class="fMeioLabel">R.G.:</label>
+      <input type="text"  class="fMeioCampo" formControlName="identidade" placeholder="(apenas números)" required>
+      <label class="fMeioLabel">CPF:</label>
+      <input type="text"  class="fMeioCampo" formControlName="cpf" placeholder="(apenas números)" required>
+    </div>
+    <div style="vertical-align: middle; display: flex; justify-content: space-between;">
+      <label class="fLabel">Endereço:</label>
+      <input type="text"  class="fCampo" formControlName="endereco" placeholder="(rua, número, complemento, bairro, cidade)" required>
+    </div>
+    <div style="vertical-align: middle; display: flex; justify-content: space-between;">
+      <label class="fMeioLabel">e-mail:</label>
+      <input type="text"  class="fMeioCampo" formControlName="email" required>
+      <label class="fMeioLabel">Celular:</label>
+      <input type="text"  class="fMeioCampo" formControlName="celular" placeholder="(apenas números)" required>
+      <label class="fMeioLabel">Tel. Fixo:</label>
+      <input type="text"  class="fMeioCampo" formControlName="telFixo" placeholder="(apenas números)" required>
+    </div>
+    <div style="vertical-align: middle; display: flex; justify-content: space-between;">
+      <label class="fLabel2">DADOS PROFISSIONAIS</label>
+    </div>
+    <div style="vertical-align: middle;">
+      <label class="fMeioLabel">Admissão:</label>
+      <input type="text"  class="fMeioCampo" appDateMask formControlName="desde" placeholder="(dd/mm/aaaa)" required>
+      <!-- <label class="fMeioLabel">Desligamento:</label>
+      <input type="text"  class="fMeioCampo" formControlName="dtNascim" placeholder="(dd/mm/aaaa)" required> -->
+    </div>
+    <div>
+      <label class="fMeioLabel" >Perfil:</label>
+      <select formControlName="perfil" style="margin-right: 10px;" >
+        <option>Diretoria</option>
+        <option>Coordenação</option>
+        <option>Secretaria</option>
+        <option>Equipe Clínica</option>
+      </select>
+      <input type="checkbox"  class="fCheck" style="margin-right:4px;" formControlName="ativo">
+      <label>Funcionário Ativo</label>
+    </div>
+  </form>
+
+
+
+    <label class="fLabel2">FORMAÇÃO ACADÊMICA E PROFISSIONAL</label>
+    <div *ngFor="let i of this.formFields">
+      <ng-container>
+        <div>
+          <label class="fLabel3">{{ i.dtConclusao | date: 'yyyy' }}</label>
+          <select class="fLabel3" style="width: 75%; border:none;" [(ngModel)]="i.nivel" name="nivel_{{ i }}">
+              <option>Graduação</option>
+              <option>Pós-Graduação</option>
+              <option>Especialização</option>
+              <option>Tecnólogo</option>
+              <option>Mestrado</option>
+              <option>MBA</option>
+              <option>Doutorado</option>
+              <option>Pós-Doutorado</option>
+              <option>Curso de Extensão</option>
+              <option>Curso Livre</option>
+            </select>
+        </div>
+        <div class="input_box">
+          <span class="fLabel">Nome do Curso:</span>
+          <input type="text" class="fCampo" [(ngModel)]="i.nomeFormacao" name="nomeFormacao_{{ i }}" placeholder="(insira o nome do curso)" required>
+        </div>
+        <div class="input_box">
+          <label class="fLabel">Instituição:</label>
+          <input type="text" class="fCampo" [(ngModel)]="i.instituicao" name="instituicao_{{ i }}" placeholder="(insira o nome da instituição de ensino)" required>
+        </div>
+        <div>
+          <label class="fMeioLabel">Data Conclusão:</label>
+          <input type="text" class="fMeioCampo" appDateMask [(ngModel)]="i.dtConclusao" name="dtConclusao_{{ i }}" placeholder="(dd/mm/aaaa)" required>
+          <label class="fMeioLabel">Registro de Classe:</label>
+          <input type="text" class="fMeioCampo" [(ngModel)]="i.registro" name="registro_{{ i }}" required>
+        </div>
+        <div class="fLabel">ÁREAS RELACIONADAS:</div>
+        <div class="boxes">
+          <div class="boxinterno">
+              <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.terapiaocup" name="terapiaocup">
+              <label>Terapia Ocupacional</label>
+                  <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.fisiopadovan" name="fisiopadovan">
+              <label>Fisioterapia Padovan</label>
+              <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.reforcoesc" name="reforcoesc">
+              <label>Reforço Escolar</label>
+              <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.neurofeedback" name="neurofeedback">
+              <label>Neurofeedback</label>
+          </div>
+          <div class="boxinterno">
+              <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.psicopedagogia" name="psicopedagogia">
+              <label>Psicopedagogia</label>
+                  <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.fono" name="fono">
+              <label>Fonoaudiologia</label>
+              <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.arteterapia" name="arteterapia">
+              <label>Arteterapia</label>
+              <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.psicologia" name="psicologia">
+              <label>Psicologia</label>
+              <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="i.psicomotr" name="psicomotr">
+              <label>Psicomotricidade</label>
+          </div>
+      </div>
+        <hr>
+      </ng-container>
+    </div>
+  <button class="rosa" (click)="abrirModal()">INSERIR NOVA FORMAÇÃO PROFISSIONAL</button>
+  </div>

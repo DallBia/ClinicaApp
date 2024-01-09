@@ -1,0 +1,66 @@
+<div class="modal-inteiro">
+    <div class="moldura">
+        <div class="titulo">INSERIR NOVA FORMAÇÃO</div>
+        <div>
+            <div class="input_box">
+                <label class="fLabel">Nome do Curso:</label>
+                <input type="text" class="fCampo" [(ngModel)]="formulario.nomeFormacao" name="nomeFormacao" placeholder="(insira o nome do curso)" required>
+            </div>
+            <div class="input_box">
+                <label class="fLabel">Instituição:</label>
+                <input type="text" class="fCampo" [(ngModel)]="formulario.instituicao" name="instituicao" placeholder="(insira o nome da instituição de ensino)" required>
+            </div>
+            <div>
+                <label class="fLabel">Data Conclusão:</label>
+                <input type="text" class="fMeioCampo" [(ngModel)]="formulario.dtConclusao" name="dtConclusao" placeholder="(dd/mm/aaaa)" required>
+                <label class="fLabel">Registro de Classe:</label>
+                <input type="text" class="fMeioCampo"  [(ngModel)]="formulario.registro" name="registro" required>
+            </div>
+            <label class="fLabel">Nível do curso:</label>
+            <select class="fLabel" style="width: 75%; border:none;" [(ngModel)]="formulario.nivel" name="nivel">
+                <option>Graduação</option>
+                <option>Pós-Graduação</option>
+                <option>Especialização</option>
+                <option>Tecnólogo</option>
+                <option>Mestrado</option>
+                <option>MBA</option>
+                <option>Doutorado</option>
+                <option>Pós-Doutorado</option>
+                <option>Curso de Extensão</option>
+                <option>Curso Livre</option>
+            </select>
+            <br> 
+            <label class="titulo">Áreas relacionadas:</label>
+            <br>
+        <div class="boxes">
+            <div class="boxinterno">
+                <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.terapiaocup" name="terapiaocup">
+                <label>Terapia Ocupacional</label> 
+                    <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.fisiopadovan" name="fisiopadovan">
+                <label>Fisioterapia Padovan</label> 
+                <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.reforcoesc" name="reforcoesc">
+                <label>Reforço Escolar</label> 
+                <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.neurofeedback" name="neurofeedback">
+                <label>Neurofeedback</label>
+            </div>
+            <div class="boxinterno">
+                <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.psicopedagogia" name="psicopedagogia">
+                <label>Psicopedagogia</label> 
+                    <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.fono" name="fono">
+                <label>Fonoaudiologia</label> 
+                <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.arteterapia" name="arteterapia">
+                <label>Arteterapia</label> 
+                <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.psicologia" name="psicologia">
+                <label>Psicologia</label> 
+                <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="formulario.psicomotr" name="psicomotr">
+                <label>Psicomotricidade</label>   
+            </div>
+        </div> 
+        <div class="botoes">
+            <button class="rosa" (click)="salvar()">SALVAR</button>
+            <button class="escuro" (click)="fechar()">CANCELAR</button>
+        </div>
+    </div>
+   
+
+</div>

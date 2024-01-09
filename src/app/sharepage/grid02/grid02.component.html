@@ -1,0 +1,21 @@
+<div class="tabela">
+  <table>
+      <thead class="cabeçalho">
+          <th class="t001">Foto</th>
+          <th class="t002">Ficha</th>
+          <th class="t0030" style="text-align: center">Nome</th>
+          <th class="t004">Telefones</th>
+          <th class="t005">Áreas</th>
+      </thead>
+      <tbody>
+          <tr *ngFor="let l of this.colaboradorService.dataSource" [class.linhaDestacada]="l.selecionada">
+              <td class="t001" (click)="destacarLinha(l, l.ficha)"><img [src]=l.foto alt="Imagem" style="height: 5vh; width: auto"></td>
+              <td class="t002" (click)="destacarLinha(l, l.ficha)"> {{l.ficha}}</td>
+              <td class="t003" (click)="destacarLinha(l, l.ficha)"> {{l.nome}}</td>
+            <td class="t004" (click)="destacarLinha(l, l.ficha)"> {{l.celular}} | {{l.telFixo}}</td>
+              <td class="t005" (click)="destacarLinha(l, l.ficha)"> {{l.area}}</td>
+          </tr>
+      </tbody>
+  </table>
+  </div>
+

@@ -1,0 +1,63 @@
+.mat-dialog-content {
+  background-color: rgb(253, 234, 238);
+  padding: 10px;
+}
+
+/* Adicione o fundo rosa ao modal */
+.mat-dialog-container {
+  background-color: rgb(253, 227, 231);
+}
+
+.botão {
+  background-color:rgb(114, 68, 87);
+  color: rgb(169, 136, 142);
+  border-radius: 10px;
+  border: 2px solid rgb(136, 2, 100);
+  width: 6vw;
+  height: 4vh;
+}
+
+.sim{
+  color:darkgreen;
+  font-weight: bolder;
+  font-size: 3.5vh;
+  text-align: center;
+}
+.nao{
+  color:brown;
+  font-weight: bolder;
+  font-size: 3.5vh;
+  text-align: center;
+}
+
+
+.titulo{
+  color: var(--cor-escura);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.titulo1{
+  color: var(--cor-escura);
+  font-size: 2.5vh;
+  font-weight: bold;
+  margin: 1vh;
+  width: 90%;
+}
+
+.titulo2{
+  font-size: 2vh;
+  font-weight: normal;
+  margin: 1vh;
+  width: 90%;
+  text-align: center;
+}
+.subt{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

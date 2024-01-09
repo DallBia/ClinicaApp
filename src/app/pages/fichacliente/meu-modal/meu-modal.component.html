@@ -1,0 +1,40 @@
+<div class="modal-inteiro">
+  <div class="cabecalho">
+    <button class="btn" (click)="fechar()">Fechar</button>
+    <span class="titulo">Anexar doumentos à ficha de {{this.shared.nome}}</span>
+
+  </div>
+  <div class="conteudo">
+    <div class="linha">
+    <span class="label">Formato de arquivo</span>
+    <select class="opcoes" id="formato" [(ngModel)] = "this.shared.docto.formato" >
+      <option></option>
+      <option value="pdf">pdf</option>
+      <option value="Word">Word</option>
+      <option value="Excel">Excel</option>
+      <option value="Imagem">Imagem</option>
+    </select>
+    <span class="label">Nome do arquivo</span>
+    <input type="text" class="opcoes" id="nome" [(ngModel)] ="this.shared.docto.nome" >
+    </div>
+    <div class="linha">
+    <span class="label" >Refere-se a:</span>
+    <select class="opcoes" id="descr" [(ngModel)] = "this.shared.docto.tipo">
+      <option></option>
+      <option>Documentos pessoais (RG, CPF, comprovantes, etc)</option>
+      <option>Atestados</option>
+      <option>Histórico Escolar</option>
+      <option>Laudos médicos</option>
+      <option>Doctos. oficiais (Liminares, Determinações Judiciais, etc)</option>
+      <option>Relatórios da equipe clínica</option>
+      <option>Avaliações e Provas</option>
+      <option>Outros</option>
+    </select>
+  </div>
+  <input type="file" #fileInput (change)="handleFileSelection($event)" style="display: none">
+<button class="btnAnexar" (click)="fileInput.click()">Abrir</button>
+<!-- <button (click)="downloadArquivo()">Salvar</button> -->
+
+  </div>
+
+</div>

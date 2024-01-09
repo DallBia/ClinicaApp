@@ -1,0 +1,13 @@
+<div class="interna">
+  <div class="cab">
+    <span class="titulo">{{this.CLienteNome}}.pdf</span>
+      <button class="bot" (click)="salvaPDF()">Download</button>
+      <button class="bot" (click)="Fechar()">Fechar</button>
+  </div>
+  <div class="formatt" id="content" #content>
+       <span class="formatt" *ngFor="let i of this.Lista">
+      {{i.dtInsercao}} - {{i.texto}} (por: {{i.nomeColab}})<br>
+    </span>
+  </div>
+
+</div>

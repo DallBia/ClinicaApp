@@ -1,0 +1,37 @@
+.interna {
+  margin: 5px;
+  padding: 5px;
+  background-color: white;
+  height: 50vh;
+  width: 50vw;
+}
+
+.cab {
+  width: 100%;
+  height: 8%;
+  background-color: rgb(241, 190, 217);
+  display:flex;
+  vertical-align: middle;
+  justify-content: flex-end; /* Alinhar os itens da direita para a esquerda */
+  align-items: center;
+}
+.titulo {
+  width: 75%;
+  color: var(--cor-escura);
+  text-align: left;
+  font-size: large;
+  padding-left: 10px;
+}
+.bot {
+  color:white;
+  border-radius: 5px;
+  background-color: var(--cor-escura);
+  width: 100px;
+  margin: 2px;
+}
+
+.formatt {
+  font-size: 12px;
+  color:rgb(37, 37, 61);
+  padding: 20px;
+}

@@ -1,0 +1,27 @@
+<div class="superior">
+  <div class="titulos">
+    <label class="lTitulos">QUADRO DE AVISOS</label>
+    <label class="lTitulos">FELIZ ANIVERSÁRIO PARA:</label>
+  </div>
+  <div class="acampos">
+    <div class="acamposI">
+      <textarea #avisosTextarea
+      placeholder="Digite seus avisos aqui..." class="box-avisos"
+      [(ngModel)]="textoAvisos"
+      [ngStyle]="{'height': mostrarBotaoSalvar ? '80%' : '95%'}"
+      (keyup)="onEnter($event)"
+      (keyup.enter)="addBullet($event)"
+      (blur)="onBlur()"
+      ></textarea>
+      <div>
+        <button *ngIf="mostrarBotaoSalvar" (click)="saveAviso()" class="rosa">Salvar</button>
+      </div>
+    </div>
+    <div class="acamposI"><label class="text-aniversario" [innerHTML]="textoNiver"></label></div>
+  </div>
+</div>
+<div class="button-container">
+  <button *ngFor="let button of buttons" class="btn-outline-danger" (click)="atualizarHeader(button.text)" [routerLink]="button.route">
+    <span class="button-line">{{ button.text }}</span>
+  </button>
+</div>

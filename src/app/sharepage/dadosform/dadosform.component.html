@@ -1,0 +1,39 @@
+<form [formGroup]="formulario">
+  <div *ngFor="let field of formFields">
+    <ng-container *ngIf="field.model == 'check'" >
+      <label   class="fLabel">{{ field.label }}</label>
+      <input style="margin-right: 3px;" [class]="field.class" [required]="field.required" [type]="field.type" [name]="field.name" [(ngModel)]="field.value">
+    </ng-container> 
+    <ng-container  *ngIf="field.model == 'input'">
+      <label class="fLabel">{{ field.label }}</label>
+      <input [class]="field.class" [required]="field.required" [type]="field.type" [name]="field.name" [(ngModel)]="field.value">
+    </ng-container>
+    <ng-container *ngIf="field.model == 'lista'">
+      <label class="fLabel">{{ field.label }}</label>
+        <select [class]="field.class" [name]="field.name" [(ngModel)]="field.value">
+        <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>
+      </select>
+    </ng-container>
+    <ng-container *ngIf="field.model == 'subtitulo'">
+        <label class="fLabel2">{{ field.label }}</label>
+    </ng-container>
+    <ng-container *ngIf="field.model == 'radio'">
+      <ng-container *ngFor="let option of field.options">
+        <input style="margin-left: 10px;" type="radio" [value]="option" [formControlName]="field.name" [name]="option">
+        <label style="margin-left: 10px;"> {{ option }}</label>
+      </ng-container>
+    </ng-container>
+    <div *ngIf="field.model == 'areaprof'">
+    </div>
+    <div *ngIf="field.model == 'areaesc'">
+    </div>
+
+    <div *ngIf="field.model == 'areasup'">
+      <div class="Foto"></div>
+      <div class="Docs">
+          <!-- aqui colocamos o app que carrega os documentos -->
+      </div>
+    </div>
+    <br>
+  </div>
+</form>

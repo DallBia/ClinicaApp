@@ -1,0 +1,18 @@
+<div class="inteiro">
+  <div class="titulo">
+    <span class="titulo">PRIMEIRO ACESSO</span>
+  <hr>
+</div>
+
+<p>Você está entrando no sistema pela primeira vez. É necessário alterar a sua senha.</p>
+<div style="align-items: center;">
+  <span class="fLabel">Digite a nova senha:</span><br>
+  <input type="password" class="fCampo" [(ngModel)]="loginAlt.novasenha" name="senha" required>
+</div>
+<span> Depois, faça o login novamente, com sua nova senha. Vá para a guia "CADASTRO DE EQUIPE" e complete o seu cadastro.</span>
+<div class="botoes" style="align-items: center;">
+  <button class="rosa" (click)="salvar()">SALVAR</button>
+</div>
+
+</div>
+

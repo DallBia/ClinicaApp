@@ -1,0 +1,16 @@
+
+<table class="tabela">
+<tbody>
+  <tr class="tabela" *ngFor="let i of this.shared.ListaPront">
+    <td style="width:5%; vertical-align: top; align-content: center;">
+      <input type="checkbox" [(ngModel)]="i.selecionada" (click)="Selec(i, $event)">
+    </td>
+    <td style="overflow-wrap: break-word;word-wrap: break-word; width:95%;" (click)="Edita(i.texto, i.nomeColab, i.nomeCliente,i.dtInsercao, i.id)">
+      <label class="inicio">{{i.dtInsercao}} - {{i.nomeCliente}}</label><br>
+      <label class="corpo" >{{i.texto}}</label><br>
+      <label class="fim">informação postada por: {{i.nomeColab}}</label><br>
+      <hr>
+    </td>
+  </tr>
+</tbody>
+</table>

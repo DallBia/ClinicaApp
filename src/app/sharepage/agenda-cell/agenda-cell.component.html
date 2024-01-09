@@ -1,0 +1,18 @@
+<div class="Contorno"  *ngIf="this.l1 === false && this.c1 === false" [ngStyle]="{'box-shadow': boxShadow}" (click)="AltHorario(this.lin, this.col)">
+  <div class="Textos">
+      <div class="Nome">{{this.linha1}}</div>
+      <div class="Sessao">{{this.linha2}}</div>
+  </div>
+  <div class="Tag" [style.background-color]="corDeFundo"></div>
+</div>
+
+<div class="Titulo"  *ngIf="this.l1 === true && this.c1 === false" [ngStyle]="{'box-shadow': boxShadow}" (click)="MudarSala(this.lin, this.col)">
+  <div class="sl">{{this.col}}</div>
+  <div class="Textoz">
+      <div class="Dono">{{this.linha1}}</div>
+      <div class="Area">{{this.linha2}}</div>
+  </div>
+</div>
+
+<div class="Hora"*ngIf="this.c1 === true">{{this.linha1}}</div>
+

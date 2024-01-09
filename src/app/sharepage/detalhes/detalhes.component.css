@@ -1,0 +1,153 @@
+
+.superior{
+  display:inline-flex;
+  width: 100%;
+  height: 40%;
+}
+.inferior{
+  height:45%;
+  padding: 25px;
+  width: 100%;
+  border: solid 1px var(--cor-clara);
+  border-radius: 10px;
+  overflow: auto;
+
+}
+
+.id-Foto {
+  height: auto;
+  width: 100%;
+}
+
+.inferior::-webkit-scrollbar-thumb {
+  background-color: #fddfed;
+  border-radius: 6px;
+}
+
+.inferior::-webkit-scrollbar {
+  width: 14px;
+  background-color:#ffffff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ffb6b6;
+  border-radius: 6px;
+  padding: 2px;
+  margin: 2px;
+}
+
+.foto{
+
+  width: 40%;
+  height: 100%;
+  padding: 3px;
+
+}
+.box-Obs1{
+  height: 95%;
+  width: 95%;
+  margin-left: 1vw;
+
+  padding: 5px;
+  resize: none;
+  border-color: white;
+}
+
+
+.info{
+  width: 60%;
+  display: flexbox;
+  align-items: center;
+  height: 100%;
+
+}
+.unidade{
+  background-color: rgb(255, 255, 255);
+  height: 7vh;
+  width: 100%;
+  z-index: 999;
+}
+
+.nome{
+  font-size: large;
+  text-align: center;
+  padding: 5px;
+  word-wrap: break-word;
+}
+
+.seletores{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Cria três colunas com largura igual */
+  grid-gap: 0px;
+  width: 100%;
+}
+
+.tags{
+  width: 100%;
+  border:solid 4px rgb(255, 255, 255);
+  margin:2px;
+  text-align: center;
+  font-size: small;
+}
+.tagsSelect{
+  width: 100%;
+  border:solid 4px rgb(0, 0, 0);
+  margin:2px;
+  text-align: center;
+  font-size: small;
+  font-weight: bold;
+}
+.Obs1{
+  overflow-y: auto;
+  height: 20%;
+  margin: 2px;
+  width: 100%;
+  background-color:#ffffff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ffb6b6;
+  border-radius: 6px;
+  padding: 2px;
+  white-space: pre-line;
+}
+
+.fLabel {
+  height: 22px;
+  width: 20%;
+  margin-right: 2px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  font-size: small;
+}
+.fCampo {
+  height: 22px;
+  width: 75%;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  border-top: solid 1px rosybrown;
+  border-bottom: solid 1px rosybrown;
+  border-left: solid 1px rgb(253, 236, 236);
+  border-right: solid 1px rgb(253, 236, 236);
+}
+
+.bot{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.rosa{
+    height: 8vh;
+    width: 50%;
+    margin-top: 1.5%;
+    background-color: var(--cor-clara);
+    font-size: large;
+    color: var(--cor-escura);
+    border-radius: 2vh;
+    border-bottom: solid 2px var(--cor-escura);
+    border-top: solid 2px var(--cor-escura);
+    border-left: none 2px var(--cor-escura);
+    border-right: none 2px var(--cor-escura);
+
+}
+
+/*ꟷꚚꟷ % ─●─*/

@@ -1,0 +1,41 @@
+.fLabel {
+  height: 30px;
+  width: 20%;
+  margin-right: 2px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.fLabel2 {
+  height: 25px;
+  width: 100%;
+  text-align: center;
+  font-size: larger;
+  color: var(--cor-media);
+  font-weight: bolder;
+  margin-right: 2px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: solid 2px var(--cor-clara);
+}
+.fCampo {
+  height: 30px;
+  width: 75%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border-top: solid 1px rosybrown;
+  border-bottom: solid 1px rosybrown;
+  border-left: solid 1px rgb(253, 236, 236);
+  border-right: solid 1px rgb(253, 236, 236);
+}
+.fLista {
+  height: 30px;
+  width: 50%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border-top: solid 1px rosybrown;
+  border-bottom: solid 1px rosybrown;
+  border-left: solid 1px rgb(253, 236, 236);
+  border-right: solid 1px rgb(253, 236, 236);
+}

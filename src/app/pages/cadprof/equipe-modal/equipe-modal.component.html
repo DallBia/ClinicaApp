@@ -1,0 +1,41 @@
+ <div class="modal-inteiro">
+    <div class="moldura">
+        <div class="titulo">INSERIR NOVO MEMBRO DA EQUIPE</div>
+        <div>
+
+          <div>
+    <span class="fLabel">Nome do Funcionário:</span>
+    <input type="text" class="fCampo" [(ngModel)]="formulario.nome" name="Nome" placeholder="(insira o nome)" required>
+  </div>
+  <div>
+    <span class="fLabel">E-mail:</span>
+    <input type="text" class="fCampo" [(ngModel)]="formulario.email" name="email" placeholder="(email)" required>
+  </div>
+  <div>
+    <span class="fLabel">Perfil:</span>
+    <select class="fCampo" style="width: 75%;" [(ngModel)]="formulario.idPerfil" name="nivel">
+      <option>Diretoria</option>
+      <option>Secretaria</option>
+      <option>Coordenação</option>
+      <option>Equipe Clínica</option>
+    </select>
+  </div>
+  <div>
+    <span class="fLabel">Celular:</span>
+    <input type="text" class="fCampo" [(ngModel)]="formulario.celular" name="celular" placeholder="(celular)" required>
+  </div>
+
+  <span class="fLabel">Insira as informações e clique em "Salvar". Será gerada uma senha temporária para
+    este funcionário, e será enviado um e-mail para que ele faça o primeiro acesso e altere a senha.<br>
+    Após isso, ele poderá completar o seu cadastro.<br>
+    Certifique-se de inserir um e-mail válido.
+  </span>
+
+      <div class="botoes">
+        <button class="rosa" (click)="salvar()" [disabled]="this.btn">{{this.txt}}</button>
+        <button class="escuro" (click)="fechar()">CANCELAR</button>
+      </div>
+    </div>
+
+
+</div>

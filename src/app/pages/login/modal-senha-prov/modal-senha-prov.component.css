@@ -1,0 +1,99 @@
+.inteiro{
+  height: 50vh;
+  width: 50vw;
+  background-color: rgb(255, 205, 238);
+  padding:25px;
+  text-align: center;
+  align-items: center;
+  align-self: center;
+  align-content: center;
+}
+.modal-inteiro {
+  width: 60vw;
+  height: 70vh;
+  background-color: rgb(255, 240, 248);
+  padding: 5vh;
+}
+.modal-inteiro::backdrop{
+  background-color: var(--cor-escura);
+}
+.titulo{
+  font-size: larger;
+  color:var(--cor-media);
+  text-align: center;
+  width: 100%;
+  font-weight: bolder;
+}
+.moldura{
+  padding:5vh;
+  border: solid 0.5px var(--cor-clara);
+  border-radius: 10px;
+}
+.fLabel{
+  margin: 5px;
+}
+.fCampo {
+  height: 30px;
+  width: 75%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border-top: solid 1px rosybrown;
+  border-bottom: solid 1px rosybrown;
+  border-left: solid 1px rgb(253, 236, 236);
+  border-right: solid 1px rgb(253, 236, 236);
+  }
+
+  .fMeioCampo {
+      height: 30px;
+      width: 25%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border-top: solid 1px rosybrown;
+      border-bottom: solid 1px rosybrown;
+      border-left: solid 1px rgb(253, 236, 236);
+      border-right: solid 1px rgb(253, 236, 236);
+      }
+      .botoes{
+          width: 100%;
+          display: inline-flex;
+          align-content: space-between;
+      }
+      .rosa{
+          align-self: center;
+          width: 40%;
+          height: 40px;
+          margin-left: 1vw;
+          background-color: var(--cor-clara);
+          color: var(--cor-escura);
+          border-radius: 1vh;
+          border: solid 1px var(--cor-media);
+          border-left: none;
+          border-right: none;
+          margin:10px;
+        }
+        .escuro{
+          align-self: center;
+          width: 40%;
+          height: 40px;
+          margin-left: 1vw;
+          background-color: var(--cor-escura);
+          border-radius: 1vh;
+          color: var(--cor-clara);
+          border: solid 1px var(--cor-media);
+          border-left: none;
+          border-right: none;
+          margin:10px;
+        }
+.fCheck{
+  margin:10px;
+
+}
+.boxes{
+  display: inline-table;
+  align-items: center;
+  align-self: center;
+  align-content: center;
+}
+

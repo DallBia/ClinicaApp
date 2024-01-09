@@ -1,0 +1,5 @@
+<div class="date-display" (change)="novaData(this.dia)">
+  <span *ngIf="this.ParImpar == 'P'" class="sem">{{this.agenda.diaSemana}}</span>
+  <span *ngIf="this.ParImpar == 'I'" class="sem2">{{this.agenda.diaSemana}}</span>
+  <input type="date" class="dia" [(ngModel)]="this.dia" required>
+</div>

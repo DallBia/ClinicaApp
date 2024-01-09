@@ -1,0 +1,11 @@
+
+
+<div class="mat-dialog-content">
+  <div class="titulo">
+    <span class="titulo1">{{this.shared.tituloModal}}</span>
+    <span class="titulo2">{{this.shared.textoModal}}</span>
+    <div *ngFor="let i of this.shared.nbotoes">
+      <button class="botão" mat-button (click)="select(i)">{{i}}</button>
+    </div>
+  </div>
+</div>

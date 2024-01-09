@@ -1,0 +1,24 @@
+<div class="areatotal">
+  <div class="detalhes">
+    <app-agenda-menu></app-agenda-menu>
+  </div>
+  <div class="area">
+
+    <table class="tabela">
+      <thead>
+        <th *ngFor="let c of colunas">
+          <app-agenda-cell [parametro]="'0%' + c"></app-agenda-cell>
+        </th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let l of linhas">
+          <td *ngFor="let c of colunas">
+              <app-agenda-cell [parametro]="l + '%' + c"></app-agenda-cell>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+ </div>
+</div>
+
+
