@@ -72,12 +72,12 @@ export class HomeComponent implements OnInit {
     this.userService.UsrA$.subscribe(Atual => {
       this.UsrAtual = Atual;
     });
-
-    this.shared.GetInfoById(1).subscribe(data => {
-      const dados = data.dados;
-      this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
-    });
-
+    this.textoAvisos = 'teste';
+    //this.shared.GetInfoById(1).subscribe(data => {
+    //  const dados = data.dados;
+    //  this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
+    //});
+  
     this.Carregar();
     this.perfilService.GetPerfil().subscribe(data => {
       const dados = data.dados;
