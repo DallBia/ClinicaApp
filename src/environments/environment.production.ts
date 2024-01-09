@@ -8,5 +8,5 @@
 
 export const environment = {
   production: true,
-  ApiUrl: 'http://clinica-api/api'
+  ApiUrl: 'http://35.232.35.159/api'
 };
