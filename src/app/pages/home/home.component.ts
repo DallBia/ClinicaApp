@@ -75,8 +75,8 @@ export class HomeComponent implements OnInit {
 
     this.shared.GetInfoById(1).subscribe(data => {
      const dados = data.dados;
-     //this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
-     this.textoAvisos = data.mensagem;
+     this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
+     //this.textoAvisos = data.mensagem;
     });
     //this.Carregar();
     // this.perfilService.GetPerfil().subscribe(data => {
