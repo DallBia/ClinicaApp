@@ -112,7 +112,7 @@ export class AgendaMenuComponent implements OnInit {
         this.agendaService.atualizarsegueModal(true);
       }else{
         this.agendaService.numReserva = tipo
-        const parm = 'id֍' + this.agendaService.numReserva.toString()
+        const parm = 'id%' + this.agendaService.numReserva.toString()
         r = this.BuscaAg(parm);
       }
     }
@@ -279,7 +279,7 @@ async BuscaAg(p: string){
         if (this.agendaService.celSelect.repeticao == '' || this.agendaService.celSelect.repeticao == undefined){
           this.agendaService.celSelect.repeticao = 'Unica'
         }
-        let Histmp = '֍' + new Date().toLocaleDateString('pt-BR') + ' - ' +  horaFormatada + ':\n' + texto  + '\npor: ' + Usr?.name + '\nꟷꚚꟷ\n';
+        let Histmp = '%' + new Date().toLocaleDateString('pt-BR') + ' - ' +  horaFormatada + ':\n' + texto  + '\npor: ' + Usr?.name + '\nꟷꚚꟷ\n';
         this.agendaService.celSelect.historico += Histmp;
         const usrId = Usr?.userid !== undefined ? parseInt(Usr?.userid, 10) : 0;
         this.agendaService.celSelect.idFuncAlt = usrId

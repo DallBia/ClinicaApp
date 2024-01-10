@@ -194,7 +194,7 @@ const corpoX: string = "<p><strong><span style='color: blue; font-size: 24px;'> 
   + "basta utilizá-la normalmente, e desconsiderar este e-mail."
 
 
-const variavel = email + '֍' + corpoX + '֍' + senha
+const variavel = email + '%' + corpoX + '%' + senha
 
  const resp1 = await this.userService.AlteraSenha(variavel).subscribe(async (data) => {
      const time1 = this.delay(500)

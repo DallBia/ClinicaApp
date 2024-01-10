@@ -187,7 +187,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
       uploadFile(file: File, name: string): Promise<Response<Tipo[]>> {
         return new Promise((resolve, reject) => {
             const formData: FormData = new FormData();
-            name = name + '֍' + file.name
+            name = name + '%' + file.name
             formData.append('file', file, name);
             const url = `${environment.ApiUrl}/Image`;
 
@@ -241,7 +241,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
         }
 
         for (let i of data){
-          const info = i.nome.split('֍');
+          const info = i.nome.split('%');
           const id = parseInt(info[0]);
           let tipoarquivo = '';
           switch (info[4]){

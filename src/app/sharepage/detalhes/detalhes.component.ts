@@ -226,7 +226,7 @@ export class DetalhesComponent  {
 
 //     const horaFormatada = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
 //     this.Usr = this.userService.getUserA().getValue();
-//       Dados.historico = '֍' + this.CelAtual.historico;
+//       Dados.historico = '%' + this.CelAtual.historico;
 //     if (DadosA.dtAlt == ''){
 //       texto += 'Agendamento de ' + this.CelAtual.subtitulo + '. ';
 //     }else{

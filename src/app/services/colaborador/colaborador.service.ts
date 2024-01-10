@@ -24,7 +24,7 @@ export class ColaboradorService {
 
   public tipo: string = 'tudo';
   public valor: string = 'tudo'
-  public param: string = 'tudo֍tudo֍0֍P';
+  public param: string = 'tudo%tudo%0%P';
   public firstID: number = 0;
   public lastID: number = 0;
   public AfirstID: number = 0;
@@ -313,13 +313,13 @@ export class ColaboradorService {
 
 
 proximo(){
-  this.param = this.tipo + '֍' + this.valor + '֍' + this.lastID.toString() + '֍P'
+  this.param = this.tipo + '%' + this.valor + '%' + this.lastID.toString() + '%P'
   console.log(this.param)
   this.iniciar()
 }
 
 anterior(){
-  this.param = this.tipo + '֍' + this.valor + '֍' + this.firstID.toString() + '֍A'
+  this.param = this.tipo + '%' + this.valor + '%' + this.firstID.toString() + '%A'
   console.log(this.param)
   this.iniciar()
 }
@@ -337,7 +337,7 @@ anterior(){
           this.colaboradorsG = response.dados;
           this.colaboradorsG.sort((a, b) => a.nome.localeCompare(b.nome));
           this.colaboradors = this.colaboradorsG;
-          const mensagem = response.mensagem.split('֍');
+          const mensagem = response.mensagem.split('%');
           this.lastID = parseInt(mensagem[1]);
           this.firstID = parseInt(mensagem[0]);
           this.AlastID = parseInt(mensagem[1]);

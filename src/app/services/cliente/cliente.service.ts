@@ -58,7 +58,7 @@ export class ClienteService {
 
   public tipo: string = 'tudo';
   public valor: string = 'tudo';
-  public param: string = 'tudo֍tudo֍0֍P';
+  public param: string = 'tudo-tudo-0-P';
   public firstID: number = 0;
   public lastID: number = 0;
   public AfirstID: number = 0;
@@ -178,9 +178,6 @@ export class ClienteService {
   }
 
 
-  ngOnInit(){
-
-  }
 
   async BuscaAgenda(){
         const data = await this.GetClientesByAgenda();
@@ -236,17 +233,8 @@ export class ClienteService {
 
 
 
-  proximo(){
-    this.param = this.tipo + '֍' + this.valor + '֍' + this.lastID.toString() + '֍P'
-    console.log(this.param)
-    this.iniciar()
-  }
 
-  anterior(){
-    this.param = this.tipo + '֍' + this.valor + '֍' + this.firstID.toString() + '֍A'
-    console.log(this.param)
-    this.iniciar()
-  }
+
   async GetClienteByFiltro(id: string): Promise<Cliente[]> {
     this.clientesG = [];
     this.clientes = [];
@@ -259,7 +247,7 @@ export class ClienteService {
         this.clientesG = response.dados;
         this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
         this.clientes = this.clientesG;
-        const mensagem = response.mensagem.split('֍');
+        const mensagem = response.mensagem.split('-');
         this.lastID = parseInt(mensagem[1]);
         this.firstID = parseInt(mensagem[0]);
         this.AlastID = parseInt(mensagem[1]);
@@ -307,25 +295,22 @@ export class ClienteService {
   }
 
 
+  proximo(){
+    this.param = this.tipo + '-' + this.valor + '-' + this.lastID.toString() + '-P'
+    console.log(this.param)
+    this.iniciar()
+  }
+
+  anterior(){
+    this.param = this.tipo + '-' + this.valor + '-' + this.firstID.toString() + '-A'
+    console.log(this.param)
+    this.iniciar()
+  }
+
   pLin: TableData[] = [];
 
   async Carregar(){
-
-    // const dados = this.data.dados;
-    // const dados = this.data;
-    //     dados.map((item: { clienteDesde: string | number | Date | null; dtInclusao: string | number | Date | null; dtNascim: string | number | Date | null; }) => {
-    //       item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toISOString().split('T')[0] : '---'
-    //       item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toISOString().split('T')[0] : '---'
-    //       item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toISOString().split('T')[0] : '---'
-
-    //       const dtNascim = item.dtNascim !== null ? item.dtNascim.split('-') : '*-*-*';
-    //       item.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
-    //       const clienteDesde = item.clienteDesde !== null ? item.clienteDesde.split('-') : '*-*-*';
-    //       item.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
-    //       const dtInclusao = item.dtInclusao !== null ? item.dtInclusao.split('-') : '*-*-*';
-    //       item.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
-
-    //        });
+console.log('Entrando em carregar')
 
     for (let i of this.clientesG) {
       let aSaiS: string = 'Não';
@@ -334,15 +319,15 @@ export class ClienteService {
 
       if(i.id !== undefined){
 
-        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toISOString().split('T')[0] : '---'
-        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toISOString().split('T')[0] : '---'
-        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toISOString().split('T')[0] : '---'
+        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
 
-        const dtNascim = i.dtNascim !== null ? i.dtNascim.split('-') : '*-*-*';
+        const dtNascim = i.dtNascim !== null ? i.dtNascim.split('-') : new Date().toISOString().split('T')[0].split('-');
         i.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
-        const clienteDesde = i.clienteDesde !== null ? i.clienteDesde.split('-') : '*-*-*';
+        const clienteDesde = i.clienteDesde !== null ? i.clienteDesde.split('-') : new Date().toISOString().split('T')[0].split('-');
         i.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
-        const dtInclusao = i.dtInclusao !== null ? i.dtInclusao.split('-') : '*-*-*';
+        const dtInclusao = i.dtInclusao !== null ? i.dtInclusao.split('-') : new Date().toISOString().split('T')[0].split('-');
         i.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
 
         if(i.maeRestric === true){
@@ -358,7 +343,8 @@ export class ClienteService {
         const aIdade1 = this.converterParaDate(i.dtNascim);
         const aIdade: string = this.calcularIdade(aIdade1) + ' anos';
 
-        this.nLin =[{foto: i.foto !== undefined ? i.foto : this.fotoService.semFoto,
+        this.nLin =[{
+          foto: i.foto !== undefined ? i.foto : this.fotoService.semFoto,
           Ficha: aId,
           id: i.id,
           nome: i.nome,
@@ -403,7 +389,7 @@ export class ClienteService {
       }
     }
     //this.shared.DataS = this.dataSource
-
+    console.log(this.dataSource)
   }
 
   converterParaDate(dataString: string): Date {

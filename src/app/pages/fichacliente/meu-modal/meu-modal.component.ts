@@ -54,15 +54,15 @@ atualiza(){
     if (fileInput.files && fileInput.files[0]) {
       const selectedFile: File = fileInput.files[0];
 
-      const nome: string = this.shared.docto.idPessoa + '֍' + this.shared.docto.cliOuProf + '֍' + this.shared.docto.tipo+ '֍' +
-      this.shared.docto.nome+ '֍' + this.shared.docto.formato
+      const nome: string = this.shared.docto.idPessoa + '%' + this.shared.docto.cliOuProf + '%' + this.shared.docto.tipo+ '%' +
+      this.shared.docto.nome+ '%' + this.shared.docto.formato
 
       const r = await this.shared.uploadFile(selectedFile, nome)
 
       console.log(r.dados);
       // this.convertFileToBase64(selectedFile).then((base64Data: string) => {
       //   this.docto.arquivo = base64Data;
-      // });   5֍teste֍pdf
+      // });   5%teste%pdf
     }
     this.fechar()
     this.desabilita = false;

@@ -31,7 +31,7 @@ export class AgendaService {
       {hora: 15, texto:'19:00', cor: 'Branco'}
     ];
 
-separador: string = '֍';
+separador: string = '%';
 
 
 delay(time:number) {
