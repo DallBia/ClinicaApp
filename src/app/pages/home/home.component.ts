@@ -73,10 +73,10 @@ export class HomeComponent implements OnInit {
       this.UsrAtual = Atual;
     });
     this.textoAvisos = 'teste';
-    //this.shared.GetInfoById(1).subscribe(data => {
-    //  const dados = data.dados;
-    //  this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
-    //});
+    this.shared.GetInfoById(1).subscribe(data => {
+     const dados = data.dados;
+     this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
+    });
     //this.Carregar();
     // this.perfilService.GetPerfil().subscribe(data => {
     //   const dados = data.dados;
