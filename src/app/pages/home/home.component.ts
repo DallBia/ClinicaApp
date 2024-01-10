@@ -92,11 +92,12 @@ export class HomeComponent implements OnInit {
 
     // });
     const x = this.pT()
+
   }
 
 async pT(){
   const x = await this.clienteService.GetClientes();
-  console.log(x)
+  console.log(x.mensagem)
 }
 
 
