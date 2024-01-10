@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
 
   login(email: string, password: string) {
     this.txtSalvar = 'Aguarde...'
-    this.userService.btnEntrar = true
+    //this.userService.btnEntrar = true
     this.authService.authenticate(email, password).subscribe(
       (success) => {
         if (success) {
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/inicio']);
           }else{
             const dialogRef = this.dialog.open(ModalSenhaProvComponent, {
-              disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
+              disableClose: true
           });
           dialogRef.afterClosed().subscribe((result: any) => {
 
@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
       }
     );
     this.txtSalvar = 'Login...'
-    this.userService.btnEntrar = true;
+    //this.userService.btnEntrar = true;
   }
 
 
