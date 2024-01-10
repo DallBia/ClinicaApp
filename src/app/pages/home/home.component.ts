@@ -91,7 +91,16 @@ export class HomeComponent implements OnInit {
     //  this.perfilService.perfils = this.ps;
 
     // });
+    const x = this.pT()
   }
+
+async pT(){
+  const x = await this.clienteService.GetClientes();
+  console.log(x)
+}
+
+
+
 
 async Carregar(){
 this.userService.btnEntrar = false;
