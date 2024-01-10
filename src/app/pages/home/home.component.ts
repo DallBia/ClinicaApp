@@ -77,24 +77,20 @@ export class HomeComponent implements OnInit {
     //  const dados = data.dados;
     //  this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
     //});
+    //this.Carregar();
+    // this.perfilService.GetPerfil().subscribe(data => {
+    //   const dados = data.dados;
+    //   dados.map((item) => {
+    //     item.dir !== null ? item.dir = item.dir : item.dir = false;
+    //     item.secr !== null ? item.secr = item.secr : item.secr = false;
+    //     item.coord !== null ? item.coord = item.coord : item.coord = false;
+    //   })
+    //   this.ps = data.dados;
+    //  this.ps.sort((a, b) => a.id - b.id);
+    //  //console.log(this.ps)
+    //  this.perfilService.perfils = this.ps;
 
-    this.Carregar();
-    this.perfilService.GetPerfil().subscribe(data => {
-      const dados = data.dados;
-      dados.map((item) => {
-        item.dir !== null ? item.dir = item.dir : item.dir = false;
-        item.secr !== null ? item.secr = item.secr : item.secr = false;
-        item.coord !== null ? item.coord = item.coord : item.coord = false;
-      })
-      this.ps = data.dados;
-     this.ps.sort((a, b) => a.id - b.id);
-     //console.log(this.ps)
-     this.perfilService.perfils = this.ps;
-
-    });
-
-
-
+    // });
   }
 
 async Carregar(){
