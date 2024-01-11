@@ -35,6 +35,7 @@ export class ClienteService {
   telComercial:  '',
   email:  '',
   endereco: '',
+  proxses: '',
 
   mae:  '',
   maeRestric: false,
@@ -67,7 +68,7 @@ export class ClienteService {
   public seletor: string = 'X';
     public btnA: boolean = false;
     public btnP: boolean = false;
-
+public txtQtde: string = '';
 
   public cliente: Cliente = this.clienteVazio;
   public success: boolean = false;
@@ -139,9 +140,10 @@ export class ClienteService {
       if (response && response.dados !== undefined && response.sucesso) {
         return response;
       } else {
-        throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        throw new Error('Erro ao trazer Clientes (142): ');
       }
     } catch (error) {
+      console.error('Resposta inválida da API: ', error)
       throw error; // Você pode personalizar essa parte conforme sua necessidade
     }
   }
@@ -165,7 +167,7 @@ export class ClienteService {
   }
 
   GetClientesByAgenda(param: string): Promise<any> {
-    return this.http.get<any>(`${this.apiurl}/Agenda/${param}`).toPromise();;
+    return this.http.get<any>(`${this.apiurl}/Agenda/${param}`).toPromise();
   }
 
   private ClienteAtual = new BehaviorSubject<TableData>(this.Vazia[0]);
@@ -205,63 +207,43 @@ export class ClienteService {
     }
   }
 
+  // async BuscaClientes(){
+  //   this.clientes = [];
+  //   this.clientesG = [];
+  //   const response = await this.BuscaCliente();
+  //   await this.Carregar();
+  //   }
+  //   async BuscaCliente(){
+  //     try {
+  //       this.data = await this.GetClientes();
+  //       this.success = this.data.sucesso;
+  //       return true;
+  //     } catch (error) {
+  //       console.error('Erro ao buscar clientes:', error);
+  //       return false;
+  //     }
+  //   }
+
   async BuscaClientes(){
 
-    this.clientes = [];
-    this.clientesG = [];
-      try {
-        this.data = await this.GetClientes();
-        this.success = this.data.sucesso;
-        this.success = await this.Dados1();
-
-        await this.Carregar();
-
-        return true;
-      } catch (error) {
-        console.error('Erro ao buscar clientes:', error);
-        return false;
-      }
-    }
-
-
-  async Dados1(): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      const verificarSucesso1 = () => {
-        if (this.success === true) {
-          resolve(true);
-        } else {
-          setTimeout(() => {
-            verificarSucesso1();
-          }, 100);
-        }
-      };
-
-      verificarSucesso1();
-    });
   }
-
-
-
+private mensagem: any;
 
 
   async GetClienteByFiltro(id: string): Promise<Cliente[]> {
+    this.txtQtde = 'Aguarde... Carregando...'
     this.clientesG = [];
     this.clientes = [];
     this.dataSource = [];
-    const url = `${environment.ApiUrl}/Cliente`;
     try {
-      const response = await this.http.get<Response<Cliente[]>>(`${url}/novoId/${id}`).toPromise();
+    const resposta = await this.chamarGetCliente(id)
+        this.AlastID = this.lastID;
+        this.AfirstID = this.firstID;
+        this.lastID = parseInt(this.mensagem[1]);
+        this.firstID = parseInt(this.mensagem[0]);
+        this.txtQtde = this.mensagem[3] + ' registros encontrados.'
 
-      if (response && response.dados !== undefined && response.sucesso) {
-        this.clientesG = response.dados;
-        this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
-        this.clientes = this.clientesG;
-        const mensagem = response.mensagem.split('-');
-        this.lastID = parseInt(mensagem[1]);
-        this.firstID = parseInt(mensagem[0]);
-        this.AlastID = parseInt(mensagem[1]);
-        this.AfirstID = parseInt(mensagem[0]);
-        this.seletor = mensagem[2]
+        this.seletor = this.mensagem[2]
         console.log('lastID: ' + this.lastID);
         console.log('firstID: ' + this.firstID);
         console.log('seletor: ' + this.seletor);
@@ -287,15 +269,34 @@ export class ClienteService {
             this.btnP = false;
             break;
         }
-        return response.dados;
-      } else {
-        throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
-      }
+        return this.clientesG;
+
     } catch (error) {
+      console.log('Deu algum problema na chamargetclient')
       throw error; // Você pode personalizar essa parte conforme sua necessidade
     }
   }
 
+
+  async chamarGetCliente(id: string){         //aqui eu mando um 'id' com o formato : parametro-valor-idInicial-AouP
+    const url = `${environment.ApiUrl}/Cliente`;
+    this.clientesG = [];
+    this.mensagem = [];
+    try {
+      const response = await this.http.get<Response<Cliente[]>>(`${url}/novoId/${id}`).toPromise();
+      if (response && response.dados !== undefined && response.sucesso) {
+        this.clientesG = response.dados;
+        this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
+        this.mensagem = response.mensagem.split('-');    // a mensagem vem: firstY.ToString() + "-" + lastY.ToString() + "-" + seletor(I,A,X,F);
+        return true
+      }else{
+        return false
+      }
+    } catch (error) {
+      console.error('Erro ao buscar os clientes: ', error)
+      return false
+    }
+  }
 
   async iniciar(){
     console.log(this.param)
@@ -319,7 +320,7 @@ export class ClienteService {
   pLin: TableData[] = [];
 
   async Carregar(){
-console.log('Entrando em carregar')
+    console.log('Entrando em carregar')
 
     for (let i of this.clientesG) {
       let aSaiS: string = 'Não';
@@ -328,9 +329,10 @@ console.log('Entrando em carregar')
 
       if(i.id !== undefined){
 
-        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
-        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
-        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+        i.clienteDesde == null || undefined ? new Date().toISOString().split('T')[0] : i.clienteDesde = new Date(i.clienteDesde!).toISOString().split('T')[0];
+        i.dtInclusao == null || undefined ? new Date().toISOString().split('T')[0] : i.dtInclusao = new Date(i.dtInclusao!).toISOString().split('T')[0];
+        i.dtNascim == null || undefined ? new Date().toISOString().split('T')[0] : i.dtNascim = new Date(i.dtNascim!).toISOString().split('T')[0];
+
 
         const dtNascim = i.dtNascim !== null ? i.dtNascim.split('-') : new Date().toISOString().split('T')[0].split('-');
         i.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
@@ -338,6 +340,16 @@ console.log('Entrando em carregar')
         i.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
         const dtInclusao = i.dtInclusao !== null ? i.dtInclusao.split('-') : new Date().toISOString().split('T')[0].split('-');
         i.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
+        i.proxses = '-'
+        try{
+          i.proxses == null || undefined ? new Date().toISOString().split('T')[0] : i.proxses = new Date(i.proxses!).toISOString().split('T')[0];
+          const proxses = i.proxses !== null ? i.proxses.split('-') : new Date().toISOString().split('T')[0].split('-');
+          i.proxses = proxses[2] + '/'+ proxses[1] + '/'+ proxses[0];
+        }catch{
+          i.proxses = '-'
+        }
+
+
 
         if(i.maeRestric === true){
           aRestM = 'Sim';
@@ -373,6 +385,7 @@ console.log('Entrando em carregar')
           ativo: i.ativo,
           cpf: i.cpf,
           telComercial: i.telComercial,
+          Proxses: i.proxses,
 
           mae: i.mae,
           maeIdentidade:i.maeIdentidade,
@@ -415,15 +428,6 @@ console.log('Entrando em carregar')
     if (m < 0 || (m === 0 && hoje.getDate() < dataNascimento.getDate())) {
         idade--;
     }
-
     return idade.toString();
-  }
-  verificarImagem(url: string): Promise<boolean> {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve(true);
-      img.onerror = () => resolve(false);
-      img.src = url;
-    });
   }
 }

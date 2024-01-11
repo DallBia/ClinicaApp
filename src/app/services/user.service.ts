@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { TableProf } from '../models/Tables/TableProf';
 import { ModalSenhaProvComponent } from '../pages/login/modal-senha-prov/modal-senha-prov.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SharedService } from '../shared/shared.service';
 
 
 @Injectable({
@@ -58,6 +59,7 @@ export class UserService {
 
   constructor(private tokenService: TokenService,
     private router: Router,
+    private shared: SharedService,
     public dialog: MatDialog,
     private http: HttpClient){
 
@@ -90,7 +92,8 @@ export class UserService {
     this.setUserA(user)
     const Uid = user.userid !== undefined ? Number(user.userid) || 0 : 0;
     this.setEquipeA(Uid)
-
+    const id = user.userid !== undefined ? user.userid.toString() : '0';
+    window.sessionStorage.setItem('IdEq', id);
   }
 
 
@@ -135,10 +138,17 @@ export class UserService {
 
   // setUserA(UsrLog: any): Observable<string | null> {
   setUserA(UsrLog: any): Observable<string | null> {
+
     let Perf: string = '';
     if (UsrLog == null){
     UsrLog = this.getUserA().getValue();
     }
+    try{
+      this.shared.perfilAtual = parseInt(UsrLog.perfil?.toString());
+    }catch{
+      this.shared.perfilAtual = 3;
+    }
+    window.sessionStorage.setItem('IdPerfil', this.shared.perfilAtual.toString());
     if(UsrLog !== null){
       const UsrName = UsrLog.name;
       if(UsrLog.perfil?.toString() == '0') {
@@ -154,6 +164,7 @@ export class UserService {
           Perf = 'Equipe Clínica';
         }
         this.setUsuario(UsrName + ' (' + Perf + ')');
+
         return of(UsrName + ' (' + Perf + ')');
       }
       else{

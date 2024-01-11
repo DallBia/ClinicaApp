@@ -57,7 +57,7 @@ public data: string = "01/01/2000";
     this.selectedImageSource.next(imageUrl);
   }
 
-
+public infoFiles: string = ' (Arquivos)'
 public ListaNomesC: Tipo[] = [];
 public ClienteAtual: number = 0;
 public ProfAtual: number = 0;
@@ -88,6 +88,8 @@ public docto: Documento = {
   arquivo:'',
   formato:'',
 }
+public Perfil: Tipo[] = [];
+public perfilAtual: number = 3;
 
 
 //--- variável para ajudar no modal de confirmação:
@@ -204,6 +206,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
       }
 
       listarArquivos(id: number,tipo: string): Promise<Tipo[]> {
+        this.infoFiles = 'Aguarde, procurando arquivos...'
         return new Promise((resolve, reject) => {
           let url = `${environment.ApiUrl}/Image/id/${id}`;
             if (tipo == 'E'){
@@ -212,9 +215,12 @@ private ApiValor = `${environment.ApiUrl}/Valor`
 
             this.http.get<Response<Tipo[]>>(url).subscribe(
                 (response) => {
+                  const n = response.dados.length;
+                  this.infoFiles = 'Foram encontrados ' + n + ' arquivos.'
                     resolve(response.dados);
                 },
                 (error) => {
+                  this.infoFiles = 'A busca não trouxe arquivos.'
                     reject(error);
                 }
             );

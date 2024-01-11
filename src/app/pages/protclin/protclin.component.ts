@@ -58,7 +58,8 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
-
+    console.log(window.sessionStorage.getItem('IdPerfil'))
+    console.log(window.sessionStorage.getItem('IdEq'))
     this.shared.MostraInfo = true;
     console.log(this.shared.MostraInfo);
     this.subscription = this.clienteService.ClienteA$.subscribe(
@@ -85,6 +86,7 @@ export class ProtclinComponent implements OnInit, OnDestroy{
       this.NomeCliente = '';
     }
     this.newInfo(this.shared.MostraInfo);
+    console.log(this.shared.Perfil)
   }
 
   newInfo(opt: boolean){

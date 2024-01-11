@@ -124,9 +124,15 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
 
+      console.log(window.sessionStorage.getItem('IdPerfil'))
+      console.log(window.sessionStorage.getItem('IdEq'))
+      console.log(window.sessionStorage.getItem('IdCl'))
+
 
       this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
         this.Atual = clienteAtual;
+        console.log(window.sessionStorage.setItem('IdCl',this.Atual.id?.toString() || '0'))
+        console.log(window.sessionStorage.getItem('IdCl'))
         const n: number = parseInt(this.Atual.Ficha)
         for (let i of this.clienteService.clientesG){
           if (n == i.id){
@@ -258,6 +264,23 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       if(TabForm.saiSozinho !== null || undefined){
         TabForm.saiSozinho == true ? SszT = true : SszT = false
       }
+      let clientedesde = new Date().toISOString();
+      try{
+        clientedesde = this.sharedService.datas(this.Atual.dtInclusao,'Banco')
+      }catch{
+      }
+      let proximasessao = null;
+      try{
+        proximasessao = this.sharedService.datas(this.Atual.Proxses,'Banco')
+      }catch{
+      }
+      try{
+        TabNas = this.sharedService.datas(TabForm.dtNascim, 'Banco');
+      }
+      catch
+      {
+        TabNas = new Date().toISOString();
+      }
 
       let Dif = 0;
 
@@ -296,21 +319,12 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       this.Atual.paiEndereco !== TabForm.paiEndereco ?  Dif+=1 : null;
 
 
-
-      try{
-        TabNas = new Date(TabForm.dtNascim).toISOString();
-      }
-      catch
-      {
-        TabNas = new Date().toISOString();
-      }
-
      if(Dif>0){
         let Tab = {
           id: this.Atual.id == null ? 0 : this.Atual.id,
           foto: this.Atual.foto !== undefined ? this.Atual.foto : this.fotoService.semFoto,
           nome: TabForm.nome == null ? '0' : TabForm.nome,
-          dtInclusao: this.Atual.dtInclusao == null ? new Date().toISOString() : this.reDatas(this.Atual.dtInclusao),
+          dtInclusao: clientedesde,
           saiSozinho: SszT,
           respFinanc: TabForm.respFinanc == null ? 'Mãe' : TabForm.respFinanc,
           identidade: TabForm.identidade == null ? '0' : TabForm.identidade.toString(),
@@ -324,9 +338,10 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
           email: TabForm.email == null ? '0' : TabForm.email,
           endereco: TabForm.endereco == null ? '0' : TabForm.endereco,
           //clienteDesde: this.Atual.Desde == null ? new Date().toString : this.Atual.Desde,
-          clienteDesde: this.Atual.clienteDesde == null ? new Date().toISOString() : this.Atual.dtInclusao,
+          clienteDesde: clientedesde,
           ativo: true,
           areaSession: TabForm.areaSession == null ? '' : this.Atual.areaSession,
+          proxses: proximasessao,
 
           mae: TabForm.mae == null ? '0' : TabForm.mae,
           maeRestric: RestMT,

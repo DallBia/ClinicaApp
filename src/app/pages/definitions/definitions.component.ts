@@ -20,21 +20,45 @@ export class DefinitionsComponent implements OnInit{
     this.perfilService.Ajuda$.subscribe((novoValor) => {
       this.Ajuda = novoValor;
     });
+
+    this.carregar()
+
   }
 
-    Salvar(){
+carregar(){
+  const r = this.trazerPerfil();
+  console.log(window.sessionStorage.getItem('IdPerfil'))
+  console.log(window.sessionStorage.getItem('IdEq'))
+  for (let i = 1; i < 19; i++) {
+    const nome = 'Perfil' + i.toString();
+    console.log('Em ' + nome + ': ' + window.sessionStorage.getItem(nome))
+  }
+}
+
+  async trazerPerfil(){
+    try{
+      const r = await this.perfilService.guardaPerfil();
+      return true
+    }catch{
+      return false
+    }
+  }
+
+    async Salvar(){
       const nPerfil = this.formPerf.perfil;
       for (let i of nPerfil){
         this.perfilService.UpdatePerfil(i).subscribe((data) => {
         this.delay(100)
-        console.log(i.id)
-     }, error => {
-       console.error('Erro no upload', error);
-     });
-    }
+
+        }, error => {
+          console.error('Erro no upload', error);
+        });
+          const r = await this.perfilService.guardaPerfil();
+      }
       alert('Registro atualizado!')
       location.reload()
     }
+
     Cancelar(){
       location.reload()
     }

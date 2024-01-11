@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { TableData } from 'src/app/models/Tables/TableData';
 import { TabResult } from 'src/app/models/Tables/TabResult';
 import { UserService } from '../user.service';
+import { Tipo } from 'src/app/models/Tipo';
 
 
 @Injectable({
@@ -84,4 +85,55 @@ export class PerfilService {
     //     return true;
     //     //return resp;
     // }
+    public ps: Perfil[] = []
+    guardaPerfil(): boolean{
+       this.GetPerfil().subscribe(data => {
+      const dados = data.dados;
+      dados.map((item) => {
+        item.dir !== null ? item.dir = item.dir : item.dir = false;
+        item.secr !== null ? item.secr = item.secr : item.secr = false;
+        item.coord !== null ? item.coord = item.coord : item.coord = false;
+      })
+      this.ps = data.dados;
+      const pf = parseInt(window.sessionStorage.getItem('IdPerfil') || '3')
+      this.ps.sort((a, b) => a.id - b.id);
+      this.perfils = this.ps;
+      for (let i of this.ps){
+
+     let nome: boolean = false;
+
+      switch (pf){
+        case (0):
+          nome = i.dir !== undefined ? i.dir : false;
+        break;
+        case (1):
+          nome = i.secr !== undefined ? i.secr : false;
+        break;
+        case (2):
+          nome = i.coord !== undefined ? i.coord : false;
+        break;
+        case (3):
+          nome = i.equipe !== undefined ? i.equipe : false;
+        break;
+        default:
+        nome = false;
+      }
+        let valor: string = '';
+        if (nome == true){
+          valor = 'S'
+        }else{
+          valor = i.siMesmo == true ? 'X' : 'N';
+        }
+
+        const nId = 'Perfil' + i.id.toString();
+        window.sessionStorage.setItem(nId, valor);
+      }
+
+    });
+    return true;
+    }
+
+
+
+
 }

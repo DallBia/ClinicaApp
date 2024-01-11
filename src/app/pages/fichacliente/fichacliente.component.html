@@ -18,7 +18,7 @@
                 <label *ngIf="this.nCliente>0">Idade: {{this.Atual.Idade}}</label>
             </div>
             <div class="proxses">
-                <label *ngIf="this.nCliente>0">Próxima sessão: 28/07/2023</label>
+                <label *ngIf="this.nCliente>0">Próxima sessão: {{this.Atual.Proxses}}</label>
             </div>
         </div>
     </div>
@@ -32,6 +32,7 @@
     <div class="botoes1">
       <button class="Branco1" id="ant" [disabled]="this.clienteService.btnA" (click)="this.clienteService.anterior()">Anterior</button>
       <button class="Branco1" id="prox" [disabled]="this.clienteService.btnP" (click)="this.clienteService.proximo()">Próximo</button>
+      <span style="font-size: small;">{{this.clienteService.txtQtde}}</span>
     </div>
   </div>
     <div class="lado-direito">

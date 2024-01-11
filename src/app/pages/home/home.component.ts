@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   textoNiver: string = '';
   subscription!: Subscription;
   UsrAtual!: User
-  public ps: Perfil[] = []
+
   public pAtual: any;
   buttons = [
     { text: 'FICHAS DE CLIENTES', param: 'parametro1', route: '/fichacliente'},
@@ -65,21 +65,10 @@ export class HomeComponent implements OnInit {
      this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
     });
 
-
+    window.sessionStorage.setItem('IdCl','0')
+    window.sessionStorage.setItem('IdEq','0')
     this.Carregar();
-    this.perfilService.GetPerfil().subscribe(data => {
-      const dados = data.dados;
-      dados.map((item) => {
-        item.dir !== null ? item.dir = item.dir : item.dir = false;
-        item.secr !== null ? item.secr = item.secr : item.secr = false;
-        item.coord !== null ? item.coord = item.coord : item.coord = false;
-      })
-      this.ps = data.dados;
-     this.ps.sort((a, b) => a.id - b.id);
-     this.perfilService.perfils = this.ps;
-     console.log('Perfis recebidos:')
-      console.log(this.ps)
-    });
+    const r = this.perfilService.guardaPerfil();
 
   }
 
@@ -99,7 +88,7 @@ this.userService.btnEntrar = false;
         catch (error) {
           console.error('Erro ao buscar clientes.'); //console.error('Erro ao buscar clientes:', error);
         }
-
+        console.log(Cli)
         if (Cli !== undefined){
           for (let i of Cli){
             const pessoa = i.nome.split('%')
@@ -195,22 +184,4 @@ this.userService.btnEntrar = false;
     this.headerService.linkAtivo = texto;
   }
 
-
-  converterParaDate(dataString: string): Date {
-    const [dia, mes, ano] = dataString.split('/').map(Number);
-    return new Date(ano, mes - 1, dia);
-  }
-
-  calcularIdade(dataNascimento: Date): string {
-    const hoje = new Date();
-    let idade = hoje.getFullYear() - dataNascimento.getFullYear();
-
-    // Ajuste para caso o aniversário ainda não tenha ocorrido este ano
-    const m = hoje.getMonth() - dataNascimento.getMonth();
-    if (m < 0 || (m === 0 && hoje.getDate() < dataNascimento.getDate())) {
-        idade--;
-    }
-
-    return idade.toString();
-  }
 }

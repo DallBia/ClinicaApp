@@ -23,7 +23,9 @@ export class Grid01Component {
 
   ngOnInit(): void {
 
-    this.clienteService.BuscaClientes()
+    //this.clienteService.BuscaClientes()
+    this.clienteService.GetClienteByFiltro('tudo-tudo-0-P')
+
     this.sharedService.btnAnexCli = false;
 
   }
@@ -33,9 +35,11 @@ export class Grid01Component {
     this.nChanges = false;
     this.clienteService.setChangesA(false);
     let numero = parseInt(l.Ficha, 10);
+    window.sessionStorage.setItem('IdCl', l.Ficha || '0')
       if (isNaN(numero)) {
         numero = 0;
     }
+    this.sharedService.ListaArquivos = [];
     this.sharedService.ClienteAtual = numero;
     this.sharedService.btnAnexCli = true;
     const dados = this.clienteService.clientesG.find(cliente => cliente.id === numero);

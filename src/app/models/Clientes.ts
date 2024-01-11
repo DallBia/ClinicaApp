@@ -16,6 +16,7 @@ export interface Cliente{
   telComercial?: string;//
   email: string;//
   endereco: string;//
+  proxses?: string | null;
 
   mae: string;
   maeRestric: boolean;
