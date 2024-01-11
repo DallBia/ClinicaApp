@@ -9,10 +9,7 @@ import { UserService } from 'src/app/services';
 import { User } from 'src/app/models';
 import { SharedService } from 'src/app/shared/shared.service';
 import {Info} from '../../models/Infos'
-import { DonoSala } from 'src/app/models/DonoSalas';
-import { DonoSalaService } from 'src/app/services/donoSala/dono-sala.service';
-import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
-import { FinanceiroService } from 'src/app/services/financeiro/financeiro.service';
+import { Tipo } from 'src/app/models/Tipo';
 
 
 @Component({
@@ -48,19 +45,7 @@ export class HomeComponent implements OnInit {
     private userService: UserService,
     private colaboradorService: ColaboradorService,
     private shared: SharedService,
-    private donoSala: DonoSalaService,
-    private agenda: Agenda2Service,
-    private financeiro: FinanceiroService
     ) {
-
-      if(this.UsrAtual){
-        for (let def in this.ps){
-          if(this.UsrAtual.perfil?.toString() == '0'){
-
-          }
-        }
-      }
-
 
     }
 
@@ -74,87 +59,68 @@ export class HomeComponent implements OnInit {
     });
 
     this.shared.GetInfoById(1).subscribe(data => {
-     const dados = data.dados;
+      console.log('Infos recebidas:')
+     console.log(data.dados)
+      const dados = data.dados;
      this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
-     //this.textoAvisos = data.mensagem;
     });
-    //this.Carregar();
-    // this.perfilService.GetPerfil().subscribe(data => {
-    //   const dados = data.dados;
-    //   dados.map((item) => {
-    //     item.dir !== null ? item.dir = item.dir : item.dir = false;
-    //     item.secr !== null ? item.secr = item.secr : item.secr = false;
-    //     item.coord !== null ? item.coord = item.coord : item.coord = false;
-    //   })
-    //   this.ps = data.dados;
-    //  this.ps.sort((a, b) => a.id - b.id);
-    //  //console.log(this.ps)
-    //  this.perfilService.perfils = this.ps;
 
-    // });
-    const x = this.pT()
+
+    this.Carregar();
+    this.perfilService.GetPerfil().subscribe(data => {
+      const dados = data.dados;
+      dados.map((item) => {
+        item.dir !== null ? item.dir = item.dir : item.dir = false;
+        item.secr !== null ? item.secr = item.secr : item.secr = false;
+        item.coord !== null ? item.coord = item.coord : item.coord = false;
+      })
+      this.ps = data.dados;
+     this.ps.sort((a, b) => a.id - b.id);
+     this.perfilService.perfils = this.ps;
+     console.log('Perfis recebidos:')
+      console.log(this.ps)
+    });
 
   }
 
-async pT(){
-  const x = await this.clienteService.GetClientes();
-  console.log(x.mensagem)
-}
 
 
 
 
 async Carregar(){
 this.userService.btnEntrar = false;
-  try {
-        const r1 = await this.clienteService.BuscaClientes();
+  let Cli: Tipo[] | undefined = undefined;
         this.clienteService.setClienteA(0);
-        const r2 = await this.colaboradorService.GetCol();
-        const dataAtual = new Date();
-        const dia = dataAtual.getDate(); // Obtém o dia (1-31)
-        const mes = dataAtual.getMonth() + 1; // Obtém o mês (0-11, então somamos 1 para obter 1-12)
+        let idade = 0
+        try {
+         const lCli = await this.clienteService.GetClientesByAgenda('home');
+         Cli = lCli.dados;
+        }
+        catch (error) {
+          console.error('Erro ao buscar clientes.'); //console.error('Erro ao buscar clientes:', error);
+        }
 
-        // Formata o dia e o mês com zero à esquerda se for menor que 10
-        const diaFormatado = dia < 10 ? `0${dia}` : dia;
-        const mesFormatado = mes < 10 ? `0${mes}` : mes;
-
-        const hoje = `${diaFormatado}/${mesFormatado}`;
-
-
-        for (let i of this.clienteService.clientesG){
-          const dataNiv = i.dtNascim.split('/');
-          const niver = dataNiv[0] + '/' + dataNiv[1];
-          if (niver == hoje){
-            const aIdade1 = this.converterParaDate(i.dtNascim);
-            this.textoNiver = this.textoNiver + i.nome + ' (cliente, ' + this.calcularIdade(aIdade1) + ' anos)<br>';
-
+        if (Cli !== undefined){
+          for (let i of Cli){
+            const pessoa = i.nome.split('%')
+            let data = new Date(pessoa[1]).toISOString().split('T')[0];
+            const dia1 = new Date(pessoa[1]).getDate();
+            const mes1 = new Date(pessoa[1]).getMonth() + 1;
+            const dia2 = new Date().getDate();
+            const mes2 = new Date().getMonth() + 1;
+            if (dia1 ==dia2 && mes1 == mes2){
+                idade = this.shared.idades(pessoa[1])
+                this.textoNiver = this.textoNiver + pessoa[0] + ' (cliente, ' + idade + ' anos)<br>';
+            }
           }
         }
-        for (let i of this.colaboradorService.colaboradorsG){
-          const nasc = i.dtNasc ? i.dtNasc : '00/00';
-          const dataNiv = nasc.split('/');
-          const niver = dataNiv[0] + '/' + dataNiv[1];
-          if (niver == hoje){
-            const aIdade1 = this.converterParaDate(nasc);
-            this.textoNiver = this.textoNiver + i.nome + ' (equipe, ' + this.calcularIdade(aIdade1) + ' anos)<br>';
 
-          }
-        }
         if (this.textoNiver.length == 0){
           this.textoNiver = 'Sem aniversariantes por hoje...'
         }
-        return true;
 
 
-      }
-      catch (error) {
-        console.error('Erro ao buscar clientes:', error);
-        return false;
-      }
-
-
-
-}
+  }
 
   mostrarBotaoSalvar = false;
 
@@ -165,14 +131,16 @@ this.userService.btnEntrar = false;
       idFuncAlt: UsrId,
       nomeInfo: this.textoAvisos,
       subtitulo: '',
-      dtInicio: new Date().toISOString().split('T')[0],
-      dtFim: new Date().toISOString().split('T')[0],
+      dtInicio: new Date().toISOString(),
+      dtFim: new Date().toISOString(),
       tipoInfo: "Aviso",
       destinat: "Todos",
     }
     this.shared.UpdateInfo(Aviso).subscribe(data => {
-      //const dados = data.dados;
-      //this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
+      const dados = data.dados;
+      console.log(dados)
+      alert(data.mensagem);
+
     });
 
       this.ctrlSalva == false;

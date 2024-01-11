@@ -9,6 +9,7 @@ import { TableData } from 'src/app/models/Tables/TableData';
 import { TabResult } from 'src/app/models/Tables/TabResult';
 import { FileService } from '../foto-service.service';
 import { SharedService } from 'src/app/shared/shared.service';
+import { Tipo } from 'src/app/models/Tipo';
 
 @Injectable({
   providedIn: 'root'
@@ -130,9 +131,23 @@ export class ClienteService {
 
 
   private apiurl = `${environment.ApiUrl}/Cliente`
-  GetClientes(): Promise<any> {
-    return this.http.get<any>(`${this.apiurl}`).toPromise();
+
+
+  async GetClientes(): Promise<Response<Cliente[]>> {
+    try {
+      const response = await this.http.get<Response<Cliente[]>>(`${this.apiurl}`).toPromise();
+      if (response && response.dados !== undefined && response.sucesso) {
+        return response;
+      } else {
+        throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+      }
+    } catch (error) {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    }
   }
+
+
+
   CreateCliente(cliente: Cliente) : Observable<Response<Cliente[]>>{
     return this.http.post<Response<Cliente[]>>(`${this.apiurl}` , cliente);
   }
@@ -149,8 +164,8 @@ export class ClienteService {
     return this.http.get<any>(`${this.apiurl}/id/${id}`).toPromise();
   }
 
-  GetClientesByAgenda(): Promise<any> {
-    return this.http.get<any>(`${this.apiurl}/Agenda`).toPromise();
+  GetClientesByAgenda(param: string): Promise<any> {
+    return this.http.get<any>(`${this.apiurl}/Agenda/${param}`).toPromise();;
   }
 
   private ClienteAtual = new BehaviorSubject<TableData>(this.Vazia[0]);
@@ -178,11 +193,6 @@ export class ClienteService {
   }
 
 
-
-  async BuscaAgenda(){
-        const data = await this.GetClientesByAgenda();
-    }
-
   async BuscaClientesById(id: number){
     try{
       this.cliente = this.clienteVazio
@@ -193,7 +203,6 @@ export class ClienteService {
     catch{
       return false;
     }
-
   }
 
   async BuscaClientes(){
@@ -319,9 +328,9 @@ console.log('Entrando em carregar')
 
       if(i.id !== undefined){
 
-        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
-        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
-        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
 
         const dtNascim = i.dtNascim !== null ? i.dtNascim.split('-') : new Date().toISOString().split('T')[0].split('-');
         i.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];

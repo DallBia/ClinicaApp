@@ -125,8 +125,8 @@ public respostaModal: string ='';
 private ApiValor = `${environment.ApiUrl}/Valor`
 
 
-  UpdateInfo(info: Info) : Observable<Response<Info>>{
-    return this.http.put<Response<Info>>(`${this.apiurl}/Info/Editar` , info);
+  UpdateInfo(info: Info) : Observable<Response<Info[]>>{
+    return this.http.put<Response<Info[]>>(`${this.apiurl}/Info/Editar` , info);
   }
   GetInfoById(id: number): Observable<Response<Info>> {
     const params = new HttpParams().set('id', id);
@@ -346,5 +346,33 @@ private ApiValor = `${environment.ApiUrl}/Valor`
        return (dataO);
     }
 
+  }
+
+  datas(n: string, t?: string) : string{
+    if (t == null){
+      if(n.length > 10){
+        const ISO = n.split('T')[0]
+        return ISO.split('-')[2] + '/' + ISO.split('-')[1] + '/' + ISO.split('-')[0];
+      }else{
+        return new Date(n.split('/')[2] + '-' + n.split('/')[1] + '-' + n.split('/')[0]).toISOString();
+      }
+    }else{
+      if (t[0] == 'T'){
+        const ISO = n.split('T')[0]
+        return ISO.split('-')[2] + '/' + ISO.split('-')[1] + '/' + ISO.split('-')[0];
+            }else{
+        return new Date(n.split('/')[2] + '-' + n.split('/')[1] + '-' + n.split('/')[0]).toISOString();
+      }
+    }
+  }
+
+  idades(n: string) : number {
+    let ano = n[2] == '/' && n[5] == '/' ? n.split('/')[2] + '-' + n.split('/')[1] + '-' + n.split('/')[0] : n;
+    const data1 = new Date();
+    let data2 = new Date(ano)
+    data2.setHours(data2.getHours() + 3);
+    const diffMillis = data1.getTime() - data2.getTime();
+    const diffYears = Math.floor(diffMillis / (1000 * 60 * 60 * 24 * 365.25));
+    return (diffYears)
   }
 }

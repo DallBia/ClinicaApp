@@ -7,6 +7,7 @@ import { UserService } from '../../services/user.service'; // Importe o UserServ
 import { User } from '../../models/user'; // Importe a classe User aqui
 import { ModalSenhaProvComponent } from './modal-senha-prov/modal-senha-prov.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SharedService } from 'src/app/shared/shared.service';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
               private router: Router,
               public userService: UserService,
               public dialog: MatDialog,
+              public shared: SharedService,
 
     ) {
       this.userService.EquipeA$.subscribe(resposta => {
@@ -141,6 +143,31 @@ export class LoginComponent implements OnInit {
 
 
   }
+
+datas(n: string){
+  console.log(this.shared.idades(n))
+  let data = ''
+  try{
+    data = this.shared.datas(n,'Banco')
+    console.log(data)
+  }catch{
+    console.log('Não foi possível converter')
+  }
+  try{
+    data = this.shared.datas(data,'Tela');
+    console.log(data)
+  }catch{
+    console.log('Não foi possível converter')
+  }
+  try{
+    data = this.shared.datas(n);
+    console.log('Invertendo: ' + data)
+  }catch{
+    console.log('Não foi possível converter')
+  }
+
+
+}
 
 
 DefinirUsuario(n: User){

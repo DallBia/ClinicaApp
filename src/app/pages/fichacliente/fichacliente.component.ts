@@ -138,13 +138,9 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
         this.nChanges = chng;
       });
       this.vNovo = this.perfilService.validaPerfil(0, 1)
-      if(this.userService.alertas !== true){
-        window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
-      }
-
-
-
-
+      // if(this.userService.alertas !== true){
+      //   window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
+      // }
       this.clienteService.dataSource = [];
       this.clienteService.iniciar();
 
@@ -153,9 +149,9 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     this.subscription.unsubscribe();
     console.log('Em fichaCliente:' + this.userService.alertas)
-    if(this.userService.alertas !== true){
-      window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
-    }
+    // if(this.userService.alertas !== true){
+    //   window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
+    // }
   }
 
 
@@ -222,7 +218,6 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
       this.formCliente.submit();
 
-
   }
 
   buscarAlteracoes(event:any){
@@ -230,8 +225,8 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       this.txtSalva = "Aguarde..."
       this.btnSalva = true;
       this.delay(300);
-    this.userService.alertas = true;
-    let TabNas: string = new Date().toISOString().split('T')[0];
+      this.userService.alertas = true;
+      let TabNas: string = new Date().toISOString();
       const TabForm = this.formCliente.clienteform.value
       let RestM = false;
       let RestP = false;
@@ -267,10 +262,10 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       let Dif = 0;
 
       this.Atual.nome !== TabForm.nome ?  Dif+=1 : null;
-      this.Atual.dtNascim == '' ?  this.Atual.dtNascim = new Date().toISOString().split('T')[0] : null;
+      this.Atual.dtNascim == '' ?  this.Atual.dtNascim = new Date().toISOString() : null;
       this.Atual.dtNascim !== TabForm.dtNascim ?  Dif+=1 : null;
-      this.Atual.clienteDesde == '' ?  this.Atual.clienteDesde = new Date().toLocaleDateString() : null;
-      this.Atual.dtInclusao == '' ?  this.Atual.dtInclusao = new Date().toLocaleDateString() : null;
+      this.Atual.clienteDesde == '' ?  this.Atual.clienteDesde = new Date().toISOString() : null;
+      this.Atual.dtInclusao == '' ?  this.Atual.dtInclusao = new Date().toISOString() : null;
       Ssz !== SszT ?  Dif+=1 : null;
       this.Atual.identidade !== TabForm.identidade ?  Dif+=1 : null;
       this.Atual.cpf !== TabForm.Cpf ?  Dif+=1 : null;
@@ -303,17 +298,11 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
 
       try{
-        let a = TabForm.dtNascim;
-        let b = this.reDatas(a);
-        let c = b.split('T')[0];
-        TabNas = c
+        TabNas = new Date(TabForm.dtNascim).toISOString();
       }
       catch
       {
-        let b = new Date();
-        let c = b.toISOString();
-        TabNas = c.split('T')[0];
-        TabNas = new Date().toISOString().split('T')[0];
+        TabNas = new Date().toISOString();
       }
 
      if(Dif>0){
@@ -335,7 +324,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
           email: TabForm.email == null ? '0' : TabForm.email,
           endereco: TabForm.endereco == null ? '0' : TabForm.endereco,
           //clienteDesde: this.Atual.Desde == null ? new Date().toString : this.Atual.Desde,
-          clienteDesde: this.Atual.clienteDesde == null ? new Date().toISOString() : this.reDatas(this.Atual.dtInclusao),
+          clienteDesde: this.Atual.clienteDesde == null ? new Date().toISOString() : this.Atual.dtInclusao,
           ativo: true,
           areaSession: TabForm.areaSession == null ? '' : this.Atual.areaSession,
 

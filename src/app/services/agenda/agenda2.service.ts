@@ -157,7 +157,7 @@ public botaoVer: string = '';
       if (response) {
         return response;
       } else {
-        throw new Error('Resposta da API é indefinida.');
+        throw new Error('Tive problemas para acessar a Agenda...');
       }
     })
     .catch(error => {
@@ -170,7 +170,7 @@ public botaoVer: string = '';
       if (response) {
         return response;
       } else {
-        throw new Error('Resposta da API é indefinida.');
+        throw new Error('Tive problemas para acessar a Agenda...');
       }
     })
     .catch(error => {
@@ -205,7 +205,7 @@ public botaoVer: string = '';
         this.atualizarsegueModal(true);
         return response;
       } else {
-        throw new Error('Resposta da API é indefinida.');
+        throw new Error('Tive problemas para acessar a Agenda...');
       }
     })
     .catch(error => {

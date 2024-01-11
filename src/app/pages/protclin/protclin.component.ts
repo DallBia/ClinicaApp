@@ -123,7 +123,6 @@ export class ProtclinComponent implements OnInit, OnDestroy{
 
   Salva()
   {
-    const r = this.clienteService.BuscaAgenda();
 
   }
 
