@@ -32,6 +32,7 @@
     <div class="botoes1">
       <button class="Branco1" id="ant" [disabled]="this.colaboradorService.btnA" (click)="this.colaboradorService.anterior()">Anterior</button>
       <button class="Branco1" id="prox" [disabled]="this.colaboradorService.btnP" (click)="this.colaboradorService.proximo()">Próximo</button>
+      <span style="font-size: small;">{{this.colaboradorService.txtQtde}}</span>
     </div>
   </div>
   <div class="lado-direito">

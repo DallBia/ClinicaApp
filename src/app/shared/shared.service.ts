@@ -227,7 +227,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
         });
       }
 
-      async carregarListaDeArquivos(){
+      async carregarListaDeArquivos(): Promise<boolean>{
         let data: Tipo[] = [];
         let PessoaAtual = 0;
         if (this.PessoaDoctos == "C"){
@@ -284,6 +284,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
             this.ListaArquivos = [...this.ListaArquivos, ...lin]
           }
         }
+        return true
       }
 
       async downloadDeArquivos(id: number, nomeArquivo: string){

@@ -95,7 +95,7 @@ export class PerfilService {
         item.coord !== null ? item.coord = item.coord : item.coord = false;
       })
       this.ps = data.dados;
-      const pf = parseInt(window.sessionStorage.getItem('IdPerfil') || '3')
+      const pf = parseInt(window.sessionStorage.getItem('nPrf') || '3')
       this.ps.sort((a, b) => a.id - b.id);
       this.perfils = this.ps;
       for (let i of this.ps){

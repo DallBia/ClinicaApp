@@ -15,12 +15,12 @@
     </div>
     <div>
       <span class="fLabel">Data de Nascim.:</span>
-      <input [(ngModel)]="this.shared.data" appDateMask type="text"  class="fCampo" formControlName="dtNascim" placeholder="(dd/mm/aaaa)" required>
+      <input appDateMask type="text"  class="fCampo" formControlName="dtNascim" placeholder="(dd/mm/aaaa)" required>
     </div>
     <div>
       <input type="checkbox"  class="fCheck" style="margin-right:4px;" formControlName="saiSozinho">
       <span  style="width: 40%; height: 20px;">Pode sair sozinho?</span>
-      <span  style="width: 30%; height: 20px;">Resp. Financeiro:</span>
+      <span  style="width: 30%; height: 20px; margin-left: 10px;">Resp. Financeiro:</span>
       <select formControlName="respFinanc" >
         <option>Pai</option>
         <option>Mãe</option>
@@ -28,7 +28,7 @@
       </select>
    </div>
    <div *ngIf="clienteform.get('respFinanc')?.value === 'Cliente'">
-    <span class="fLabel2">DADOS DO CLIENTE</span>
+    <label class="fLabel2">DADOS DO CLIENTE</label>
     <div>
       <span class="fLabel">Identidade:</span>
       <input type="text"  class="fCampo" formControlName="identidade" placeholder="(apenas números)" required>

@@ -40,20 +40,6 @@ export class Agenda2Service {
     {hora: 14, texto:'18:10', cor: 'Branco'},
     {hora: 15, texto:'19:00', cor: 'Branco'}
   ];
-
-  private _agendaDiaSubject = new BehaviorSubject<any[]>([]);
-  agendaDia$ = this._agendaDiaSubject.asObservable();
-  atualizarAgendaDia(novaAgendaDia: any[]) {
-    this._agendaDiaSubject.next(novaAgendaDia);
-  }
-
-  private segueModal = new BehaviorSubject<boolean>(false);
-  segueModal$ = this.segueModal.asObservable();
-  atualizarsegueModal(bol: boolean) {
-    this.segueModal.next(bol);
-  }
-
-public botaoVer: string = '';
   public Vazia: Agenda = {
     id: 0,
     idCliente:0,
@@ -72,6 +58,30 @@ public botaoVer: string = '';
     diaF:'',
     valor: -1000009,
   };
+  private _agendaDiaSubject = new BehaviorSubject<any[]>([]);
+  agendaDia$ = this._agendaDiaSubject.asObservable();
+  atualizarAgendaDia(novaAgendaDia: any[]) {
+    this._agendaDiaSubject.next(novaAgendaDia);
+  }
+
+
+  private _cellASubject = new BehaviorSubject<Agenda>(this.Vazia);
+  cellA$ = this._cellASubject.asObservable();
+  setcellA(cellA: Agenda) {
+    this._cellASubject.next(cellA);
+  }
+
+
+
+
+  private segueModal = new BehaviorSubject<boolean>(false);
+  segueModal$ = this.segueModal.asObservable();
+  atualizarsegueModal(bol: boolean) {
+    this.segueModal.next(bol);
+  }
+
+public botaoVer: string = '';
+
 
   public tVazia: Tipo = {
     id: 0,
@@ -87,7 +97,6 @@ public botaoVer: string = '';
   public hora: number = 0;
   public horario: string = '';
   public celSelect: Agenda = this.Vazia;
-  public cellA: Agenda = this.Vazia;
   public agendaDia: TableAgenda[] = [];
   public agendaDiaAnt: TableAgenda[] = [];
   public linTmp: TableAgenda[] = [];
@@ -104,6 +113,8 @@ public botaoVer: string = '';
   public fotografia: boolean = false;
   public changes: boolean = false;
   public success: boolean = false;
+
+  public tipoDeAgendamento: string = 'Reservado'
   // public donoSala: DonoSala[]=[];
   // public donoTmp: DonoSala[]=[];
   public agendaNsessoes: number = 0;
@@ -300,11 +311,14 @@ validaRept(agenda: Agenda[]): boolean {
     const data = await this.GetClientesByAgenda('nome');
     this.ListaCLientes = data.dados
   }
-  GetColabByAgenda(): Promise<any> {
-    return this.http.get<any>(`${environment.ApiUrl}/Colaborador/Agenda`).toPromise();
+
+  GetColabByAgenda(tipo: string): Promise<any> {
+    return this.http.get<any>(`${environment.ApiUrl}/Colaborador/Agenda/${tipo}`).toPromise();
   }
-  async BuscaColab(){
-    const data = await this.GetColabByAgenda();
+
+
+  async BuscaColab(tipo: string){
+    const data = await this.GetColabByAgenda(tipo);
     this.ListaEquipe = data.dados
   }
 
@@ -364,7 +378,8 @@ validaRept(agenda: Agenda[]): boolean {
 
     async UpdateAgenda(id: number, agenda: Agenda): Promise<Agenda[]> {
       try {
-        const response = await this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}` , agenda).toPromise();
+        agenda.diaDaSemana = '';
+        const response = await this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}`, agenda).toPromise();
 
         if (response && response.dados !== undefined && response.sucesso) {
           return response.dados;
@@ -455,29 +470,41 @@ validaRept(agenda: Agenda[]): boolean {
 
     this.Cliente = this.clienteService.clienteVazio
     this.celSelect = {
-      id: 0,
-      idCliente:0,
-      nome:'',
-      configRept: 'X',
-      idFuncAlt:0,
-      sala:0,
-      dtAlt:'',
-      status:'',
-      repeticao:'',
-      obs:'',
-      horario:'',
-      historico:'',
-      diaDaSemana:'',
-      diaI:'',
-      diaF:'',
-      valor: -1000009,
-    };
-
+          id: 0,
+          idCliente:0,
+          nome:'',
+          configRept: 'X',
+          idFuncAlt:0,
+          sala:0,
+          dtAlt:'',
+          status:'',
+          repeticao:'',
+          obs:'',
+          horario:'',
+          historico:'',
+          diaDaSemana:'',
+          diaI:'',
+          diaF:'',
+          valor: -1000009,
+        };
+    this.celSelect.sala = this.sala;
+    for(let i of this.listaHorarios){
+      if (i.n == this.hora){
+        this.horario = i.horario
+        if(this.horario == 'manhã' || this.horario == 'tarde'){
+          this.celSelect.status = 'Sala';
+          this.celSelect.valor = 0;
+        }
+      }
+    }
+    this.celSelect.horario = this.horario
     const s = this.hora * 100;
     const idSelect = s + this.sala;
-
+    let rep: string = '';
     for(let i of this.agendaDia){
       if (i.idtmp == idSelect){
+        this.celSelect = this.Vazia;
+        this.celSelect.sala = this.sala;
         this.celSelect = {
           id: 0,
           idCliente:0,
@@ -517,25 +544,42 @@ validaRept(agenda: Agenda[]): boolean {
           multi: i.multi,
           valor:  i.valor,
         }
+        rep = i.repeticao ? i.repeticao : '';
       }
-      this.cellA = this.celSelect;
+
+    }
+
+    switch (rep){
+      case ('Diaria'):
+        this.celSelect.repeticao = 'Diária';
+      break;
+      case ('Semanal'):
+        this.celSelect.repeticao = 'Semanal';
+      break;
+      case ('Quinzenal'):
+        this.celSelect.repeticao = 'Quinzenal';
+      break;
+      case ('Mensal'):
+        this.celSelect.repeticao = 'Mensal';
+      break;
+      case ('Cancela'):
+        this.celSelect.repeticao = 'Cancelar Repetição';
+      break;
+      default:
+        this.celSelect.repeticao = 'Sessão única';
+      break;
     }
 
     this.celSelect.idCliente = this.celSelect.idCliente !== undefined ? this.celSelect.idCliente : 0;
     if (this.celSelect.id == 0){
-      let data: any = 'nada por enquanto';
-      // try{
-      //   data = this.BuscaValores();
-      // }catch{
-      //   data = null;
-      // }
-      this.ListaValores = data.value;
-      console.log(this.ListaValores)
+
+
     }
     if (this.celSelect.idCliente !== 0){
       if (this.celSelect.horario == 'manhã' || this.celSelect.horario == 'tarde'){
         const data = this.BuscaColabor(this.celSelect.idCliente)
         this.Cliente.foto = this.Equipe.foto !== '' ? this.Equipe.foto : this.fotoService.semfoto2
+        this.celSelect.status = 'Sala';
       }else{
         const data = this.BuscaCliente(this.celSelect.idCliente)
       this.Cliente.foto = this.Cliente.foto !== '' ? this.Cliente.foto : this.fotoService.semfoto2
@@ -544,13 +588,14 @@ validaRept(agenda: Agenda[]): boolean {
 
     }
     this.celSelect.id = this.celSelect.id !== undefined ? this.celSelect.id : 0;
+
     this.Cliente.foto = this.Cliente.foto !== '' ? this.Cliente.foto : this.fotoService.semfoto2
     this.fotografia = true
-    for(let i of this.listaHorarios){
-      if (i.n == this.hora){
-        this.horario = i.horario
-      }
-    }
+    // for(let i of this.listaHorarios){
+    //   if (i.n == this.hora){
+    //     this.horario = i.horario
+    //   }
+    // }
     this.botaoVer = '';
     if (this.celSelect.multi !== undefined && this.celSelect.multi !== null){
       this.botaoVer = this.celSelect.multi;
@@ -580,12 +625,12 @@ validaRept(agenda: Agenda[]): boolean {
           diaDaSemana:  i.diaDaSemana,
           repeticao:  i.repeticao,
           subtitulo:  i.subtitulo,
-          status:  "Sala",
+          status: 'Sala',
           historico:  i.historico,
           obs:  i.obs,
           valor:  0,
         }
-        this.cellA = this.celSelect
+
       }
     }
 
@@ -605,7 +650,6 @@ validaRept(agenda: Agenda[]): boolean {
         this.horario = i.horario
       }
     }
-    console.log(this.celSelect)
 
   }
 

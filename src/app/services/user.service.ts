@@ -93,7 +93,7 @@ export class UserService {
     const Uid = user.userid !== undefined ? Number(user.userid) || 0 : 0;
     this.setEquipeA(Uid)
     const id = user.userid !== undefined ? user.userid.toString() : '0';
-    window.sessionStorage.setItem('IdEq', id);
+    window.sessionStorage.setItem('nCol', id);
   }
 
 
@@ -148,7 +148,7 @@ export class UserService {
     }catch{
       this.shared.perfilAtual = 3;
     }
-    window.sessionStorage.setItem('IdPerfil', this.shared.perfilAtual.toString());
+    window.sessionStorage.setItem('nPrf', this.shared.perfilAtual.toString());
     if(UsrLog !== null){
       const UsrName = UsrLog.name;
       if(UsrLog.perfil?.toString() == '0') {

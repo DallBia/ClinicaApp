@@ -1,3 +1,4 @@
+import { Prontuario } from 'src/app/models/Prontuarios';
 import { Component, ViewChild, ElementRef, Input , OnChanges, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { Subscription, Subject } from 'rxjs';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -18,28 +19,6 @@ import { FileService } from 'src/app/services/foto-service.service';
 
 
 
-
-
-interface FormField {
-  id:number,
-  idFuncionario: number,
-  dtConclusao: any,
-  nivel: string,
-  registro: string,
-  instituicao: string,
-  nomeFormacao: string,
-  areasRelacionadas:string,
-  psicologia:boolean,
-  fisiopadovan:boolean,
-  psicopedagogia:boolean,
-  terapiaocup:boolean,
-  fono:boolean,
-  arteterapia:boolean,
-  psicomotr:boolean,
-  neurofeedback:boolean,
-  reforcoesc:boolean,
-}
-
 @Component({
   selector: 'app-forms',
   templateUrl: './forms.component.html',
@@ -57,12 +36,11 @@ export class FormsComponent implements OnDestroy, OnInit {
   public Atual!: TableProf;
   public caminho: string = 'https://drive.google.com/uc?export=view&id=1IFS7L3CGfUjpAVdEyulTBrMzcWOgcmvf';
   @Output() submitForm: EventEmitter<any> = new EventEmitter<any>();
-  formFields: FormField[] = [];
-  formField!: FormField
+
 
   // ========================================================
   constructor(private http: HttpClient,
-      private colaboradorService: ColaboradorService,
+      public colaboradorService: ColaboradorService,
       private formacaoService: FormacaoService,
       private userService: UserService,
       public dialog: MatDialog,
@@ -77,10 +55,14 @@ export class FormsComponent implements OnDestroy, OnInit {
 
     this.colaboradorService.ProfAtual$.subscribe(Atual => {
       this.Atual = Atual;
-      this.CarregaForm();
+      if (this.colaboradorService.nChng == true){
+        this.colaboradorService.nChng = false
+        //
+      }
+
 
     });
-
+this.CarregaForm();
 
     // this.colaboradorService.EquipeA$.subscribe(eAtual => {
     //   this.nColab = eAtual;
@@ -114,17 +96,29 @@ export class FormsComponent implements OnDestroy, OnInit {
   };
 
 
-  async buscaFormacao(id: number){
-    this.xFormacao = await this.formacaoService.getFormacaoById(id)
+  async buscaFormacao(id: number): Promise<boolean>{
+    this.xFormacao = []
+    this.colaboradorService.formFields = [];
+    const resp = await this.formacaoService.getFormacaoById(id)
+    if (resp == true){
+      this.xFormacao = this.formacaoService.formacaoAtual
+
+    }
+    return true;
   }
 
-  CarregaForm(){
+  async CarregaForm(){
     if (this.Atual.foto == '(img)' ){
       this.Atual.foto = this.fotoService.semFoto
     }
     const id = this.Atual.id !== undefined ? this.Atual.id : 0
-    const resp = this.buscaFormacao(id)
-    //this.Atual.formacao = this.xFormacao;
+    try{
+      const resp = await this.buscaFormacao(id)
+    }catch{
+      console.log('Erro no retorno da requisição getFormacaoById (em forms-129)')
+    }
+
+    this.Atual.formacao = this.xFormacao;
     this.formulario = {
       nomeFormacao: '',
       instituicao: '',
@@ -141,7 +135,9 @@ export class FormsComponent implements OnDestroy, OnInit {
       neurofeedback: false,
       reforcoesc: false,
     };
-    this.equipeform = new FormGroup({
+
+    if(this.equipeform == undefined){
+      this.equipeform = new FormGroup({
       id:new FormControl(this.Atual.id),
       perfil:new FormControl(this.Atual.perfil),
       nome:new FormControl(this.Atual.nome),
@@ -155,7 +151,10 @@ export class FormsComponent implements OnDestroy, OnInit {
       email:new FormControl(this.Atual.email),
       desde:new FormControl(this.Atual.desde),
       ativo:new FormControl(this.Atual.ativo),
-    });
+      });
+    }
+
+
     //this.Atual.formacao = this.xFormacao
 
     if (this.Atual.formacao !== undefined){
@@ -220,7 +219,7 @@ export class FormsComponent implements OnDestroy, OnInit {
           k.dtConclusao = datarray[2] + '/' + datarray[1] + '/' + datarray[0]
         }
 
-        this.formField = {
+        this.colaboradorService.formField = {
           id: k.id !== undefined ? k.id : 0,
           idFuncionario: k.idFuncionario,
           dtConclusao:  k.dtConclusao,
@@ -239,7 +238,7 @@ export class FormsComponent implements OnDestroy, OnInit {
           arteterapia: valorArteterapia,
           psicologia: valorPsicologia,
         }
-        this.formFields.push(this.formField)
+        this.colaboradorService.formFields.push(this.colaboradorService.formField)
         // Adicione os elementos de k ao objeto de controle
 
         this.formform.push(fG);

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Colaborador } from 'src/app/models/Colaboradors';
 import { Formacao } from 'src/app/models/Formacaos';
 import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
 import { FormacaoService } from 'src/app/services/formacao/formacao.service';
@@ -14,7 +15,7 @@ export class ModalComponent {
     public dialogRef: MatDialogRef<ModalComponent>,
     private colaboradorService: ColaboradorService,
     private formacaoService: FormacaoService,
-  ) {} 
+  ) {}
 
   private id: number = 0;
   formulario: any = {
@@ -44,7 +45,7 @@ export class ModalComponent {
     });
   }
   salvar(){
-    
+
     let areasRelacionadas = '';
     if (this.formulario.psicologia == true){
       areasRelacionadas += "Psicologia,"
@@ -94,11 +95,49 @@ export class ModalComponent {
     console.log(dados)
     this.createFormacao(dados);
     setTimeout(() => {
-      
-    }, 300);
 
+    }, 300);
+    const col: Colaborador = {
+      id: this.id,
+      nome: '',
+      dtNasc: '',
+      rg: '',
+      cpf: '',
+      endereco: '',
+      telFixo: '',
+      celular: '',
+      email: '',
+      dtAdmis: '',
+      dtDeslig: '',
+      idPerfil:  5,
+      ativo: true,
+      areaSession: areasRelacionadas,
+      senhaHash: '',
+      foto: '',
+    }
+    const r = this.chamarUpdate(col)
+    setTimeout(() => {
+
+    }, 300);
+    alert('As informações foram atualizadas.')
+    this.colaboradorService.iniciar()
     this.dialogRef.close();
   }
+
+async chamarUpdate(colab: Colaborador){
+  try{
+    const r = await this.colaboradorService.UpdateColaborador(colab)
+    console.log('Atualização do profissional - OK')
+  }catch{
+    console.log('Deu erro na atualização do profissional.')
+  }
+
+}
+
+
+
+
+
   voltar() {
     this.dialogRef.close(); // Isso fecha o modal.
   }
@@ -112,7 +151,7 @@ export class ModalComponent {
     this.formacaoService.CreateFormacao(formacao).subscribe((data) => {
       console.log(data)
       setTimeout(() => {
-      
+
       }, 300);
       location.reload()
     }, error => {

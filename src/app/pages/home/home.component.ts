@@ -65,8 +65,8 @@ export class HomeComponent implements OnInit {
      this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
     });
 
-    window.sessionStorage.setItem('IdCl','0')
-    window.sessionStorage.setItem('IdEq','0')
+    window.sessionStorage.setItem('nCli','0')
+    window.sessionStorage.setItem('nCol','0')
     this.Carregar();
     const r = this.perfilService.guardaPerfil();
 

@@ -27,13 +27,17 @@ subscription: Subscription;
     }
 
 
-  destacarLinha(l:any, Ficha:string){
+  async destacarLinha(l:any, Ficha:string){
     this.nChanges = false;
+    this.colaboradorService.nChng = true;
+    window.localStorage.setItem('nCol',Ficha)
     this.colaboradorService.setChangesA(false);
     let numero = parseInt(l.ficha, 10);
       if (isNaN(numero)) {
         numero = 0;
     }
+
+
     this.sharedService.ProfAtual = numero;
     for(let i of this.colaboradorService.dataSource){
       i.selecionada = false;
@@ -50,7 +54,7 @@ subscription: Subscription;
     l.selecionada = true;
     this.sharedService.btnAnexPro = true;
     this.sharedService.PessoaDoctos = "E";
-    this.sharedService.carregarListaDeArquivos()
+    const resp = await this.sharedService.carregarListaDeArquivos()
     this.nChanges = true;
     setTimeout(() => {
       this.colaboradorService.setChangesA(true);

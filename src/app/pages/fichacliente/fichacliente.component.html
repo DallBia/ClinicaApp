@@ -37,7 +37,7 @@
   </div>
     <div class="lado-direito">
       <div class="formul-result">
-        <div *ngIf="this.nCliente!=0">
+       <div *ngIf="this.nCliente!=0">
         <app-form-cliente (onSubmit)="buscarAlteracoes($event)" *ngIf="nChanges"></app-form-cliente>
       </div>
     </div>

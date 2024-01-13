@@ -11,6 +11,29 @@ import { User } from 'src/app/models';
 import { FileService } from '../foto-service.service';
 import { Tipo } from 'src/app/models/Tipo';
 import { FinanceiroService } from '../financeiro/financeiro.service';
+import { FormGroup, FormsModule , FormControl, FormBuilder } from '@angular/forms';
+
+
+interface FormField {
+  id:number,
+  idFuncionario: number,
+  dtConclusao: any,
+  nivel: string,
+  registro: string,
+  instituicao: string,
+  nomeFormacao: string,
+  areasRelacionadas:string,
+  psicologia:boolean,
+  fisiopadovan:boolean,
+  psicopedagogia:boolean,
+  terapiaocup:boolean,
+  fono:boolean,
+  arteterapia:boolean,
+  psicomotr:boolean,
+  neurofeedback:boolean,
+  reforcoesc:boolean,
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +47,7 @@ export class ColaboradorService {
 
   public tipo: string = 'tudo';
   public valor: string = 'tudo'
-  public param: string = 'tudo%tudo%0%P';
+  public param: string = 'tudo|tudo|0|P';
   public firstID: number = 0;
   public lastID: number = 0;
   public AfirstID: number = 0;
@@ -32,8 +55,8 @@ export class ColaboradorService {
   public seletor: string = 'X';
     public btnA: boolean = false;
     public btnP: boolean = false;
-
-
+    public txtQtde: string = '';
+    public nChng: boolean = false;
   public fotoAtual: string='';
   private apiurl = `${environment.ApiUrl}/User`
   public Vazia: TableProf[] = [{
@@ -82,6 +105,9 @@ export class ColaboradorService {
     perfil : '',
     formacao : undefined
   }
+
+  public formFields: FormField[] = [];
+  public formField!: FormField
 
   public eAtual: TableProf = this.tableV
 
@@ -148,6 +174,8 @@ export class ColaboradorService {
     GetColaboradorbyId(id: number) : Promise<any>{
         return this.http.get<any>(`${environment.ApiUrl}/Colaborador/id/${id}`).toPromise();
     }
+
+
     async GetEquipeMinimal() : Promise<Tipo[]>{
      try {
         const response = await this.http.get<Response<Tipo[]>>(`${environment.ApiUrl}/Colaborador/Agenda`).toPromise();
@@ -313,35 +341,58 @@ export class ColaboradorService {
 
 
 proximo(){
-  this.param = this.tipo + '%' + this.valor + '%' + this.lastID.toString() + '%P'
+  this.param = this.tipo + '|' + this.valor + '|' + this.lastID.toString() + '|P'
   console.log(this.param)
   this.iniciar()
 }
 
 anterior(){
-  this.param = this.tipo + '%' + this.valor + '%' + this.firstID.toString() + '%A'
+  this.param = this.tipo + '|' + this.valor + '|' + this.firstID.toString() + '|A'
   console.log(this.param)
   this.iniciar()
 }
 
 
     async GetColbyFiltro(id: string): Promise<Colaborador[]> {
+      this.txtQtde = 'Aguarde... Carregando...'
       this.colaboradorsG = [];
       this.colaboradors = [];
       this.dataSource = [];
       const url = `${environment.ApiUrl}/Colaborador`;
       try {
-        const response = await this.http.get<Response<Colaborador[]>>(`${url}/novoId/${id}`).toPromise();
+        const data = await this.http.get<Response<Colaborador[]>>(`${url}/novoId/${id}`).toPromise();
 
-        if (response && response.dados !== undefined && response.sucesso) {
-          this.colaboradorsG = response.dados;
+        if (data && data.dados !== undefined && data.sucesso) {
+
+          const dados = data.dados;
+          dados.map((item:{
+            dtAdmis?: any;
+            dtDeslig?: any;
+            dtNasc?: any
+          }) => {
+
+        item.dtAdmis !== null ? item.dtAdmis = new Date(item.dtAdmis!).toISOString().split('T')[0] : '---'
+        item.dtDeslig !== null ? item.dtDeslig = new Date(item.dtDeslig!).toISOString().split('T')[0] : '---'
+        item.dtNasc !== null ? item.dtNasc = new Date(item.dtNasc!).toISOString().split('T')[0] : '---'
+
+        const dtAdmis = item.dtAdmis !== null ? item.dtAdmis.split('-') : '*-*-*';
+        item.dtAdmis = dtAdmis[2] + '/'+ dtAdmis[1] + '/'+ dtAdmis[0];
+        const dtDeslig = item.dtDeslig !== null ? item.dtDeslig.split('-') : '*-*-*';
+        item.dtDeslig = dtDeslig[2] + '/'+ dtDeslig[1] + '/'+ dtDeslig[0];
+        const dtNasc = item.dtNasc !== null ? item.dtNasc.split('-') : '*-*-*';
+        item.dtNasc = dtNasc[2] + '/'+ dtNasc[1] + '/'+ dtNasc[0];
+      });
+
+
+          this.colaboradorsG = data.dados;
           this.colaboradorsG.sort((a, b) => a.nome.localeCompare(b.nome));
           this.colaboradors = this.colaboradorsG;
-          const mensagem = response.mensagem.split('%');
-          this.lastID = parseInt(mensagem[1]);
-          this.firstID = parseInt(mensagem[0]);
+          const mensagem = data.mensagem.split('|');
           this.AlastID = parseInt(mensagem[1]);
           this.AfirstID = parseInt(mensagem[0]);
+          this.lastID = parseInt(mensagem[1]);
+          this.firstID = parseInt(mensagem[0]);
+          this.txtQtde = mensagem[3] + ' registros encontrados.'
           this.seletor = mensagem[2]
           console.log('lastID: ' + this.lastID);
           console.log('firstID: ' + this.firstID);
@@ -368,9 +419,9 @@ anterior(){
               this.btnP = false;
               break;
           }
-          return response.dados;
+          return data.dados;
         } else {
-          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+          throw new Error('GetColbyFiltro não retornou uma resposta válida.');
         }
       } catch (error) {
         throw error; // Você pode personalizar essa parte conforme sua necessidade
@@ -381,7 +432,7 @@ anterior(){
     async iniciar(){
       console.log(this.param)
       const data = await this.GetColbyFiltro(this.param);
-      const dataFormacao = await this.formacaoService.getFormacao();
+      //const dataFormacao = await this.formacaoService.getFormacao();
       this.Carregar();
     }
 
@@ -404,13 +455,7 @@ anterior(){
             tipo = 'Equipe Clínica'
             break;
         }
-        let pForm: Formacao[] = [];
-        for (const forma of this.formacaoService.formacaos) {
-          let x = forma.idFuncionario;
-          if (forma.idFuncionario == i.id) {
-            pForm.push(forma);
-          }
-        }
+
         this.pLin = [{
           foto: i.foto !== undefined ? i.foto : this.fotoService.semFoto,
           ficha: i.id !== undefined ? i.id.toString().padStart(4, '0') : '0',
@@ -429,7 +474,6 @@ anterior(){
           email : i.email,
           ativo : i.ativo,
           perfil : tipo,
-          formacao :pForm,
         }]
         this.dataSource = [...this.dataSource, ... this.pLin]
       }

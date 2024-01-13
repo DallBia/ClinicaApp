@@ -32,12 +32,14 @@ export class ModalMultiComponent implements OnInit, OnDestroy{
   ) { }
   ngOnDestroy(): void {
     this.agenda.ListaAgenda = []
+    this.agenda.tipoDeAgendamento = 'Reservado'
   }
 
   ngOnInit() {
     this.ListaAgenda= []
       this.ListaAgenda = this.agenda.ListaAgenda;
       const n = this.agenda.agendaNsessoes;
+      console.log(this.agenda.tipoDeAgendamento)
   }
 
 
@@ -201,11 +203,13 @@ async busca(n?: number){
 
 }
 
-async onReserveClick(){
+
+
+async agendar(status: string){
   console.log('Serão feitos os seguintes agendamentos:')
   console.log(this.agenda.agendaMulti)
   for (let i of this.agenda.agendaMulti){
-    i.status = 'Reservado';
+    i.status = status;
     const n =  i.id !== undefined ? i.id - 1 : 0;
     i.id = 0;
     this.informacao = 'Gravando dados... sessão ' + this.ListaAgenda[n].sessao.toString();
@@ -217,15 +221,36 @@ async onReserveClick(){
     }
   }
   this.informacao = '';
+  this.agenda.tipoDeAgendamento = 'Reservado'
   this.agenda.recarregar();
   this.onCloseClick();
 }
 
 
+async onReserveClick(){
+  if(this.agenda.tipoDeAgendamento == 'Existente'){
+    this.shared.respostaModal = 'Reservado'
+    this.Cancela();
+  }else{
+    this.agendar('Reservado');
+  }
+}
+
+onSaveClick(){
+  this.shared.respostaModal = 'Marcar'
+  if(this.agenda.tipoDeAgendamento == 'Existente'){
+    this.shared.respostaModal = 'Marcar'
+    this.agenda.tipoDeAgendamento = 'Reservado'
+    this.Cancela();
+  }else{
+    this.agendar('Pendente');
+  }
+}
+
 onCancelClick(): void{
   this.shared.textoModal = 'Selecione a opção desejada:'
   this.shared.tituloModal = 'Confirme o cancelamento das reservas'
-  this.shared.nbotoes = ['Apenas as reservas de ' + this.agenda.numReserva, 'Todas as reservas de ' + this.agenda.celSelect.nome]
+  this.shared.nbotoes = ['Apenas as reservas de ' + this.agenda.numReserva, 'Todas as reservas de ' + this.agenda.celSelect.nome, 'Fechar']
   const dialogRefConfirm = this.dialog.open(ModalConfirComponent, {
 
   });
@@ -250,35 +275,43 @@ async Cancela(){
       id = 1;
       param = this.agenda.celSelect.nome !== undefined ? this.agenda.celSelect.nome : '';
     break;
+    case ('R'):
+      id = 3;
+      param = this.agenda.numReserva;
+    break;
+    case ('F'):
+      id = 10;
+      param = '';
+    break;
     default:
       id = 0;
       param = this.agenda.celSelect.nome !== undefined ? this.agenda.numReserva : '';
     break;
   }
-
+  if(id < 10){
     this.agenda.MultiAgenda(id, param).subscribe((data) => {
       console.log(data.mensagem)
       this.delay(300)
-
       this.onCloseClick();
       alert(data.mensagem);
       this.agenda.recarregar()
     }, error => {
       console.error('Erro no upload', error);
     });
+  }else{
+    this.onCloseClick();
+  }
+
+
 }
 
 
-delay(time:number) {
-  setTimeout(() => {
+  delay(time:number) {
+    setTimeout(() => {
 
-  }, time);
-}
+    }, time);
+  }
 
-onSaveClick(){
-  this.shared.respostaModal = 'Marcar'
-  this.Cancela();
-}
 
 }
 

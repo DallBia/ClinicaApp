@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { Colaborador } from "src/app/models/Colaboradors";
 import { TableProf } from "src/app/models/Tables/TableProf";
 import { User } from "src/app/models/user";
@@ -16,7 +16,9 @@ import { SharedService } from "src/app/shared/shared.service";
 import { FileService } from 'src/app/services/foto-service.service';
 import { ModalArquivoComponent } from 'src/app/sharepage/arquivos/modal-arquivo/modal-arquivo.component';
 import { MeuModalComponent } from "../fichacliente/meu-modal/meu-modal.component";
-
+import { Formacao } from "src/app/models/Formacaos";
+import { Response } from '../../models/Response';
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: 'app-cadprof',
@@ -92,6 +94,7 @@ export class CadprofComponent implements OnDestroy, OnInit {
     private ctrl2: boolean = false;
 
     private estadoMonitorado = new BehaviorSubject<boolean>(false);
+  http: any;
 
   constructor(private formacaoService: FormacaoService,
     private userService: UserService,
@@ -114,7 +117,6 @@ export class CadprofComponent implements OnDestroy, OnInit {
     this.colaboradorService.dataSource = [];
 
 
-    this.colaboradorService.iniciar();
     // this.colaboradorService.inicio();
 
     this.subscription = this.colaboradorService.ProfAtual$.subscribe(EquipeAtual => {
@@ -126,9 +128,12 @@ export class CadprofComponent implements OnDestroy, OnInit {
     this.subscription = this.colaboradorService.EquipeAtual$.subscribe(eat => {
       this.EAtual = eat;
     });
+
     this.vNovo = this.perfilService.validaPerfil(0, 3)
     const id = this.ColAt.id !== undefined ? this.ColAt.id : 0;
     this.colaboradorService.vSalvar = this.perfilService.validaPerfil(id, 4)
+
+    this.colaboradorService.iniciar();
   }
 
   ngOnDestroy() {
@@ -194,10 +199,10 @@ Salvar(){
   if (ProfAlt !== null){
     ProfAlt.ativo = Dados.ativo;
     if (ProfAlt.ativo === true){
-      ProfAlt.dtDeslig = '1900-01-01';
+      ProfAlt.dtDeslig = new Date('1900-01-01').toISOString();
     }else{
       if (ProfAlt.dtDeslig == ''){
-        ProfAlt.dtDeslig = new Date().toISOString().split('T')[0];
+        ProfAlt.dtDeslig = new Date().toISOString();
       }
     }
     ProfAlt.foto = this.colaboradorService.fotoAtual;
@@ -205,12 +210,75 @@ Salvar(){
     ProfAlt.celular = Dados.celular;
     ProfAlt.telFixo = Dados.telFixo;
     ProfAlt.cpf = Dados.cpf;
-    ProfAlt.dtAdmis = this.reDatas(Dados.desde);
+    ProfAlt.dtAdmis = this.shared.datas(Dados.desde,'Banco');
     ProfAlt.email = Dados.email;
     ProfAlt.endereco = Dados.endereco;
     ProfAlt.rg = Dados.identidade;
-    ProfAlt.dtNasc =  this.reDatas(Dados.nascimento);
+    ProfAlt.dtNasc =  this.shared.datas(Dados.nascimento,'Banco')
     ProfAlt.nome = Dados.nome;
+
+        let valorPsicologia = false;
+        let valorFisioPadovan = false;
+        let valorPsicopedagogia = false;
+        let valorFonoaudiologia = false;
+        let valorTerOcup = false;
+        let valorPsicomotric = false;
+        let valorArteterapia = false;
+        let valorNeurofeedback = false;
+        let valorReforcoEsc = false;
+        let ListaFormac: Formacao[] = []
+
+        let areas: string = '';
+        for (let z of this.colaboradorService.formFields){
+
+            valorPsicologia = valorPsicologia === false ? z.psicologia : true;
+            valorFisioPadovan = valorFisioPadovan === false ? z.fisiopadovan : true;
+            valorPsicopedagogia = valorPsicopedagogia === false ? z.psicopedagogia : true;
+            valorFonoaudiologia = valorFonoaudiologia === false ? z.fono : true;
+            valorTerOcup = valorTerOcup === false ? z.terapiaocup : true;
+            valorPsicomotric = valorPsicomotric === false ? z.psicomotr : true;
+            valorArteterapia = valorArteterapia === false ? z.arteterapia : true;
+            valorNeurofeedback = valorNeurofeedback === false ? z.neurofeedback : true;
+            valorReforcoEsc = valorReforcoEsc === false ? z.reforcoesc : true;
+            areas = valorPsicologia ==true ? areas + 'Psicologia,' : areas;
+            areas = valorFisioPadovan ==true ? areas + 'Fisio Padovan,' : areas;
+            areas = valorPsicopedagogia ==true ? areas + 'Psicopedagogia,' : areas;
+            areas = valorFonoaudiologia ==true ? areas + 'Fonoaudiologia,' : areas;
+            areas = valorTerOcup ==true ? areas + 'Terapia Ocup.,' : areas;
+            areas = valorPsicomotric ==true ? areas + 'Psicomotricidade,' : areas;
+            areas = valorArteterapia ==true ? areas + 'Arteterapia,' : areas;
+            areas = valorNeurofeedback ==true ? areas + 'Neurofeedback,' : areas;
+            areas = valorReforcoEsc ==true ? areas + 'Reforço escolar,' : areas;
+
+            let areasRel: string = '';
+            areasRel = z.psicologia ==true ? areas + 'Psicologia,' : areasRel;
+            areasRel = z.fisiopadovan ==true ? areas + 'Fisio Padovan,' : areasRel;
+            areasRel = z.psicopedagogia ==true ? areas + 'Psicopedagogia,' : areasRel;
+            areasRel = z.fono ==true ? areas + 'Fonoaudiologia,' : areasRel;
+            areasRel = z.terapiaocup ==true ? areas + 'Terapia Ocup.,' : areasRel;
+            areasRel = z.psicomotr ==true ? areas + 'Psicomotricidade,' : areasRel;
+            areasRel = z.arteterapia ==true ? areas + 'Arteterapia,' : areasRel;
+            areasRel = z.neurofeedback ==true ? areas + 'Neurofeedback,' : areasRel;
+            areasRel = z.reforcoesc ==true ? areas + 'Reforço escolar,' : areasRel;
+
+
+            const dados: Formacao = {
+              id: 0,
+              idFuncionario: Dados.id,
+              dtConclusao: z.dtConclusao,
+              nivel: z.nivel,
+              registro: z.registro,
+              instituicao: z.instituicao,
+              nomeFormacao: z.nomeFormacao,
+              areasRelacionadas: areasRel,
+            }
+            const r = this.formacaoService.UpdateFormacao(dados)
+            setTimeout(() => {
+
+            }, 200);
+            }
+
+
     switch (Dados.perfil){
       case 'Diretoria':
         ProfAlt.idPerfil = 0;
@@ -228,16 +296,18 @@ Salvar(){
       ProfAlt.idPerfil = 3;
     }
     ProfAlt.senhaHash = '';
+    ProfAlt.senhaProv = '';
+    ProfAlt.areaSession = areas;
     if (ProfAlt !== null){
       //this.AtualizarProf(this.ProfAlt)
       this.colaboradorService.UpdateEquipe(ProfAlt).subscribe((data) => {
-       this.delay(300)
-       const dados = this.colaboradorService.GetCol();
-       console.log(dados)
-      alert('Registro atualizado!')
+
       this.btnSalva = false;
       this.txtSalva = "Salvar"
-      location.reload()
+      this.delay(300)
+       const dados = this.colaboradorService.GetCol();
+      alert('Registro atualizado!')
+      this.colaboradorService.iniciar();
     }, error => {
       console.error('Erro no upload', error);
     });
@@ -289,5 +359,6 @@ Salvar(){
 
     }, time);
   }
-
 }
+
+

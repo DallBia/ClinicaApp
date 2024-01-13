@@ -30,10 +30,11 @@ export class AgendaMenuComponent implements OnInit {
       private router: Router,
 
     ){}
-
+      public subscription1: Subscription | undefined;
       public fotografia: any = false
       public subscription: Subscription | undefined;
-
+      private StatAnt: string = '';
+      private cellAnt!: Agenda;
   ngOnInit(): void {
       this.agendaService.buscaData()
       this.shared.BuscaValores()
@@ -41,18 +42,20 @@ export class AgendaMenuComponent implements OnInit {
         if (Segue == true){
           this.agendaService.atualizarsegueModal(false);
           const dialogRef = this.dialog.open(ModalMultiComponent, {
-
           });
-
           dialogRef.afterClosed().subscribe(result => {
             console.log('O modal foi fechado.');
             this.subscription?.unsubscribe
-
           });
         }
-
       });
 
+
+      this.subscription1 = this.agendaService.cellA$.subscribe(valor => {
+        this.cellAnt = valor
+        console.log('Novo valor de cellA:')
+        console.log(valor)
+      });
   }
 
     public Vlr: boolean = true;
@@ -111,8 +114,9 @@ export class AgendaMenuComponent implements OnInit {
         }
         this.agendaService.atualizarsegueModal(true);
       }else{
+        this.agendaService.tipoDeAgendamento = 'Existente'
         this.agendaService.numReserva = tipo
-        const parm = 'id%' + this.agendaService.numReserva.toString()
+        const parm = 'id|' + this.agendaService.numReserva.toString()
         r = this.BuscaAg(parm);
       }
     }
@@ -164,8 +168,8 @@ async BuscaAg(p: string){
     setStatus(status: string){
       if(status == 'Bloqueado'){
         let valSt = false
-        const StatAnt = this.agendaService.cellA.status
-        if(StatAnt == '' || StatAnt == 'Vago'){
+
+        if(this.cellAnt.status == '' || this.cellAnt.status == 'Vago'){
           valSt = true
         }
         if (this.agendaService.celSelect.nome !== ''
@@ -178,16 +182,18 @@ async BuscaAg(p: string){
       }else{
         this.agendaService.celSelect.status = status;
       }
+
     }
 
 
 
     async salvaSessao(){
-      //let diff = this.saoIguais(this.agendaService.celSelect, this.agendaService.cellA)
-      let diff = true
+     let diff = this.saoIguais(this.agendaService.celSelect, this.cellAnt)
+     const rept = this.cellAnt;
+     diff = true
       if (diff == true){
         this.agendaService.celSelect.idCliente = 0;
-        if (this.agendaService.celSelect.status == 'Sala'){
+         if (this.agendaService.celSelect.status == 'Sala'){
           for(let n of this.agendaService.ListaEquipe){
             if (this.agendaService.celSelect.nome == n.nome){
               this.agendaService.celSelect.idCliente = n.id;
@@ -247,45 +253,46 @@ async BuscaAg(p: string){
         const horaFormatada = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
         const Usr = this.userService.getUserA().getValue();
 
-        if (this.agendaService.cellA.status == ''|| this.agendaService.cellA.status == 'Vago'){
+        if (this.cellAnt.status == ''|| this.cellAnt.status == 'Vago'){
           texto = 'Agendamento de ' + this.agendaService.celSelect.subtitulo + '. ';
           this.agendaService.celSelect.status == 'Pendente';
         }
         if(this.agendaService.celSelect.status == 'Vago'){
-            texto = 'Sessão anterior Excluída.';
-            this.agendaService.celSelect.repeticao = 'Cancelar';
-            this.agendaService.celSelect.subtitulo ='';
-            this.agendaService.celSelect.nome = '';
-            this.agendaService.celSelect.idCliente = 0;
-            this.agendaService.celSelect.subtitulo = '';
-            this.agendaService.celSelect.obs = '';
-            this.agendaService.celSelect.valor = -1000009;
-          }else{
-            if(this.agendaService.cellA.repeticao !== this.agendaService.celSelect.repeticao){
-              texto += 'Repetição alterada: de ' + this.agendaService.cellA.repeticao + ' para ' + this.agendaService.celSelect.repeticao + '. '
-            }
-            if(this.agendaService.cellA.valor !== this.agendaService.celSelect.valor){
-              texto += 'Valor alterado: de ' + this.agendaService.cellA.valor + ' para ' + this.agendaService.celSelect.valor + '. '
-            }
-            if(this.agendaService.cellA.nome !== this.agendaService.celSelect.nome){
-              texto += 'Cliente alterado: de ' + this.agendaService.cellA.nome + ' para ' + this.agendaService.celSelect.nome + '. '
-            }
-            if(this.agendaService.cellA.status !== this.agendaService.celSelect.status){
-              texto += 'Novo Status: ' + this.agendaService.celSelect.status + '. '
-            }
+          texto = 'Sessão anterior Excluída.';
+          this.agendaService.celSelect.repeticao = 'Cancelar';
+          this.agendaService.celSelect.subtitulo ='';
+          this.agendaService.celSelect.nome = '';
+          this.agendaService.celSelect.idCliente = 0;
+          this.agendaService.celSelect.subtitulo = '';
+          this.agendaService.celSelect.obs = '';
+          this.agendaService.celSelect.valor = -1000009;
+        }else{
+          if(this.cellAnt.repeticao !== this.agendaService.celSelect.repeticao){
+            texto += 'Repetição alterada: de ' + this.cellAnt.repeticao + ' para ' + this.agendaService.celSelect.repeticao + '. '
           }
+          if(this.cellAnt.valor !== this.agendaService.celSelect.valor){
+            texto += 'Valor alterado: de ' + this.cellAnt.valor + ' para ' + this.agendaService.celSelect.valor + '. '
+          }
+          if(this.cellAnt.nome !== this.agendaService.celSelect.nome){
+            texto += 'Cliente alterado: de ' + this.cellAnt.nome + ' para ' + this.agendaService.celSelect.nome + '. '
+          }
+          if(this.cellAnt.status !== this.agendaService.celSelect.status){
+            texto += 'Novo Status: ' + this.agendaService.celSelect.status + '. '
+          }
+        }
 
         this.agendaService.celSelect.repeticao = sessao;
         if (this.agendaService.celSelect.repeticao == '' || this.agendaService.celSelect.repeticao == undefined){
           this.agendaService.celSelect.repeticao = 'Unica'
         }
+        this.agendaService.celSelect.status = this.agendaService.celSelect.horario == 'manhã' || this.agendaService.celSelect.horario == 'tarde' ? 'Sala' :  this.agendaService.celSelect.status;
         let Histmp = '%' + new Date().toLocaleDateString('pt-BR') + ' - ' +  horaFormatada + ':\n' + texto  + '\npor: ' + Usr?.name + '\nꟷꚚꟷ\n';
         this.agendaService.celSelect.historico += Histmp;
         const usrId = Usr?.userid !== undefined ? parseInt(Usr?.userid, 10) : 0;
         this.agendaService.celSelect.idFuncAlt = usrId
-        this.agendaService.celSelect.diaI = this.agendaService.dia;
+        this.agendaService.celSelect.diaI = new Date(this.agendaService.dia).toISOString().split('T')[0];
         this.agendaService.celSelect.diaF = dataFim;
-        this.agendaService.celSelect.unidade = this.agendaService.un;
+        this.agendaService.celSelect.unidade = 1;
         this.agendaService.celSelect.horario = this.agendaService.horario;
         this.agendaService.celSelect.sala = this.agendaService.sala;
         this.agendaService.celSelect.dtAlt = new Date().toISOString();
@@ -300,16 +307,17 @@ async BuscaAg(p: string){
           this.salvaAgenda(this.agendaService.celSelect)
         }
         else{
-          const resp = await this.buscaFinanceiro(this.agendaService.celSelect.id)
-
-          if(this.dado.idCliente == this.agendaService.celSelect.idCliente){
-            this.dado.data = this.agendaService.celSelect.dtAlt
-            this.dado.valor = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
-            this.dado.idFuncAlt = this.agendaService.celSelect.idFuncAlt
-            const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.diaI
-            this.dado.descricao = texto
-            console.log(this.dado)
-            const ok = this.updateFin(this.dado)
+          if(this.agendaService.celSelect.horario !== 'manhã' && this.agendaService.celSelect.horario !== 'tarde'){
+            const resp = await this.buscaFinanceiro(this.agendaService.celSelect.id)
+            if(this.dado.idCliente == this.agendaService.celSelect.idCliente){
+              this.dado.data = this.agendaService.celSelect.dtAlt
+              this.dado.valor = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
+              this.dado.idFuncAlt = this.agendaService.celSelect.idFuncAlt
+              const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.diaI
+              this.dado.descricao = texto
+              console.log(this.dado)
+              const ok = this.updateFin(this.dado)
+            }
           }
           this.updateAgenda(this.agendaService.celSelect.id, this.agendaService.celSelect)
         }
@@ -434,7 +442,8 @@ async BuscaAg(p: string){
 
 
     saoIguais(agenda1: Agenda, agenda2: Agenda): boolean {
-
+      console.log(agenda1)
+      console.log(agenda2)
       if (!agenda1 || !agenda2) {
         return false;
       }

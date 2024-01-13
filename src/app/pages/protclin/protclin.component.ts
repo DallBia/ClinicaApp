@@ -58,8 +58,8 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
-    console.log(window.sessionStorage.getItem('IdPerfil'))
-    console.log(window.sessionStorage.getItem('IdEq'))
+    console.log(window.sessionStorage.getItem('nPrf'))
+    console.log(window.sessionStorage.getItem('nCol'))
     this.shared.MostraInfo = true;
     console.log(this.shared.MostraInfo);
     this.subscription = this.clienteService.ClienteA$.subscribe(

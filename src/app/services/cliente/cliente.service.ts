@@ -412,6 +412,28 @@ private mensagem: any;
     }
     //this.shared.DataS = this.dataSource
     console.log(this.dataSource)
+    let numero: number = 0;
+      try{
+        const cli = window.sessionStorage.getItem('nCli')
+        if ( cli !== null){
+          numero = parseInt(cli, 10)
+        }else{
+          numero = 0;
+        }
+      }catch{
+        numero = 0;
+      }
+
+    for (let f of this.dataSource){
+        try{
+          const n = parseInt(f.Ficha)
+          if (n == numero){
+            this.setClienteA(numero);
+            this.setClienteAtual(f);
+          }
+        }
+        catch{}
+    }
   }
 
   converterParaDate(dataString: string): Date {

@@ -40,11 +40,9 @@ export class Agenda2Component implements OnInit, OnDestroy{
         this.linhas.push(j);
       }
 
-      // this.donoSala.dono$.subscribe((novoValor) => {
-      //   this.agendaService.donoTmp = this.donoSala.dono.value;
-      //   this.agendaService.validaDono();
+    this.agendaService.cellA$.subscribe((novoValor) => {
 
-      // });
+    });
 
   }
 
@@ -87,7 +85,7 @@ export class Agenda2Component implements OnInit, OnDestroy{
 
   async buscaEquipe(){
     try {
-      this.valid1 = await this.agendaService.BuscaColab()
+      this.valid1 = await this.agendaService.BuscaColab('nome')
       console.log(this.agendaService.ListaEquipe)
     }
     catch(error)   {

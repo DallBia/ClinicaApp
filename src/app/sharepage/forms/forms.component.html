@@ -63,7 +63,7 @@
 
 
     <label class="fLabel2">FORMAÇÃO ACADÊMICA E PROFISSIONAL</label>
-    <div *ngFor="let i of this.formFields">
+    <div *ngFor="let i of this.colaboradorService.formFields">
       <ng-container>
         <div>
           <label class="fLabel3">{{ i.dtConclusao | date: 'yyyy' }}</label>

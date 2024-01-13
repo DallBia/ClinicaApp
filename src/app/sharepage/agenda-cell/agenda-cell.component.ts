@@ -151,16 +151,27 @@ if (this.col == 0){
 
 
 MudarSala(lin: number, col: number){
-  this.agendaService.hora = lin;
-  this.agendaService.sala = col;
-  this.agendaService.carregarSala()
-  this.agendaService.carregarCel()
+  this.chamar(lin,col);
 }
 AltHorario(lin: number, col: number){
+  this.chamar(lin,col);
+}
+
+chamar(lin: number, col: number){
   this.agendaService.hora = lin;
   this.agendaService.sala = col;
+  let hora: string = '';
+  for (let i of this.agendaService.Horarios){
+    if(i.hora == lin){
+      hora = i.texto
+    }
+  }
+  for (let i of this.agendaService.agendaDia){
+    if (i.horario == hora && i.sala == col){
+      this.agendaService.setcellA(i);
+    }
+  }
   this.agendaService.carregarCel()
-
 }
 
 get boxShadow(): string {

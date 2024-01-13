@@ -34,20 +34,28 @@ public Vazia: Formacao[] = [{
   }
 
 
-  async getFormacaoById(id: number): Promise<Formacao[]> {
+  async getFormacaoById(id: number): Promise<boolean> {
     try {
+      this.formacaoAtual = [];
       const response = await this.http.get<Response<Formacao[]>>(`${this.apiurl}/id/${id}`).toPromise();
-
+      this.delay(200)
       if (response && response.dados !== undefined && response.sucesso) {
         this.formacaoAtual = response.dados;
-        return response.dados;
+        return true;
       } else {
-        throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        console.log(response?.mensagem)
+        return false;
       }
     } catch (error) {
-      throw error; // Você pode personalizar essa parte conforme sua necessidade
+      return false;
     }
   }
+delay(time:number) {
+    setTimeout(() => {
+
+    }, time);
+  }
+
   async getFormacao(): Promise<Formacao[]> {
     try {
       const response = await this.http.get<Response<Formacao[]>>(`${this.apiurl}`).toPromise();
@@ -71,6 +79,10 @@ public Vazia: Formacao[] = [{
   UpdateFormacao(formacao: Formacao) : Observable<Response<Formacao[]>>{
     return this.http.put<Response<Formacao[]>>(`${this.apiurl}/Editar` , formacao);
   }
+
+  updateFormacao(formacao: Formacao[]) : Observable<Response<Formacao[]>>{
+    return this.http.put<Response<Formacao[]>>(`${this.apiurl}/Editar` , formacao);
+}
 
   private FormacaoAtual = new BehaviorSubject<Formacao>(this.Vazia[0]);
   FormacaoAtual$ = this.FormacaoAtual.asObservable();

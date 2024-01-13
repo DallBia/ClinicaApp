@@ -61,7 +61,7 @@ formulario: any = {
    + this.formulario.email + ".</span></strong></p>"
    + "<p>Sua senha <b>provisória</b> é <strong><span style='color: blue; font-size: 18px;'>"
    + senha + "</span></strong></p>"
-   + "<p>Acesse o link do <a href='http://35.232.35.159'>aplicativo</a> e <b>altere a senha. </b>"
+   + "<p>Acesse o link do <a href='http://34.123.211.220'>aplicativo</a> e <b>altere a senha. </b>"
     + "Coloque uma senha que seja fácil para você decorar.</p>"
     + "<p>Para sua comodidade, salve o link na sua guia de marcadores favoritos.</p>"
     + "Depois, vá na guia <b>Cadastro de Equipe</b>, selecione seu nome através do filtro e "
@@ -98,19 +98,21 @@ formulario: any = {
     const novoUs: Colaborador = {
       id: 0,
       nome: nomeX,
-      dtNasc: '1900-01-01',
-      rg: '(preencha)',
-      cpf: '(preencha)',
-      endereco:  '(preencha)',
-      telFixo: '(preencha)',
+      dtNasc: new Date('1900-01-01').toISOString(),
+      rg: '-',
+      cpf: '-',
+      endereco:  '-',
+      telFixo: '-',
       celular: celX,
       email:  destinatarioX,
-      dtAdmis: new Date().toISOString().split('T')[0],
-      dtDeslig:  '1900-01-01',
+      dtAdmis: new Date().toISOString(),
+      dtDeslig:  new Date('1900-01-01').toISOString(),
       idPerfil: nperf,
       ativo: false,
-      areaSession: '(nenhuma)',
+      areaSession: '|',
       senhaHash: senha,
+      senhaProv: '',
+
     }
     // const Mail = {
     //   destinatario: destinatarioX,

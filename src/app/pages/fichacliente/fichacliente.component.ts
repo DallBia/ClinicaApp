@@ -111,28 +111,15 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   }
 
 
-  CliqueNovo(){
-    this.btnNovo = true;
-    this.clienteService.setChangesA(false);
-    this.clienteService.setClienteAtual(this.clienteService.Vazia[0]);
-    this.clienteService.setClienteA(-1);
-    setTimeout(() => {
-    this.clienteService.setChangesA(true);
-    }, 0)
-    this.btnNovo = false;
-  }
 
     ngOnInit(): void {
 
-      console.log(window.sessionStorage.getItem('IdPerfil'))
-      console.log(window.sessionStorage.getItem('IdEq'))
-      console.log(window.sessionStorage.getItem('IdCl'))
-
+      console.log(window.sessionStorage.getItem('nPrf'))
+      console.log(window.sessionStorage.getItem('nCol'))
+      console.log(window.sessionStorage.getItem('nCli'))
 
       this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
         this.Atual = clienteAtual;
-        console.log(window.sessionStorage.setItem('IdCl',this.Atual.id?.toString() || '0'))
-        console.log(window.sessionStorage.getItem('IdCl'))
         const n: number = parseInt(this.Atual.Ficha)
         for (let i of this.clienteService.clientesG){
           if (n == i.id){
@@ -140,13 +127,11 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
           }
         }
       });
+
       this.clienteService.ChangesA$.subscribe(chng => {
         this.nChanges = chng;
       });
       this.vNovo = this.perfilService.validaPerfil(0, 1)
-      // if(this.userService.alertas !== true){
-      //   window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
-      // }
       this.clienteService.dataSource = [];
       this.clienteService.iniciar();
 
@@ -161,6 +146,16 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   }
 
 
+  CliqueNovo(){
+    this.btnNovo = true;
+    this.clienteService.setChangesA(false);
+    this.clienteService.setClienteAtual(this.clienteService.Vazia[0]);
+    this.clienteService.setClienteA(-1);
+    setTimeout(() => {
+    this.clienteService.setChangesA(true);
+    }, 0)
+    this.btnNovo = false;
+  }
   onBeforeUnload(event: any): void {
     // localStorage.clear();
     // sessionStorage.clear();

@@ -18,29 +18,39 @@ export class Grid01Component {
   public nLin: TableData[] = [];
   public Verifica: boolean = false;
   subscription: Subscription;
-  nChanges!: boolean;
+  nChanges: boolean = true;
   @ViewChild(FormClienteComponent) formCli!: FormClienteComponent;
 
   ngOnInit(): void {
 
     //this.clienteService.BuscaClientes()
     this.clienteService.GetClienteByFiltro('tudo-tudo-0-P')
-
+    this.sharedService.ClienteAtual = parseInt(window.sessionStorage.getItem('nCli') || '0', 10)
     this.sharedService.btnAnexCli = false;
 
-  }
+    // this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
+    //   if (this.nCh == true){
+    //     let numero: number = 0;
+    //       let cli = window.sessionStorage.getItem('nCli')
+    //       if (cli == null){
+    //         cli = '0';
+    //       }
+    //     this.destacarLinha(clienteAtual, cli)
+    //   }
+    //   });
+    }
 
   destacarLinha(l:any, lFicha: string) {
-
     this.nChanges = false;
     this.clienteService.setChangesA(false);
     let numero = parseInt(l.Ficha, 10);
-    window.sessionStorage.setItem('IdCl', l.Ficha || '0')
+    window.sessionStorage.setItem('nCli', l.Ficha || '0')
       if (isNaN(numero)) {
         numero = 0;
     }
     this.sharedService.ListaArquivos = [];
     this.sharedService.ClienteAtual = numero;
+
     this.sharedService.btnAnexCli = true;
     const dados = this.clienteService.clientesG.find(cliente => cliente.id === numero);
     if (dados !== undefined){

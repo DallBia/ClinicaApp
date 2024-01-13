@@ -27,8 +27,8 @@ export class DefinitionsComponent implements OnInit{
 
 carregar(){
   const r = this.trazerPerfil();
-  console.log(window.sessionStorage.getItem('IdPerfil'))
-  console.log(window.sessionStorage.getItem('IdEq'))
+  console.log(window.sessionStorage.getItem('nPrf'))
+  console.log(window.sessionStorage.getItem('nCol'))
   for (let i = 1; i < 19; i++) {
     const nome = 'Perfil' + i.toString();
     console.log('Em ' + nome + ': ' + window.sessionStorage.getItem(nome))
