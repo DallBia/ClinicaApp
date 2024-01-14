@@ -206,13 +206,13 @@ async busca(n?: number){
 
 
 async agendar(status: string){
-  console.log('Serão feitos os seguintes agendamentos:')
-  console.log(this.agenda.agendaMulti)
+    console.log('Serão feitos os seguintes agendamentos:')
+    console.log(this.agenda.agendaMulti)
   for (let i of this.agenda.agendaMulti){
     i.status = status;
     i.diaI = i.diaI !== undefined ? new Date(i.diaI).toISOString() : i.diaI;
     i.diaF = i.diaF !== undefined ? new Date(i.diaF).toISOString() : i.diaF;
-
+    console.log(i.diaI + ' e ' + i.diaF)
     const n =  i.id !== undefined ? i.id - 1 : 0;
     i.id = 0;
     this.informacao = 'Gravando dados... sessão ' + this.ListaAgenda[n].sessao.toString();
