@@ -404,14 +404,14 @@ validaRept(agenda: Agenda[]): boolean {
   }
 
     async CreateAgenda(agenda: Agenda): Promise<Agenda[]> {
+      console.log(agenda)
       try {
         const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda).toPromise();
         if (response && response.dados !== undefined && response.sucesso) {
           this.agendaG = response.dados;
-
           return response.dados;
         } else {
-          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+          throw new Error(response?.mensagem);
         }
       } catch (error) {
         throw error; // Você pode personalizar essa parte conforme sua necessidade
