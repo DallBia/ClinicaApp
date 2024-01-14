@@ -79,7 +79,7 @@ abrirEdicao(){
       if (response && response.dados !== undefined && response.sucesso) {
         return response.dados;
       } else {
-        throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        throw new Error('Erro no update do Financeiro');
       }
     } catch (error) {
       throw error; // Você pode personalizar essa parte conforme sua necessidade
@@ -92,7 +92,7 @@ abrirEdicao(){
       if (response && response.dados !== undefined && response.sucesso) {
         return response.dados;
       } else {
-        throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        throw new Error('Erro no Create do Financeiro.');
       }
     } catch (error) {
       throw error; // Você pode personalizar essa parte conforme sua necessidade
