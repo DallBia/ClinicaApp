@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { UserService } from '../../services/user.service'; // Importe o UserService aqui
 import { User } from '../../models/user'; // Importe a classe User aqui
 import { ModalSenhaProvComponent } from './modal-senha-prov/modal-senha-prov.component';
@@ -15,6 +15,7 @@ import { SharedService } from 'src/app/shared/shared.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   public Perf: string='';
   public UsrLog: string  = '';
@@ -25,6 +26,7 @@ export class LoginComponent implements OnInit {
   private resposta: boolean | undefined = undefined;
   private UnserN: number = 0;
   public txtSalvar = "Entrar";
+  http: any;
 
 
   constructor(private colab: ColaboradorService,
@@ -143,6 +145,15 @@ export class LoginComponent implements OnInit {
 
 
   }
+
+  teste(x: string){
+
+
+  }
+
+
+
+
 
 datas(n: string){
   console.log(this.shared.idades(n))

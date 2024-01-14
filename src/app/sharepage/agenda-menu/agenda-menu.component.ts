@@ -290,8 +290,8 @@ async BuscaAg(p: string){
         this.agendaService.celSelect.historico += Histmp;
         const usrId = Usr?.userid !== undefined ? parseInt(Usr?.userid, 10) : 0;
         this.agendaService.celSelect.idFuncAlt = usrId
-        this.agendaService.celSelect.diaI = new Date(this.agendaService.dia).toISOString().split('T')[0];
-        this.agendaService.celSelect.diaF = dataFim;
+        this.agendaService.celSelect.diaI = new Date(this.agendaService.dia).toISOString();
+        this.agendaService.celSelect.diaF = new Date(dataFim).toISOString();;
         this.agendaService.celSelect.unidade = 1;
         this.agendaService.celSelect.horario = this.agendaService.horario;
         this.agendaService.celSelect.sala = this.agendaService.sala;

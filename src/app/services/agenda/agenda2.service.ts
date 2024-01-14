@@ -162,6 +162,7 @@ public botaoVer: string = '';
   private apiUrl = `${environment.ApiUrl}/Agenda`;
 
   getAgendaByDate(date: string): Promise<Response<Agenda[]>> {
+    date = new Date(date).toUTCString();
   return this.http.get<Response<Agenda[]>>(`${this.apiUrl}/AgendaByDate/${date}`)
     .toPromise()
     .then(response => {

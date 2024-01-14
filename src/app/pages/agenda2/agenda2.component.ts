@@ -30,7 +30,6 @@ export class Agenda2Component implements OnInit, OnDestroy{
       this.main()
       this.buscaClientes()
       this.buscaEquipe()
-      // this.donoSala.buscaDonos()
       this.colunas = [];
       this.linhas = [];
       for (let i = 0; i <= 30; i++) {
