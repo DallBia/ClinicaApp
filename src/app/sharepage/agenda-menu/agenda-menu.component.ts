@@ -188,9 +188,8 @@ async BuscaAg(p: string){
 
 
     async salvaSessao(){
-     let diff = this.saoIguais(this.agendaService.celSelect, this.cellAnt)
-     const rept = this.cellAnt;
-     diff = true
+
+     let diff = true
       if (diff == true){
         this.agendaService.celSelect.idCliente = 0;
          if (this.agendaService.celSelect.status == 'Sala'){
@@ -441,27 +440,6 @@ async BuscaAg(p: string){
     }
 
 
-    saoIguais(agenda1: Agenda, agenda2: Agenda): boolean {
-      console.log(agenda1)
-      console.log(agenda2)
-      if (!agenda1 || !agenda2) {
-        return false;
-      }
-
-      const chavesAgenda1 = Object.keys(agenda1);
-      const chavesAgenda2 = Object.keys(agenda2);
-
-      if (chavesAgenda1.length !== chavesAgenda2.length) {
-        return false;
-      }
-      const n = chavesAgenda1.length
-      for (let i = 0; i < n; i++) {
-        if (chavesAgenda1[i] !== chavesAgenda2[i]) {
-          return false;
-        }
-      }
-      return true;
-    }
 
 
 
