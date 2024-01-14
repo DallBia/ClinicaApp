@@ -380,12 +380,13 @@ validaRept(agenda: Agenda[]): boolean {
     async UpdateAgenda(id: number, agenda: Agenda): Promise<Agenda[]> {
       try {
         agenda.diaDaSemana = '';
+        console.log(agenda)
         const response = await this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}`, agenda).toPromise();
 
         if (response && response.dados !== undefined && response.sucesso) {
           return response.dados;
         } else {
-          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+          throw new Error(response?.mensagem);
         }
       } catch (error) {
         throw error;
