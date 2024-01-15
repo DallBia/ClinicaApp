@@ -1,0 +1,98 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.gcp.kubernetes.io/pre-shared-cert: mcrt-4c3e06d2-016c-4df5-bb8b-850ace16fe5c
+    ingress.kubernetes.io/backends: '{"k8s-be-32631--70469804847de843":"HEALTHY"}'
+    ingress.kubernetes.io/forwarding-rule: k8s2-fr-8ezgt4oy-default-clinica-webapp-ingress-3c22xil2
+    ingress.kubernetes.io/https-forwarding-rule: k8s2-fs-8ezgt4oy-default-clinica-webapp-ingress-3c22xil2
+    ingress.kubernetes.io/https-target-proxy: k8s2-ts-8ezgt4oy-default-clinica-webapp-ingress-3c22xil2
+    ingress.kubernetes.io/ssl-cert: mcrt-4c3e06d2-016c-4df5-bb8b-850ace16fe5c
+    ingress.kubernetes.io/target-proxy: k8s2-tp-8ezgt4oy-default-clinica-webapp-ingress-3c22xil2
+    ingress.kubernetes.io/url-map: k8s2-um-8ezgt4oy-default-clinica-webapp-ingress-3c22xil2
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"kubernetes.io/ingress.class":"gce","kubernetes.io/ingress.global-static-ip-name":"app-static-ip","networking.gke.io/managed-certificates":"clinica-webapp-cert","nginx.ingress.kubernetes.io/cors-allow-credentials":"true","nginx.ingress.kubernetes.io/cors-allow-methods":"PUT, GET, POST, OPTIONS, HEAD, DELETE, PATCH","nginx.ingress.kubernetes.io/cors-allow-origin":"*","nginx.ingress.kubernetes.io/enable-cors":"true"},"name":"clinica-webapp-ingress","namespace":"default"},"spec":{"defaultBackend":{"service":{"name":"clinica-webapp-svc","port":{"number":80}}}}}
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: app-static-ip
+    networking.gke.io/managed-certificates: clinica-webapp-cert
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, HEAD,
+      DELETE, PATCH
+    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+  creationTimestamp: "2024-01-15T02:54:28Z"
+  finalizers:
+  - networking.gke.io/ingress-finalizer-V2
+  generation: 1
+  managedFields:
+  - apiVersion: networking.k8s.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:kubernetes.io/ingress.class: {}
+          f:kubernetes.io/ingress.global-static-ip-name: {}
+          f:networking.gke.io/managed-certificates: {}
+          f:nginx.ingress.kubernetes.io/cors-allow-credentials: {}
+          f:nginx.ingress.kubernetes.io/cors-allow-methods: {}
+          f:nginx.ingress.kubernetes.io/cors-allow-origin: {}
+          f:nginx.ingress.kubernetes.io/enable-cors: {}
+      f:spec:
+        f:defaultBackend:
+          .: {}
+          f:service:
+            .: {}
+            f:name: {}
+            f:port:
+              .: {}
+              f:number: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2024-01-15T02:54:28Z"
+  - apiVersion: networking.k8s.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:ingress.gcp.kubernetes.io/pre-shared-cert: {}
+    manager: managed-certificate-controller
+    operation: Update
+    time: "2024-01-15T02:54:28Z"
+  - apiVersion: networking.k8s.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:ingress.kubernetes.io/backends: {}
+          f:ingress.kubernetes.io/forwarding-rule: {}
+          f:ingress.kubernetes.io/https-forwarding-rule: {}
+          f:ingress.kubernetes.io/https-target-proxy: {}
+          f:ingress.kubernetes.io/ssl-cert: {}
+          f:ingress.kubernetes.io/target-proxy: {}
+          f:ingress.kubernetes.io/url-map: {}
+        f:finalizers:
+          .: {}
+          v:"networking.gke.io/ingress-finalizer-V2": {}
+      f:status:
+        f:loadBalancer:
+          f:ingress: {}
+    manager: glbc
+    operation: Update
+    subresource: status
+    time: "2024-01-15T02:56:01Z"
+  name: clinica-webapp-ingress
+  namespace: default
+  resourceVersion: "97865291"
+  uid: fe0e9eff-892e-45a2-9ddb-02e8106d24c0
+spec:
+  defaultBackend:
+    service:
+      name: clinica-webapp-svc
+      port:
+        number: 80
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.49.251.222
