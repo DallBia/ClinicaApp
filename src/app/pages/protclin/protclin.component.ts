@@ -14,6 +14,7 @@ import { jsPDF } from "jspdf";
 import { SharedService } from 'src/app/shared/shared.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PdfModalComponent } from 'src/app/sharepage/form-pront/pdf-modal/pdf-modal.component';
+import { HeaderService } from 'src/app/sharepage/navbar/header.service';
 
 @Component({
   selector: 'app-protclin',
@@ -23,13 +24,11 @@ import { PdfModalComponent } from 'src/app/sharepage/form-pront/pdf-modal/pdf-mo
 export class ProtclinComponent implements OnInit, OnDestroy{
 
   @ViewChild(BlocoNotasComponent) blocoNotas!: BlocoNotasComponent;
-  @ViewChild(LoginComponent) login!: LoginComponent;
+  //@ViewChild(LoginComponent) login!: LoginComponent;
   texto: string = '';
   private subscription!: Subscription;
   nCliente!: number;
-  Atual!: TableData;
-  public Ficha:string = 'FICHA';
-  public NomeCliente: string = '';
+
   //public MostraInfo: boolean = true;
   public idFoto: string = '';
   public User!:Colaborador;
@@ -40,54 +39,26 @@ export class ProtclinComponent implements OnInit, OnDestroy{
 
   constructor(private colaboradorService: ColaboradorService,
     public clienteService: ClienteService,
-    private prontuarioService: ProntuarioService,
+    public prontuarioService: ProntuarioService,
     public dialog: MatDialog,
     public fotoService: FileService,
     public shared: SharedService,
+    public headerService: HeaderService,
     private userService: UserService) {
-    this.subscription = this.clienteService.ClienteA$.subscribe(
-      nameC => this.nCliente = nameC
-    )
-    this.subscription = this.userService.EquipeA$.subscribe(
-      nameC => this.nUser = nameC
-    )
 
-    this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-      this.Atual = clienteAtual;
-    });
+
+
   }
 
   ngOnInit() {
-    console.log(window.sessionStorage.getItem('nPrf'))
-    console.log(window.sessionStorage.getItem('nCol'))
-    this.shared.MostraInfo = true;
-    console.log(this.shared.MostraInfo);
-    this.subscription = this.clienteService.ClienteA$.subscribe(
-      nameC => this.nCliente = nameC
-    )
-    this.subscription = this.userService.EquipeA$.subscribe(
-      nameC => this.nUser = nameC
-    )
-
-    this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-      this.Atual = clienteAtual;
-    });
-
-    this.UserAll = this.colaboradorService.GetColaborador();
-// this.delay(300);
-
-    if(this.nCliente !== 0){
-        this.Ficha = this.Atual.Ficha;
-      this.NomeCliente = this.Atual.nome.toUpperCase();
-      this.idFoto = '../../../assets/img/Clientes/' + this.Ficha + '.jpg'
-
-      }else{
-      this.Ficha = 'FICHA';
-      this.NomeCliente = '';
-    }
-    this.newInfo(this.shared.MostraInfo);
-    console.log(this.shared.Perfil)
+    this.shared.ListaPront = [];
+    this.inicio()
   }
+async inicio(){
+  this.shared.MostraInfo = false;
+    this.prontuarioService.iniciar();
+}
+
 
   newInfo(opt: boolean){
     this.shared.MostraInfo = !opt;
@@ -99,27 +70,9 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   }
 
 
-  ficha = [
-    { texto: this.Ficha, altura: '10vh', largura: '18vh', cor: 'var(--cor-clara)', size: '20pt' }
-  ];
-  containers = [
-    {altura:'10vh', largura: "200vh"}
-  ];
-  botoes = [
-    { texto: '', altura: '4.6vh', largura: '15vh', cor: 'white' },
-    { texto: '', altura: '4.6vh', largura: '15vh', cor: 'white' },
-    { texto: '', altura: '4.6vh', largura: '15vh', cor: 'white'},
-    { texto: '', altura: '4.6vh', largura: '15vh', cor:'white' }
-  ];
-  botoesInfo = [
-    { texto: 'Anexar Documento', altura: '4vh', largura: '30vh', cor: 'white' },
-    { texto: 'Ver Documento', altura: '4vh', largura: '30vh', cor: 'white' },
-    { texto: 'Imprimir Relatório', altura: '4vh', largura: '30vh', cor: 'white' },
-    { texto: 'Buscar neste Prontuário', altura: '4vh', largura: '30vh', cor: 'white' },
-    { texto: 'Inserir nova informação', altura: '4vh', largura: '30vh', cor: 'white' },
- ]
+
  ngOnDestroy(): void {
-  this.subscription.unsubscribe();
+
 }
 
 

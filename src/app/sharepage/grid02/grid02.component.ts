@@ -31,6 +31,7 @@ subscription: Subscription;
     this.nChanges = false;
     this.colaboradorService.nChng = true;
     window.localStorage.setItem('nCol',Ficha)
+    this.colaboradorService.validarPermissoes();
     this.colaboradorService.setChangesA(false);
     let numero = parseInt(l.ficha, 10);
       if (isNaN(numero)) {

@@ -54,37 +54,77 @@ export class PerfilService {
     }
 
 
-    validaPerfil(id: number, n: number): boolean{
-      return true
+    // validaPerfil(id: number, n: number): boolean{
+    //   return true
+    // }
+
+    validaPerfil(id: number, n: number): boolean{   //o id é o id que se deseja consultar (0 para nenhum, 1 para cliente e 2 pra Colaborador); o n é o item da Definição de perfil
+      let resp: boolean = true;
+      let id0: string | null = '0';
+      switch (id){
+        case (1):
+          id0 = window.localStorage.getItem('nCli');
+          break;
+        case (2):
+          id0 = window.localStorage.getItem('nCol');
+          break;
+        default:
+          id0 = '0';
+      }
+      try{
+        id = id0 !== null ? parseInt(id0) : 0;
+      }catch{
+        id = 0
+      }
+      try{
+
+        const nId = window.sessionStorage.getItem('Perfil' + n.toString());
+        const idUser = window.sessionStorage.getItem('nUsr');
+
+        switch (nId){
+          case ('S'):
+            resp = true;
+            break;
+          case ('N'):
+            resp = false;
+            break;
+          case ('X'):
+            resp = idUser == id.toString() ? true : false;
+            break;
+          default:
+            resp = false;
+            break;
+        }
+
+          // let p: boolean[] = [false, false, false, false, false];
+
+          // if (idUser !== null){
+          //   const usuario = idUser !== undefined ? parseInt(idUser) : 0;
+          //   const perfil = nId !== null ? parseInt(nId) : 3;
+          //   for (let x of this.perfils){
+          //     if (x.id == n){
+          //       p = [x.dir ? x.dir : false, x.secr ? x.secr : false, x.coord ? x.coord : false, x.equipe ? x.equipe : false, x.siMesmo ? x.siMesmo : false]
+          //     }
+          //   }
+          //   if(perfil == 3 && p[4] == true){
+          //     if(id == usuario){
+          //       resp = true;
+          //     }
+          //   }else{
+          //     resp = p[perfil]
+          //   }
+          //   console.log('perfil: '+ perfil)
+          //   console.log('p perfil:' + p[perfil])
+          //   console.log('Id / Usuário: ' + id + '/' + usuario)
+          // }
+      }catch{
+        resp = false;
+      }
+        return resp;
+        //return resp;
     }
 
-    // validaPerfil(id: number, n: number): boolean{
-    //   let resp: boolean = true;
-    //     const UsrLog = this.user.getUserA().getValue();
-    //     let p: boolean[] = [false, false, false, false, false];
 
-    //     if (UsrLog !== null){
-    //       const usuario = UsrLog.userid !== undefined ? parseInt(UsrLog.userid) : 0;
-    //       const perfil = UsrLog.perfil !== undefined ? parseInt(UsrLog.perfil) : 3;
-    //       for (let x of this.perfils){
-    //         if (x.id == n){
-    //           p = [x.dir ? x.dir : false, x.secr ? x.secr : false, x.coord ? x.coord : false, x.equipe ? x.equipe : false, x.siMesmo ? x.siMesmo : false]
-    //         }
-    //       }
-    //       if(perfil == 3 && p[4] == true){
-    //         if(id == usuario){
-    //           resp = true;
-    //         }
-    //       }else{
-    //         resp = p[perfil]
-    //       }
-    //       console.log('perfil: '+ perfil)
-    //       console.log('p perfil:' + p[perfil])
-    //       console.log('Id / Usuário: ' + id + '/' + usuario)
-    //     }
-    //     return true;
-    //     //return resp;
-    // }
     public ps: Perfil[] = []
     guardaPerfil(): boolean{
        this.GetPerfil().subscribe(data => {

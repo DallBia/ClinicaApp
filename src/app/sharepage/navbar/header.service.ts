@@ -5,10 +5,13 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class HeaderService {
-  private LinkA = new BehaviorSubject<string>('');
+  public LinkA = new BehaviorSubject<string>('');
   LinkA$ = this.LinkA.asObservable();
   setLinkA(value: string) {
     this.LinkA.next(value);
+  }
+  getLink(){
+    return this.LinkA.value
   }
   linkAtivo: string = '';
 }

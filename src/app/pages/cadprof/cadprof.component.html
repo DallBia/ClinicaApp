@@ -1,6 +1,6 @@
 <div class="linha01">
   <div class="ti-botao">
-      <button class="Rosa" (click)="CliqueNovo()" [disabled]="!this.vNovo"> <!--[disabled]="!this.vNovo"-->
+      <button class="Rosa" (click)="CliqueNovo()" [disabled]="!this.colaboradorService.vNovoCadProf"> <!--[disabled]="!this.vNovo"-->
           <!-- {{this.selectedFicha}} -->
           NOVO
       </button>
@@ -43,12 +43,12 @@
     </div>
     <div class="botoes-finais">
       <div class="btnAnexar">
-        <button class="Branco" id="Anexar" (click)="abrirModal()" [disabled]="!this.shared.btnAnexPro"> <!-- <button class="Branco" id="Anexar" (click)="abrirModal()">-->
+        <button class="Branco" id="Anexar" (click)="abrirModal()" [disabled]="!this.colaboradorService.vSalvarCadProf"> <!-- <button class="Branco" id="Anexar" (click)="abrirModal()">-->
           Anexar Arquivos
         </button>
       </div>
     <div class="btnSalvar">
-        <button class="Rosa" [disabled]="this.btnSalva" id="Salvar" (click)="Salvar()">  <!-- <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  -->
+        <button class="Rosa" [disabled]="!this.colaboradorService.vSalvarCadProf" id="Salvar" (click)="Salvar()">  <!-- <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  -->
           {{this.txtSalva}}
         </button>
     </div>

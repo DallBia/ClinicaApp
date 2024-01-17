@@ -26,8 +26,8 @@ export class BlocoNotasComponent implements OnInit {
   @Output() onSubmit = new EventEmitter<string>();
 
   //==================================================================
-  @ViewChild(LoginComponent) login!: LoginComponent;
-  @ViewChild('protadmRef') protadm!: ProtadmComponent;
+  //@ViewChild(LoginComponent) login!: LoginComponent;
+  //@ViewChild('protadmRef') protadm!: ProtadmComponent;
 
 
   texto: string = '';
@@ -57,16 +57,6 @@ export class BlocoNotasComponent implements OnInit {
     this.processedText = this.text;
 }
 
-Enviar(){
-  if(this.linkA!=='CONTROLE FINANCEIRO'){
-  let texto = this.processedText;
-  this.Insere(texto.toString());
-  }else{
-    this.Insere('CONTROLE FINANCEIRO');
-  }
-
-
-}
 
 onKeydown(event: KeyboardEvent): void {
   const target = event.target as HTMLTextAreaElement;
@@ -90,79 +80,15 @@ onKeydown(event: KeyboardEvent): void {
   ) { }
 
   ngOnInit() {
-      this.subscription = this.clienteService.ClienteA$.subscribe(
-        nameC => this.nCliente = nameC
-      )
-      this.subscription = this.userService.EquipeA$.subscribe(
-        nameC => this.nUser = nameC
-      )
-
-      this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-        this.Atual = clienteAtual;
-      });
-      this.headerService.LinkA$.subscribe(link => {
-        this.linkA = link;
-        switch (this.linkA){
-          case ('PRONTUÁRIO CLÍNICO'):
-            this.rota = '/protclin'
-            break;
-          case ('PRONTUÁRIO ADMINISTRATIVO'):
-            this.rota = '/protadm'
-            break;
-          case ('CONTROLE FINANCEIRO'):
-            this.rota = '/controleFinaceiro'
-            break;
-          default:
-            this.rota = '/inicio'
-        }
-      });
-
-      console.log(this.shared.texto)
+      console.log('Em Bloco de Notas: ' + this.shared.texto)
       this.processedText = this.shared.texto;
-}
-
-recarrega(data: Prontuario[]){
-  console.log(data)
-      data.map((i: any) => {
-        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toLocaleDateString('pt-BR') : '---'
-        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toLocaleDateString('pt-BR') : '---'
-        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toLocaleDateString('pt-BR') : '---'
-      })
-      this.prontuarioService.prontuarioG = data
-          this.prontuarioService.prontuarioG.sort((a, b) => (a.dtInsercao - b.dtInsercao));
-          this.shared.setprotadmChange(true);
-      alert('Registro gravado!');
-      this.delay(300);
-      this.shared.MostraInfo = !this.shared.MostraInfo;
-  switch(this.rota){
-    case ('/protadm'):
-      this.router.navigate([this.rota]);
-      break;
-    case ('/protclin'):
-      this.router.navigate([this.rota]);
-      break;
-  }
 }
 
 
 Insere (processedText: string) {
   if (processedText.length > 1) {
-    let tipo: string = '';
-    switch (this.linkA) {
-      case "PRONTUÁRIO CLÍNICO":
-        tipo = 'clínico'
-        break;
-      case "PRONTUÁRIO ADMINISTRATIVO":
-        tipo = 'administrativo'
-        break;
-      case "CONTROLE FINANCEIRO":
-        tipo = 'financeiro'
-        break;
-      default:
-        tipo = ''
-        break;
-    }
-    if (this.linkA == 'CONTROLE FINANCEIRO'){
+
+    if (this.prontuarioService.tipo =='financeiro'){
       const novo: Valor = {
         id: this.shared.idTexto,
         nome: this.shared.texto,
@@ -176,11 +102,17 @@ Insere (processedText: string) {
         this.updateValor(novo);
       }
     }else{
+      let User: number = 0;
+      const stringUsr = window.sessionStorage.getItem('nUsr')
+      if (stringUsr !== null && stringUsr !== undefined){
+        try{ User = parseInt(stringUsr);}
+        catch{ User = 0}
+      }
       const texto: Prontuario = {
         id: this.shared.idTexto,
-        idCliente: this.nCliente,
-        idColab: this.nUser !== undefined ? this.nUser : 0,
-        tipo: tipo,
+        idCliente: this.prontuarioService.nCliente,
+        idColab: User,
+        tipo: this.prontuarioService.tipo,
         dtInsercao: new Date(),
         texto: processedText,
       };
@@ -191,20 +123,20 @@ Insere (processedText: string) {
       }
     }
 
-
   }
 }
-carregaProtAdm(data: Prontuario[]){
-  data.map((i: any) => {
-    i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toLocaleDateString('pt-BR') : '---'
-    i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toLocaleDateString('pt-BR') : '---'
-    i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toLocaleDateString('pt-BR') : '---'
-  })
-  this.prontuarioService.prontuarioG = data
-      this.prontuarioService.prontuarioG.sort((a, b) => (a.dtInsercao - b.dtInsercao));
-      this.shared.setprotadmChange(true);
-}
 
+  Enviar(){
+    this.prontuarioService.vSalva = false
+    if(this.prontuarioService.tipo!=='financeiro'){
+      let texto = this.processedText;
+      this.Insere(texto.toString());
+    }else{
+      this.Insere('CONTROLE FINANCEIRO');
+    }
+    this.prontuarioService.vSalva = true
+
+  }
 
 createValor(novo: Valor) {
   const data = this.shared.createValor(novo);
@@ -212,7 +144,6 @@ createValor(novo: Valor) {
       alert('Registro gravado!');
       this.delay(300);
       this.router.navigate([this.rota]);
-
       this.shared.MostraInfo = false;
     }
 
@@ -239,7 +170,9 @@ createProntuario(texto: Prontuario) {
   this.prontuarioService.CreateProntuario(texto).subscribe(
     (data) => {
       this.delay(300);
-      this.recarrega(data.dados)
+      this.shared.MostraInfo = false;
+      alert('Informação inserida!')
+      this.prontuarioService.iniciar();
     },
     (error) => {
       console.error('Erro no upload', error);
@@ -250,12 +183,10 @@ createProntuario(texto: Prontuario) {
 updateProntuario(texto: Prontuario) {
   this.prontuarioService.UpdateProntuario(texto).subscribe(
     (data) => {
-
-      // this.delay(300);
-      // this.carregaProtAdm(data.dados);
-      // alert('Registro atualizado!');
-      // this.delay(300);
-      this.recarrega(data.dados)
+      this.delay(300);
+      this.shared.MostraInfo = false;
+      alert('Informação inserida!')
+      this.prontuarioService.iniciar();
     },
     (error) => {
       console.error('Erro no upload', error);

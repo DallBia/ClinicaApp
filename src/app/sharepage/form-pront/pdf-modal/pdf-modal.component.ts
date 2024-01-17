@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as docx from "docx";
 import { SharedService } from 'src/app/shared/shared.service';
 import { TableProntClin } from 'src/app/models/Tables/TableProntClin';
+import { ProntuarioService } from 'src/app/services/prontuario/prontuario.service';
 
 @Component({
   selector: 'app-pdf-modal',
@@ -17,11 +18,13 @@ export class PdfModalComponent {
 
   public Lista: TableProntClin[] = [];
   public Linha: TableProntClin[] = [];
+  public cliadm: string = ' (' + this.prontuarioService.tipo + ' - ' + new Date().toLocaleDateString('pt-BR') + ')';
   public CLienteNome: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<PdfModalComponent>,
     public shared: SharedService,
+    public prontuarioService: ProntuarioService,
 
 
   ) {
@@ -33,7 +36,7 @@ export class PdfModalComponent {
           idColab: i.idColab,
           nomeColab: i.nomeColab,
           nomeCliente: i.nomeCliente,
-          dtInsercao: new Date(i.dtInsercao).toLocaleDateString('pt-BR'),
+          dtInsercao: i.dtInsercao,
           texto: i.texto,
           selecionada:i.selecionada,
         }]
@@ -45,7 +48,11 @@ export class PdfModalComponent {
 
 salvaPDF(){
   let pdf = new jsPDF('p','px','A4', true);
-  const nome = this.CLienteNome + ' 01.pdf'
+  let nome = this.CLienteNome + this.cliadm
+  nome = nome.replace('/','_')
+  nome = nome.replace('?','-')
+  nome = nome.replace('*','-')
+  console.log(nome)
   pdf.setFontSize(12);
 
   let texto = this.CLienteNome + '\n'

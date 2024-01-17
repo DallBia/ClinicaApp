@@ -168,6 +168,12 @@ async busca(n?: number){
               }
               const Usr = this.userService.getUserA().getValue();
               const usrId = Usr?.userid !== undefined ? parseInt(Usr?.userid, 10) : 0;
+              let valor = undefined
+              try{
+                  valor = parseFloat(this.ListaAgenda[x].valor);
+              }catch{
+                valor = undefined
+              }
 
               this.agenda.agendaMulti[n] = {
                 id: nn,
@@ -187,7 +193,7 @@ async busca(n?: number){
                 historico: this.agenda.numReserva + ' (' + nn + ' de ' + this.agenda.agendaNsessoes + ')',
                 obs: '',
                 multi: this.agenda.numReserva,
-                valor: nn == 1 ? this.agenda.celSelect.valor : 0,
+                valor: valor,
                 configRept: 'X',
               }
               console.log(this.agenda.agendaMulti[n])

@@ -43,7 +43,7 @@
     </div>
     <div style="vertical-align: middle;">
       <label class="fMeioLabel">Admissão:</label>
-      <input type="text"  class="fMeioCampo" appDateMask formControlName="desde" placeholder="(dd/mm/aaaa)" required>
+      <input type="text" class="fMeioCampo" appDateMask formControlName="desde" placeholder="(dd/mm/aaaa)" required>
       <!-- <label class="fMeioLabel">Desligamento:</label>
       <input type="text"  class="fMeioCampo" formControlName="dtNascim" placeholder="(dd/mm/aaaa)" required> -->
     </div>
@@ -55,7 +55,7 @@
         <option>Secretaria</option>
         <option>Equipe Clínica</option>
       </select>
-      <input type="checkbox"  class="fCheck" style="margin-right:4px;" formControlName="ativo">
+      <input type="checkbox" class="fCheck" style="margin-right:4px;" formControlName="ativo">
       <label>Funcionário Ativo</label>
     </div>
   </form>
@@ -122,5 +122,5 @@
         <hr>
       </ng-container>
     </div>
-  <button class="rosa" (click)="abrirModal()">INSERIR NOVA FORMAÇÃO PROFISSIONAL</button>
+  <button class="rosa" [disabled]="!this.colaboradorService.vSalvarCadProf" (click)="abrirModal()">INSERIR NOVA FORMAÇÃO PROFISSIONAL</button>
   </div>

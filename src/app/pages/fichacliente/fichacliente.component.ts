@@ -115,7 +115,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
 
       console.log(window.sessionStorage.getItem('nPrf'))
-      console.log(window.sessionStorage.getItem('nCol'))
+      console.log(window.sessionStorage.getItem('nUsr'))
       console.log(window.sessionStorage.getItem('nCli'))
 
       this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
@@ -131,7 +131,8 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       this.clienteService.ChangesA$.subscribe(chng => {
         this.nChanges = chng;
       });
-      this.vNovo = this.perfilService.validaPerfil(0, 1)
+
+      this.clienteService.validarPermissoes()
       this.clienteService.dataSource = [];
       this.clienteService.iniciar();
 
@@ -183,6 +184,8 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   }
 
   abrirModal() {
+    const SalvarAnterior = this.clienteService.vSalvarFichaCli;
+    this.clienteService.vSalvarFichaCli = false;
     this.sharedService.nome = this.sharedService.ListaClientes.nome;
       this.sharedService.docto = {
         id: 0,
@@ -199,7 +202,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
         disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
     });
     dialogRef.afterClosed().subscribe(result => {
-
+      this.clienteService.vSalvarFichaCli = SalvarAnterior;
     });
   }
 
@@ -216,9 +219,10 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   }
 
   salvarPessoa(){
-
+      const SalvarAnterior = this.clienteService.vSalvarFichaCli;
+      this.clienteService.vSalvarFichaCli = false;
       this.formCliente.submit();
-
+      this.clienteService.vSalvarFichaCli = SalvarAnterior;
   }
 
   buscarAlteracoes(event:any){

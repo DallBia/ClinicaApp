@@ -44,6 +44,7 @@ export class Grid01Component {
     this.nChanges = false;
     this.clienteService.setChangesA(false);
     let numero = parseInt(l.Ficha, 10);
+
     window.sessionStorage.setItem('nCli', l.Ficha || '0')
       if (isNaN(numero)) {
         numero = 0;
@@ -60,7 +61,8 @@ export class Grid01Component {
     this.clienteService.setClienteA(numero);
 
     this.clienteService.setClienteAtual(this.clienteService.dataSource.find(cliente => parseInt(cliente.Ficha, 10) === numero) || this.clienteService.Vazia[0]);
-
+    const cli = this.clienteService.ClienteAtual.value
+    this.clienteService.foto = cli.foto
     l.selecionada = true;
     this.sharedService.PessoaDoctos = "C";
     this.sharedService.carregarListaDeArquivos()
@@ -72,7 +74,9 @@ export class Grid01Component {
 
 
 
-  constructor(private sharedService: SharedService, public clienteService: ClienteService) {
+  constructor(private sharedService: SharedService,
+    public clienteService: ClienteService,
+    ) {
 
     this.subscription = this.clienteService.ChangesA$.subscribe(
       name => this.nChanges = name

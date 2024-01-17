@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: clinica-webapp-cert
+spec:
+  domains:
+    - app.clincasagrande.com.br

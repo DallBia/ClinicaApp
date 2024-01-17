@@ -86,7 +86,6 @@ export class CadprofComponent implements OnDestroy, OnInit {
     ListaEquipe: any;
     ListaFormacaos: any;
     vNovo: boolean = true;
-    vSalvar: boolean = true;
     public btnSalva: boolean = false;
     public txtSalva: string = "Salvar";
     private control!:any;
@@ -129,10 +128,8 @@ export class CadprofComponent implements OnDestroy, OnInit {
       this.EAtual = eat;
     });
 
-    this.vNovo = this.perfilService.validaPerfil(0, 3)
-    const id = this.ColAt.id !== undefined ? this.ColAt.id : 0;
-    this.colaboradorService.vSalvar = this.perfilService.validaPerfil(id, 4)
-
+    this.colaboradorService.vNovoCadProf = this.perfilService.validaPerfil(0, 3)
+    this.colaboradorService.vSalvarCadProf = this.perfilService.validaPerfil(2, 4)
     this.colaboradorService.iniciar();
   }
 
@@ -192,7 +189,9 @@ abrirModal(){
 Salvar(){
   if (this.txtSalva == "Salvar"){
     this.txtSalva = "Aguarde..."
-    this.btnSalva = true;
+    const salvarAnterior = this.colaboradorService.vSalvarCadProf
+    this.colaboradorService.vSalvarCadProf = false
+
     this.delay(300);
   const Dados = this.formProf.submitE()
   let ProfAlt = this.ProfVazio;
@@ -301,8 +300,7 @@ Salvar(){
     if (ProfAlt !== null){
       //this.AtualizarProf(this.ProfAlt)
       this.colaboradorService.UpdateEquipe(ProfAlt).subscribe((data) => {
-
-      this.btnSalva = false;
+        this.colaboradorService.vSalvarCadProf = salvarAnterior
       this.txtSalva = "Salvar"
       this.delay(300)
        const dados = this.colaboradorService.GetCol();

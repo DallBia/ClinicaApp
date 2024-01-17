@@ -1,6 +1,6 @@
 <div class="linha01">
     <div class="ti-botao">
-        <button class="Rosa" (click)="CliqueNovo()" [disabled]="this.btnNovo" > <!-- [disabled]="!this.vNovo" -->
+        <button class="Rosa" (click)="CliqueNovo()" [disabled]="!this.clienteService.vNovoFichaCli" > <!-- [disabled]="!this.vNovo" -->
             <!-- {{this.selectedFicha}} -->
             NOVO
         </button>
@@ -43,12 +43,12 @@
     </div>
     <div class="botoes-finais">
       <div class="btnAnexar">
-        <button class="Branco" id="Anexar" (click)="abrirModal()" [disabled]="!this.sharedService.btnAnexCli">
+        <button class="Branco" id="Anexar" (click)="abrirModal()"  [disabled]="!this.clienteService.vSalvarFichaCli">
           Anexar Arquivos
         </button>
           </div>
           <div class="btnSalvar">
-              <button class="Rosa" [disabled]="this.btnSalva" (click)="this.salvarPessoa()">
+              <button class="Rosa" [disabled]="!this.clienteService.vSalvarFichaCli" (click)="this.salvarPessoa()">
                   {{this.txtSalva}}
               </button>
           </div>

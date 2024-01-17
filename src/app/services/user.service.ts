@@ -76,6 +76,7 @@ export class UserService {
 
 
   setUser(user: User) {
+
     this.userSubject.next(user);
   }
 
@@ -87,13 +88,14 @@ export class UserService {
     //this.router.navigate(['/login']);
     const token: string = this.tokenService.getToken();
     const user = jwt_decode(token) as User;
+    //window.sessionStorage.setItem('idPrf', user.perfil);
     this.userSubject.next(user);
     this.userLogged.next(true);
     this.setUserA(user)
     const Uid = user.userid !== undefined ? Number(user.userid) || 0 : 0;
     this.setEquipeA(Uid)
     const id = user.userid !== undefined ? user.userid.toString() : '0';
-    window.sessionStorage.setItem('nCol', id);
+    window.sessionStorage.setItem('nUsr', id);
   }
 
 

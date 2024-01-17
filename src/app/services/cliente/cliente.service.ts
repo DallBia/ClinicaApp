@@ -10,6 +10,7 @@ import { TabResult } from 'src/app/models/Tables/TabResult';
 import { FileService } from '../foto-service.service';
 import { SharedService } from 'src/app/shared/shared.service';
 import { Tipo } from 'src/app/models/Tipo';
+import { PerfilService } from '../perfil/perfil.service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,11 @@ export class ClienteService {
   paiEmail:  '',
   paiEndereco:  '',
   }
+
+
+  public vNovoFichaCli: boolean = true;
+  public vSalvarFichaCli: boolean = false;
+  public foto: string = '';
 
   public tipo: string = 'tudo';
   public valor: string = 'tudo';
@@ -128,6 +134,8 @@ public txtQtde: string = '';
   constructor(private http: HttpClient,
     private fotoService: FileService,
     private shared: SharedService,
+    public perfil: PerfilService,
+
     ) { }
 
 
@@ -170,7 +178,7 @@ public txtQtde: string = '';
     return this.http.get<any>(`${this.apiurl}/Agenda/${param}`).toPromise();
   }
 
-  private ClienteAtual = new BehaviorSubject<TableData>(this.Vazia[0]);
+  public ClienteAtual = new BehaviorSubject<TableData>(this.Vazia[0]);
   ClienteAtual$ = this.ClienteAtual.asObservable();
   setClienteAtual(name: TableData) {
     this.ClienteAtual.next(name);
@@ -207,22 +215,6 @@ public txtQtde: string = '';
     }
   }
 
-  // async BuscaClientes(){
-  //   this.clientes = [];
-  //   this.clientesG = [];
-  //   const response = await this.BuscaCliente();
-  //   await this.Carregar();
-  //   }
-  //   async BuscaCliente(){
-  //     try {
-  //       this.data = await this.GetClientes();
-  //       this.success = this.data.sucesso;
-  //       return true;
-  //     } catch (error) {
-  //       console.error('Erro ao buscar clientes:', error);
-  //       return false;
-  //     }
-  //   }
 
   async BuscaClientes(){
 
@@ -299,6 +291,7 @@ private mensagem: any;
   }
 
   async iniciar(){
+
     console.log(this.param)
     this.data = await this.GetClienteByFiltro(this.param);
     this.Carregar();
@@ -434,6 +427,19 @@ private mensagem: any;
         }
         catch{}
     }
+  }
+
+
+  validarPermissoes(){
+
+    this.vNovoFichaCli = this.perfil.validaPerfil(0,3);
+    this.vSalvarFichaCli = this.perfil.validaPerfil(0,4);
+
+
+    console.log('Pode criar novo? ' + this.vNovoFichaCli)
+    console.log('Pode Salvar? ' + this.vSalvarFichaCli)
+
+
   }
 
   converterParaDate(dataString: string): Date {

@@ -198,6 +198,7 @@ DefinirUsuario(n: User){
     }
   }
   return n.name + ' *(' + this.Perf + ')'
+
 }
 
 

@@ -139,7 +139,7 @@ this.CarregaForm();
     if(this.equipeform == undefined){
       this.equipeform = new FormGroup({
       id:new FormControl(this.Atual.id),
-      perfil:new FormControl(this.Atual.perfil),
+      perfil:new FormControl({value: this.Atual.perfil, disabled: !this.colaboradorService.vPerfilCadProf}),
       nome:new FormControl(this.Atual.nome),
       foto:new FormControl(this.Atual.foto),
       nascimento:new FormControl(this.Atual.nascimento),
@@ -149,8 +149,8 @@ this.CarregaForm();
       cpf:new FormControl(this.Atual.cpf),
       endereco:new FormControl(this.Atual.endereco),
       email:new FormControl(this.Atual.email),
-      desde:new FormControl(this.Atual.desde),
-      ativo:new FormControl(this.Atual.ativo),
+      desde:new FormControl({value: this.Atual.desde, disabled: !this.colaboradorService.vPerfilCadProf}),
+      ativo:new FormControl({value: this.Atual.ativo, disabled: !this.colaboradorService.vPerfilCadProf}),
       });
     }
 

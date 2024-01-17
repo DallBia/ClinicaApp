@@ -12,6 +12,7 @@ import { FileService } from '../foto-service.service';
 import { Tipo } from 'src/app/models/Tipo';
 import { FinanceiroService } from '../financeiro/financeiro.service';
 import { FormGroup, FormsModule , FormControl, FormBuilder } from '@angular/forms';
+import { PerfilService } from '../perfil/perfil.service';
 
 
 interface FormField {
@@ -42,6 +43,7 @@ export class ColaboradorService {
   constructor(private http: HttpClient, private formacaoService: FormacaoService,
               private fotoService: FileService,
               public finService:FinanceiroService,
+              public perfil: PerfilService,
 
               ) { }
 
@@ -124,7 +126,9 @@ export class ColaboradorService {
   public V: Colaborador[]=[]
   public colaboradorsG: Colaborador[] = [];
   public ColAt!: Colaborador;
-  public vSalvar: boolean = true;
+  public vSalvarCadProf: boolean = false;
+  public vNovoCadProf: boolean = false;
+  public vPerfilCadProf: boolean = false;
   public equipeVazia: Colaborador = {
     id: 0,
     nome: '',
@@ -147,6 +151,29 @@ export class ColaboradorService {
 
   public ProfN: number = 0;
   public success: boolean = false;
+
+
+
+
+
+
+  validarPermissoes(){
+    const idSel = window.localStorage.getItem('nCol');
+    const idUsr = window.localStorage.getItem('nUsr');
+    this.vNovoCadProf = this.perfil.validaPerfil(2,3);
+    this.vSalvarCadProf = this.perfil.validaPerfil(2,4);
+    this.vPerfilCadProf = this.perfil.validaPerfil(2,15);
+
+    console.log('Pode criar novo? ' + this.vNovoCadProf)
+    console.log('Pode Salvar? ' + this.vSalvarCadProf)
+    console.log('Pode Alterar Perfil? ' + this.vPerfilCadProf)
+
+  }
+
+
+
+
+
     GetColaboradorbyEmail(Login: string, senha: string): Observable<Response<Colaborador[]>> {
       const body = { Login: Login, Senha: senha };
       const apiurllogin = `${environment.ApiUrl}/User/Email`;
@@ -175,6 +202,14 @@ export class ColaboradorService {
         return this.http.get<any>(`${environment.ApiUrl}/Colaborador/id/${id}`).toPromise();
     }
 
+    async GetColabByTipo(tipo: string): Promise<Tipo[]> {
+      let resp: Tipo[] = [];
+      const response = await this.http.get<Response<Tipo[]>>(`${environment.ApiUrl}/Colaborador/Agenda/${tipo}`).toPromise();
+      if (response && response.dados !== undefined && response.sucesso) {
+        resp = response.dados
+      }
+      return resp;
+    }
 
     async GetEquipeMinimal() : Promise<Tipo[]>{
      try {

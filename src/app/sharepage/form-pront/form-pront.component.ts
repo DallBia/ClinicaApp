@@ -15,6 +15,7 @@ import { Formacao } from 'src/app/models/Formacaos';
 import { FormacaoService } from 'src/app/services/formacao/formacao.service';
 import { jsPDF } from "jspdf";
 import { SharedService } from 'src/app/shared/shared.service';
+import { Tipo } from 'src/app/models/Tipo';
 
 
 
@@ -26,38 +27,12 @@ import { SharedService } from 'src/app/shared/shared.service';
 export class FormProntComponent implements OnInit {
   @ViewChild(LoginComponent) login!: LoginComponent;
 
-    //public ListaPront: TableProntClin[] = [];
-    public ListaLin: TableProntClin[] = [];
-    public ListaEquipe: TableProf[] = [];
-    public ListaLinEq: TableProf[] = [];
-
-    nCliente:number = 0;
-    subscription: Subscription;
-    nChanges!: boolean;
-    Atual!: TableData;
-    Colaborador!: string;
-    EquipeAll!: any;
-    nUser!: number;
-    linkA!: string;
     tipo: string = '';
+    subscription!: Subscription;
+    private ListaPront: Prontuario[] = [];
 
     ngOnChanges(changes: SimpleChanges) {
-      // if (changes['prontuarioService']) {
-      //   this.CarregarFuncionario()
-      //   this.Carregar()
-      // }
-      // if (changes['userService']) {
-      //   this.CarregarFuncionario()
-      //   this.Carregar()
-      // }
-      // if (changes[this.nCliente]) {
-      //   this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-      //     this.Atual = clienteAtual;
-      //   });
-      //   this.clienteService.ClienteA$.subscribe(clienteA => {
-      //     this.nCliente = clienteA;
-      //   });
-      // }
+
     }
   constructor(private headerService: HeaderService,
     private colaboradorService: ColaboradorService,
@@ -67,152 +42,92 @@ export class FormProntComponent implements OnInit {
     private formacaoService: FormacaoService,
     private prontuarioService: ProntuarioService) {
 
-    this.subscription = this.clienteService.ChangesA$.subscribe(
-      name => this.nChanges = name
-    )
-
-    this.subscription = this.clienteService.ChangesA$.subscribe(
-      name => this.nChanges = name
-    )
-    this.subscription = this.shared.protadmChange$.subscribe(
-      (valor) => {
-      if (valor == true){
-        this.shared.setprotadmChange(false)
-        this.Carregar();
-      }
-  });
 
   }
 
 
   ngOnInit(): void {
 
-    this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-      this.Atual = clienteAtual;
-    });
-    this.headerService.LinkA$.subscribe(link => {
-      this.linkA = link;
-    });
-    this.subscription = this.clienteService.ClienteA$.subscribe(
-      name => this.nCliente = name
-    )
-    this.userService.usuario$.subscribe(user => {
-      this.Colaborador = user;
-    });
-
-    this.userService.EquipeA$.subscribe(user => {
-      this.nUser = user;
-    });
-
-    this.userService.GetEquipe().subscribe(data => {
-      const dadosEq = data.dados;
-      dadosEq.map((i: any) => {
-        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toLocaleDateString('pt-BR') : '---'
-        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toLocaleDateString('pt-BR') : '---'
-        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toLocaleDateString('pt-BR') : '---'
-      })
-      this.userService.equipeG = data.dados;
-      this.CarregarFuncionario();
-    });
-
-    this.EquipeAll = this.colaboradorService.GetColaborador();
-
-
-    this.prontuarioService.GetProntuario().subscribe(data1 => {
-      this.prontuarioService.prontuarioG = data1.dados;
-      this.prontuarioService.prontuarioG.sort((a, b) => (a.dtInsercao - b.dtInsercao));
-
-
-
+    this.prontuarioService.prontuarioG$.subscribe(data1 => {
+      if (data1.length !==0){
+        this.ListaPront = data1
       this.Carregar();
+      }
     });
 
   }
 
-   Carregar(){
+   async Carregar(){
+    const clienteTmp = window.sessionStorage.getItem('nCli');
+    console.log(clienteTmp)
     this.shared.ListaPront = [];
-      switch (this.linkA) {
-        case "PRONTUÁRIO CLÍNICO":
-          this.tipo = 'clínico'
-          break;
-        case "PRONTUÁRIO ADMINISTRATIVO":
-          this.tipo = 'administrativo'
-          break;
-        case "CONTROLE FINANCEIRO":
-          this.tipo = 'financeiro'
-          break;
-        default:
-          this.tipo = ''
-          break;
-      }
-      if(this.tipo !== ''){
-      for (let i of this.prontuarioService.prontuarioG){
-        if(i.idCliente == this.nCliente && i.tipo == this.tipo){
-          let nomeColab = this.Colaborador;
-            for (let a of this.userService.equipeG){
-              if(i.idColab == a.id){
-                nomeColab = a.nome;
+        let cliente: number;
+        try{
+
+          if (clienteTmp !== null){
+            cliente = parseInt(clienteTmp);
+          }else{
+            cliente = 0;
+          }
+
+        }catch{
+          cliente = 0
+        }
+      for (let i of this.ListaPront){
+        if(i.idCliente == cliente && i.tipo == this.prontuarioService.tipo){
+          let nomeColab = '';
+          let perfil = '';
+          let nome = '';
+          if (this.prontuarioService.ListaNome !== undefined){
+
+            for (let l of this.prontuarioService.ListaNome){
+              if (l.id == i.idColab){
+                nome = l.nome;
               }
             }
-          this.ListaLin = [{
+          }
+          if (this.prontuarioService.ListaPerfil !== undefined){
+
+            for (let l of this.prontuarioService.ListaPerfil){
+              if (l.id == i.idColab){
+                perfil = l.nome;
+              }
+            }
+            switch (perfil){
+              case ('0'):
+                nomeColab = nome + ' (Diretoria)';
+                break;
+              case ('1'):
+                nomeColab = nome + ' (Secretaria)';
+                break;
+              case ('2'):
+                nomeColab = nome + ' (Coordenação)';
+                break;
+              case ('3'):
+                nomeColab = nome + ' (Equipe Clínica)';
+                break;
+              default:
+                nomeColab = nome + ' ( indefinido )';
+                break;
+            }
+          }
+
+          const ListaLin = [{
             id: i.id,
             idCliente: i.idCliente,
             idColab: i.idColab,
             nomeColab: nomeColab,
-            nomeCliente: this.Atual.nome,
+            nomeCliente: this.prontuarioService.nome,
             dtInsercao: new Date(i.dtInsercao).toLocaleDateString('pt-BR'),
             texto: i.texto,
             selecionada: false,
           }]
-          this.shared.ListaPront = [...this.shared.ListaPront, ...this.ListaLin]
+          this.shared.ListaPront = [...this.shared.ListaPront, ...ListaLin]
         }
       }
     }
-    }
 
-    CarregarFuncionario(){
-      enum EnumPerfil {
-        Diretoria = 'Diretoria',
-        Secretaria = 'Secretaria',
-        Coordenacao = 'Coordenacao',
-        EquipeClinica = 'Equipe Clínica',
-      }
 
-      const idPerfilMap: { [key: number]: EnumPerfil } = {
-        0: EnumPerfil.Diretoria,
-        1: EnumPerfil.Secretaria,
-        2: EnumPerfil.Coordenacao,
-        3: EnumPerfil.EquipeClinica,
-      };
-      for (let i of this.userService.equipeG){
-        let pForm: Formacao[] = [];
-        for (const formacao of this.formacaoService.formacaos) {
-          if (formacao.idFuncionario === i.id) {
-            pForm.push(formacao);
-          }
-        }
-            this.ListaLinEq = [{
-              foto: '',
-              ficha: (typeof i.id === 'number' ? i.id.toString() : '0'),
-              id: i.id,
-              nome: i.nome,
-              nascimento: i.dtNasc,
-              area: (typeof i.areaSession === 'string' ? i.areaSession : '0'),
-              selecionada: false,
-              desde: i.dtAdmis,
-              proxses: '',
-              celular: i.celular,
-              identidade : i.rg,
-              cpf : i.cpf,
-              endereco : i.endereco,
-              email : i.email,
-              ativo : i.ativo,
-              perfil: (typeof i.idPerfil === 'number' ? idPerfilMap[i.idPerfil] : 'Equipe'),
-              formacao : pForm,
-          }]
-          this.ListaEquipe = [...this.ListaEquipe, ...this.ListaLinEq]
-      }
-    }
 
     Edita(texto: string | undefined, colab: string | undefined, cliente: string | undefined, dia: string | undefined, id: number){
       this.shared.MostraInfo = !this.shared.MostraInfo;
