@@ -12,6 +12,9 @@ import { FileService } from "src/app/services/foto-service.service";
 import { SharedService } from "src/app/shared/shared.service";
 import { MatDialog } from '@angular/material/dialog';
 import { PdfModalComponent } from 'src/app/sharepage/form-pront/pdf-modal/pdf-modal.component';
+import { PerfilService } from "src/app/services/perfil/perfil.service";
+import { Router } from "@angular/router";
+
 
 @Component({
   selector: 'app-protadm',
@@ -44,6 +47,8 @@ export class ProtadmComponent implements OnInit, OnDestroy{
     public prontuarioService: ProntuarioService,
     public shared: SharedService,
     public fotoService: FileService,
+    private perfilService: PerfilService,
+    private router: Router,
     public dialog: MatDialog,
     private userService: UserService) {
 
@@ -51,6 +56,12 @@ export class ProtadmComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
+
+    if(this.perfilService.validaPerfil(0,7) == false){
+      alert('Você não tem autorização para acessar esta página')
+      this.router.navigate(['/inicio']);
+    }
+
     this.shared.ListaPront = [];
     this.inicio()
   }

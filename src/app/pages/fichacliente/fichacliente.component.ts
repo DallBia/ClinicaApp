@@ -114,9 +114,6 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
 
-      console.log(window.sessionStorage.getItem('nPrf'))
-      console.log(window.sessionStorage.getItem('nUsr'))
-      console.log(window.sessionStorage.getItem('nCli'))
 
       this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
         this.Atual = clienteAtual;
@@ -140,10 +137,6 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    console.log('Em fichaCliente:' + this.userService.alertas)
-    // if(this.userService.alertas !== true){
-    //   window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
-    // }
   }
 
 

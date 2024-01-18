@@ -16,6 +16,7 @@ import { SharedService } from 'src/app/shared/shared.service';
 import { FinanceiroService } from 'src/app/services/financeiro/financeiro.service';
 import { Financeiro } from 'src/app/models/Financeiro';
 import { HeaderService } from 'src/app/sharepage/navbar/header.service';
+import { PerfilService } from 'src/app/services/perfil/perfil.service';
 
 @Component({
   selector: 'app-controle-finaceiro',
@@ -49,6 +50,7 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
     public fotoService: FileService,
     private prontuarioService: ProntuarioService,
     private router: Router,
+    private perfilService: PerfilService,
     private headerService: HeaderService,
     public shared: SharedService,
     private userService: UserService,
@@ -95,6 +97,13 @@ altCliFunc(){
 
 
   ngOnInit() {
+
+    if(this.perfilService.validaPerfil(0,9) == false){
+      alert('Você não tem autorização para acessar esta página')
+      this.router.navigate(['/inicio']);
+    }
+
+
     this.finService.zerar();
     this.finService.tabFinanceira = [];
     this.subscription = this.clienteService.ClienteA$.subscribe(

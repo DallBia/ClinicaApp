@@ -96,27 +96,6 @@ export class PerfilService {
             break;
         }
 
-          // let p: boolean[] = [false, false, false, false, false];
-
-          // if (idUser !== null){
-          //   const usuario = idUser !== undefined ? parseInt(idUser) : 0;
-          //   const perfil = nId !== null ? parseInt(nId) : 3;
-          //   for (let x of this.perfils){
-          //     if (x.id == n){
-          //       p = [x.dir ? x.dir : false, x.secr ? x.secr : false, x.coord ? x.coord : false, x.equipe ? x.equipe : false, x.siMesmo ? x.siMesmo : false]
-          //     }
-          //   }
-          //   if(perfil == 3 && p[4] == true){
-          //     if(id == usuario){
-          //       resp = true;
-          //     }
-          //   }else{
-          //     resp = p[perfil]
-          //   }
-          //   console.log('perfil: '+ perfil)
-          //   console.log('p perfil:' + p[perfil])
-          //   console.log('Id / Usuário: ' + id + '/' + usuario)
-          // }
       }catch{
         resp = false;
       }

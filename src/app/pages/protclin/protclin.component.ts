@@ -1,3 +1,4 @@
+import { PerfilService } from './../../services/perfil/perfil.service';
 import { LoginComponent } from './../login/login.component';
 import { ColaboradorService } from './../../services/colaborador/colaborador.service';
 import { UserService } from './../../services/user.service';
@@ -15,6 +16,7 @@ import { SharedService } from 'src/app/shared/shared.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PdfModalComponent } from 'src/app/sharepage/form-pront/pdf-modal/pdf-modal.component';
 import { HeaderService } from 'src/app/sharepage/navbar/header.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-protclin',
@@ -44,6 +46,8 @@ export class ProtclinComponent implements OnInit, OnDestroy{
     public fotoService: FileService,
     public shared: SharedService,
     public headerService: HeaderService,
+    public perfilService: PerfilService,
+    private router: Router,
     private userService: UserService) {
 
 
@@ -51,6 +55,12 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
+
+    if(this.perfilService.validaPerfil(0,5) == false){
+      alert('Você não tem autorização para acessar esta página')
+      this.router.navigate(['/inicio']);
+    }
+
     this.shared.ListaPront = [];
     this.inicio()
   }

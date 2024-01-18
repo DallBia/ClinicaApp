@@ -11,6 +11,8 @@ import { SharedService } from 'src/app/shared/shared.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalMultiComponent } from './modal-multi/modal-multi.component';
 import { Router } from '@angular/router';
+import { Perfil } from 'src/app/models/Perfils';
+import { PerfilService } from 'src/app/services/perfil/perfil.service';
 
 
 @Component({
@@ -23,6 +25,7 @@ export class AgendaMenuComponent implements OnInit {
     constructor(
       public agendaService: Agenda2Service,
       public foto: FileService,
+      private perfilService: PerfilService,
       public shared: SharedService,
       public userService: UserService,
       public financeiroService: FinanceiroService,
@@ -35,6 +38,9 @@ export class AgendaMenuComponent implements OnInit {
       public subscription: Subscription | undefined;
       private StatAnt: string = '';
       private cellAnt!: Agenda;
+
+
+
   ngOnInit(): void {
       this.agendaService.buscaData()
       this.shared.BuscaValores()
@@ -86,6 +92,10 @@ export class AgendaMenuComponent implements OnInit {
       }
     }
     openModal(n: number, tipo: string): void {
+      if (this.perfilService.validaPerfil(0,12) == false){
+        alert('Você não tem permissão para alterar agendas.')
+      }else{
+
       let r: any = 0;
       console.log(this.agendaService.ListaValores)
       this.agendaService.agendaNsessoes = n
@@ -94,9 +104,6 @@ export class AgendaMenuComponent implements OnInit {
         let id01 = id00.toISOString()
         id01 = id01.replace(/\D/g, '')
         this.agendaService.numReserva = id01
-
-
-
         const vlr = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
         const valorSess: number = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor / n : 0;
         this.agendaService.valorStr = this.transformarNumeroEmString(vlr)
@@ -120,6 +127,7 @@ export class AgendaMenuComponent implements OnInit {
         r = this.BuscaAg(parm);
       }
     }
+    }
 
     transformarNumeroEmString(num: number): string {
       const parteInt = Math.floor(num);
@@ -128,6 +136,7 @@ export class AgendaMenuComponent implements OnInit {
       num = parteInt + parteFrac;
       const v = num.toString();
       return v;
+
     }
 
 
@@ -188,7 +197,9 @@ async BuscaAg(p: string){
 
 
     async salvaSessao(){
-
+      if (this.perfilService.validaPerfil(0,12) == false){
+        alert('Você não tem permissão para alterar agendas.')
+      }else{
      let diff = true
       if (diff == true){
         this.agendaService.celSelect.idCliente = 0;
@@ -321,6 +332,7 @@ async BuscaAg(p: string){
           this.updateAgenda(this.agendaService.celSelect.id, this.agendaService.celSelect)
         }
       }
+    }
     }
 
 

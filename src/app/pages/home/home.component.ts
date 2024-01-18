@@ -114,26 +114,30 @@ this.userService.btnEntrar = false;
   mostrarBotaoSalvar = false;
 
   saveAviso(){
-    const UsrId = this.UsrAtual.userid !== undefined ? parseInt(this.UsrAtual.userid) : 0;
-    const Aviso: Info = {
-      id: 1,
-      idFuncAlt: UsrId,
-      nomeInfo: this.textoAvisos,
-      subtitulo: '',
-      dtInicio: new Date().toISOString(),
-      dtFim: new Date().toISOString(),
-      tipoInfo: "Aviso",
-      destinat: "Todos",
+    if (this.perfilService.validaPerfil(0,18) == false){
+      alert('Você não tem permissão para alterar avisos.')
+    }else{
+      const UsrId = this.UsrAtual.userid !== undefined ? parseInt(this.UsrAtual.userid) : 0;
+      const Aviso: Info = {
+        id: 1,
+        idFuncAlt: UsrId,
+        nomeInfo: this.textoAvisos,
+        subtitulo: '',
+        dtInicio: new Date().toISOString(),
+        dtFim: new Date().toISOString(),
+        tipoInfo: "Aviso",
+        destinat: "Todos",
+      }
+      this.shared.UpdateInfo(Aviso).subscribe(data => {
+        const dados = data.dados;
+        console.log(dados)
+        alert(data.mensagem);
+
+      });
+
+        this.ctrlSalva == false;
+        this.mostrarBotaoSalvar = false;
     }
-    this.shared.UpdateInfo(Aviso).subscribe(data => {
-      const dados = data.dados;
-      console.log(dados)
-      alert(data.mensagem);
-
-    });
-
-      this.ctrlSalva == false;
-      this.mostrarBotaoSalvar = false;
   }
 
 

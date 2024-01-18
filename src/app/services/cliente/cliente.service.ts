@@ -436,10 +436,6 @@ private mensagem: any;
     this.vSalvarFichaCli = this.perfil.validaPerfil(0,4);
 
 
-    console.log('Pode criar novo? ' + this.vNovoFichaCli)
-    console.log('Pode Salvar? ' + this.vSalvarFichaCli)
-
-
   }
 
   converterParaDate(dataString: string): Date {

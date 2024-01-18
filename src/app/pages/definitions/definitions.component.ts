@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Perfil } from 'src/app/models/Perfils';
 import { PerfilTabComponent } from 'src/app/sharepage/perfil-tab/perfil-tab.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-definitions',
@@ -13,10 +14,18 @@ export class DefinitionsComponent implements OnInit{
   public Ajuda:string = 'Passe o mouse por cima da linha para ter uma descrição mais detalhada.';
   @ViewChild(PerfilTabComponent) formPerf!: PerfilTabComponent;
 
-  constructor (private perfilService: PerfilService){}
+  constructor (private perfilService: PerfilService,
+    private router: Router,
+    ){}
 
 
   ngOnInit(){
+
+    if(this.perfilService.validaPerfil(0,16) == false){
+      alert('Você não tem autorização para acessar esta página')
+      this.router.navigate(['/inicio']);
+    }
+
     this.perfilService.Ajuda$.subscribe((novoValor) => {
       this.Ajuda = novoValor;
     });
