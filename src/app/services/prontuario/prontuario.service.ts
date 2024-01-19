@@ -154,6 +154,7 @@ export class ProntuarioService {
     try {
       const cliTmp = window.sessionStorage.getItem('nCli')
       if(cliTmp !== null){
+        this.vSalva = true
         this.Ficha = cliTmp
         this.nCliente = parseInt(cliTmp);
       }else{
@@ -165,6 +166,7 @@ export class ProntuarioService {
     }
     console.log('Em protclin: ' + this.nCliente)
     if(this.nCliente !== 0){
+      this.vSalva = true
       for (let i of this.ListaCliente){
         if (i.id == this.nCliente){
           this.nome = i.nome;
