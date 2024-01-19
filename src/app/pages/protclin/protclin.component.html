@@ -41,7 +41,7 @@
         <button class="btnBranco" [disabled]="true">
           Buscar neste Prontuário
         </button>
-        <button class="btnBranco" [style.color]="shared.MostraInfo ? 'white' : 'black'" [style.background-color]="shared.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(shared.MostraInfo)">
+        <button class="btnBranco" [disabled]="!this.prontuarioService.vSalva" [style.color]="shared.MostraInfo ? 'white' : 'black'" [style.background-color]="shared.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(shared.MostraInfo)">
           {{shared.MostraInfo ? 'Cancelar nova informação' : 'Inserir nova informação'}}
         </button>
         <button class="Salvar" [disabled]="!this.prontuarioService.vSalva" (click)="this.blocoNotas.Enviar()">
