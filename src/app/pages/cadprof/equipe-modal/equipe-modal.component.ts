@@ -110,8 +110,8 @@ formulario: any = {
       idPerfil: nperf,
       ativo: false,
       areaSession: '|',
-      senhaHash: senha,
-      senhaProv: '',
+      senhaHash: '',
+      senhaProv: senha,
 
     }
     // const Mail = {
