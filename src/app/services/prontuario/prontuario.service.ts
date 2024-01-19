@@ -158,6 +158,7 @@ export class ProntuarioService {
         this.nCliente = parseInt(cliTmp);
       }else{
         this.nCliente = 0
+        this.vSalva = false;
       }
     }catch{
       this.nCliente = 0
