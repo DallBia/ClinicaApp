@@ -104,8 +104,8 @@ export class AgendaMenuComponent implements OnInit {
         let id01 = id00.toISOString()
         id01 = id01.replace(/\D/g, '')
         this.agendaService.numReserva = id01
-        const vlr = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
-        const valorSess: number = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor / n : 0;
+        const vlr = this.agendaService.celSelect.valor !== undefined  && this.agendaService.celSelect.valor !== null ? this.agendaService.celSelect.valor : 0;
+        const valorSess: number = this.agendaService.celSelect.valor !== undefined && this.agendaService.celSelect.valor !== null ? this.agendaService.celSelect.valor / n : 0;
         this.agendaService.valorStr = this.transformarNumeroEmString(vlr)
         for (let i = 0; i < n; i++) {
           const lin = {
@@ -166,7 +166,7 @@ async BuscaAg(p: string){
 
     altVlr(){
       this.Vlr = !this.Vlr
-      if (this.agendaService.celSelect.valor !== undefined){
+      if (this.agendaService.celSelect.valor !== undefined && this.agendaService.celSelect.valor !== null){
         if(this.agendaService.celSelect.valor < 0){
         this.agendaService.celSelect.valor = 0;
         }
@@ -296,7 +296,7 @@ async BuscaAg(p: string){
           this.agendaService.celSelect.idCliente = 0;
           this.agendaService.celSelect.subtitulo = '';
           this.agendaService.celSelect.obs = '';
-          this.agendaService.celSelect.valor = -1000009;
+          this.agendaService.celSelect.valor = null;
         }else{
           if(this.cellAnt.repeticao !== this.agendaService.celSelect.repeticao){
             texto += 'Repetição alterada: de ' + this.cellAnt.repeticao + ' para ' + this.agendaService.celSelect.repeticao + '. '
@@ -337,18 +337,20 @@ async BuscaAg(p: string){
 
         if(this.agendaService.celSelect.id == 0 || this.agendaService.celSelect.id == undefined){
           this.agendaService.celSelect.id = 0
+          console.log(this.agendaService.celSelect)
           this.salvaAgenda(this.agendaService.celSelect)
         }
         else{
           if (this.agendaService.celSelect.repeticao == 'Unica' && reptOriginal !== 'Unica'){
             this.agendaService.celSelect.id = 0
+            console.log(this.agendaService.celSelect)
             this.salvaAgenda(this.agendaService.celSelect)
           }else{
             if(this.agendaService.celSelect.horario !== 'manhã' && this.agendaService.celSelect.horario !== 'tarde'){
               const resp = await this.buscaFinanceiro(this.agendaService.celSelect.id)
               if(this.dado.idCliente == this.agendaService.celSelect.idCliente){
-                this.dado.data = this.agendaService.celSelect.dtAlt
-                this.dado.valor = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
+                this.dado.data = new Date(this.agendaService.celSelect.dtAlt).toISOString();
+                this.dado.valor = this.agendaService.celSelect.valor !== undefined && this.agendaService.celSelect.valor !== null ? this.agendaService.celSelect.valor : 0;
                 this.dado.idFuncAlt = this.agendaService.celSelect.idFuncAlt
                 const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.diaI
                 this.dado.descricao = texto
@@ -451,7 +453,7 @@ async BuscaAg(p: string){
 
           const x = this.agendaService.celSelect.dtAlt !== undefined ? new Date(this.agendaService.celSelect.dtAlt) :new Date();
           this.dado.data = x.toISOString().split('T')[0]
-          this.dado.valor = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
+          this.dado.valor = this.agendaService.celSelect.valor !== undefined && this.agendaService.celSelect.valor !== null ? this.agendaService.celSelect.valor : 0;
           this.dado.idFuncAlt = this.agendaService.celSelect.idFuncAlt !== undefined ? this.agendaService.celSelect.idFuncAlt : 0;
           const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.diaI
           this.dado.descricao = ''

@@ -15,7 +15,7 @@ export interface TableAgenda{
   status?: string;
   historico?: string; //
   obs?: string;
-  valor?: number;
+  valor?: number | null;
   idtmp?: number;
   configRept: string,
   multi?: string,

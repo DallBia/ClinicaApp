@@ -6,6 +6,6 @@ export interface lAgenda{
   dia?: string;
   hora?: string;
   status?: string;
-  valor?: number;
+  valor?: number | null;
 
 }

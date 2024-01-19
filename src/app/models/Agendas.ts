@@ -16,7 +16,7 @@ export interface Agenda{
   status?: string;
   historico?: string; //
   obs?: string;
-  valor?: number;
+  valor?: number | null;
   configRept: string;
   multi?: string;
   profis?:string;
