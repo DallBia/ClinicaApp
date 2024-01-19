@@ -29,16 +29,16 @@
       <img *ngIf="this.clienteService.ClienteA.getValue() == 0" [src]="this.fotoService.semfoto2" id="minhaImagem" class="id-Foto">
     </div>
     <div class="botoes">
-      <button class="btnBranco">
+      <button class="btnBranco" [disabled]="true">
         Anexar Documento
       </button>
-      <button class="btnBranco">
+      <button class="btnBranco" [disabled]="true">
         Ver Documento
       </button>
       <button class="btnBranco" (click)="this.abrirModal()">
         Imprimir Relatório
       </button>
-      <button class="btnBranco">
+      <button class="btnBranco" [disabled]="true">
         Buscar neste Prontuário
       </button>
       <button class="btnBranco" [style.color]="shared.MostraInfo ? 'white' : 'black'" [style.background-color]="shared.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(shared.MostraInfo)">
