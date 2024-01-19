@@ -6,11 +6,6 @@
 
 
 
-// export const environment = {
-//   production: true,
-//   ApiUrl: 'https://34.49.248.104/api'
-// };
-
 export const environment = {
   production: true,
   ApiUrl: 'https://api.clincasagrande.com.br/api'

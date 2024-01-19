@@ -13,8 +13,9 @@
   color: rgb(169, 136, 142);
   border-radius: 10px;
   border: 2px solid rgb(136, 2, 100);
-  width: 6vw;
-  height: 4vh;
+  width: 8vw;
+  height: 6vh;
+  font-size: 2vh;
 }
 
 .sim{
@@ -38,6 +39,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+
 }
 .titulo1{
   color: var(--cor-escura);

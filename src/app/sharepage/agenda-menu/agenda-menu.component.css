@@ -3,6 +3,7 @@
   display:inline-flex;
   width: 100%;
   height: 40%;
+  font-size: 1.8vh;
 }
 .inferior{
   height:45%;
@@ -11,7 +12,7 @@
   border: solid 1px var(--cor-clara);
   border-radius: 10px;
   overflow: auto;
-
+  font-size: 1.8vh;
 }
 
 .id-Foto {
@@ -46,7 +47,6 @@
   height: 95%;
   width: 95%;
   margin-left: 1vw;
-
   padding: 5px;
   resize: none;
   border-color: white;
@@ -68,10 +68,10 @@
 }
 
 .nome{
-  font-size: large;
   text-align: center;
   padding: 5px;
   word-wrap: break-word;
+  font-size: 2.5vh;
 }
 
 .seletores{
@@ -86,15 +86,15 @@
   border:solid 4px rgb(255, 255, 255);
   margin:2px;
   text-align: center;
-  font-size: small;
+  font-size: 1.5vh;
 }
 .tagsSelect{
   width: 100%;
   border:solid 4px rgb(0, 0, 0);
   margin:2px;
   text-align: center;
-  font-size: small;
   font-weight: bold;
+  font-size: 1.5vh;
 }
 .Obs1{
   overflow-y: auto;
@@ -116,7 +116,7 @@
   margin-right: 2px;
   margin-top: 4px;
   margin-bottom: 4px;
-  font-size: small;
+  font-size: 1.5vh;
 }
 .fCampo {
   height: 22px;
@@ -128,6 +128,7 @@
   border-bottom: solid 1px rosybrown;
   border-left: solid 1px rgb(253, 236, 236);
   border-right: solid 1px rgb(253, 236, 236);
+  font-size: 1.5vh;
 }
 
 .bot{

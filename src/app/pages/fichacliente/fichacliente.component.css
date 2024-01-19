@@ -35,12 +35,12 @@
     width:100%;
     border: none;
     background-color: white;
-    font-size: large;
     color: var(--cor-escura);
     font-weight: bolder;
     text-transform:uppercase;
     display: grid;
     place-items: center;
+    font-size: 2.5vh;
   }
   .linhadebaixo {
     display:inline-flex;
@@ -48,6 +48,7 @@
     text-align: center;
     height:4vh;
     width:100%;
+    font-size: 2.0vh;
   }
   .desde {
     height:4vh;
@@ -56,6 +57,7 @@
     place-items: center;
     text-align: center;
     padding: 5px;
+    font-size: 2.0vh;
   }
   .idade {
     height:4vh;
@@ -65,6 +67,7 @@
     place-items: center;
     text-align: center;
     padding: 5px;
+    font-size: 2.0vh;
   }
   .proxses {
     height:4vh;
@@ -74,6 +77,7 @@
     place-items: center;
     text-align: center;
     padding: 5px;
+    font-size: 2.0vh;
   }
 
   .corpo {
@@ -110,6 +114,7 @@
    display: inline-flex;
    align-items: center;
    align-content: space-around;
+   font-size: 2.5vh;
   }
 
   .ti-botao {
@@ -129,7 +134,7 @@
     border-top: solid 2px var(--cor-media);
     border-left: none;
     border-right: none;
-    font-size: 18pt;
+    font-size: 2.5vh;
   }
   .Branco {
     height: 100%;
@@ -140,7 +145,7 @@
     border-top: solid 2px var(--cor-media);
     border-left: none;
     border-right: none;
-    font-size: 18pt;
+    font-size: 2.5vh;
   }
   .Branco1 {
     height: 50px;
@@ -151,9 +156,9 @@
     border-top: solid 2px var(--cor-media);
     border-left: none;
     border-right: none;
-    font-size: 12pt;
     margin-left: 30px;
     margin-right: 30px;
+    font-size: 2.5vh;
 }
   .RosaEscuro {
     height: 100%;
@@ -165,14 +170,12 @@
     border-left: none;
     color:#fddfed;
     border-right: none;
-    font-size: 18pt;
+    font-size: 2.5vh;
   }
   .grid-result {
    height: 85%;
    width: 95%;
    margin: 2vh;
-
-
    overflow-y: auto;
   }
 

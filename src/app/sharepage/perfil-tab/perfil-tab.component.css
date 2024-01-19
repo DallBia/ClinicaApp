@@ -8,6 +8,10 @@
   background-color: white;
   border-bottom: solid 1px #fedef8;
   color:black;
+  border-collapse: collapse;
+  table-layout: fixed;
+  text-align: left;
+  vertical-align: middle;
 }
 .c1 {
   width:40%;
