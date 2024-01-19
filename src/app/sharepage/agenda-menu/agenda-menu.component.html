@@ -48,7 +48,7 @@
   <div style="display: flex; vertical-align: middle;" *ngIf="this.agendaService.horario !== 'manhã' && this.agendaService.horario !== 'tarde'">
     <span class="fLabel" for="valor">Valor (R$):</span>
     <input type="text" *ngIf="this.Vlr == false" class="fCampo" style="width: 25%;" (blur)="altVlr()" [(ngModel)]="this.agendaService.celSelect.valor" [ngModelOptions]="{updateOn: 'blur'}" appCurrencyInput />
-    <div (click)="altVlr()" *ngIf="this.Vlr == true && this.agendaService.celSelect.valor !== undefined" class="fLabel" >{{ (this.agendaService.celSelect.valor > 0 ? this.agendaService.celSelect.valor : 0).toFixed(2) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
+    <div (click)="altVlr()" *ngIf="this.Vlr == true && this.agendaService.celSelect.valor !== undefined && this.agendaService.celSelect.valor !== null" class="fLabel" >{{ (this.agendaService.celSelect.valor !==null && this.agendaService.celSelect.valor > 0 ? this.agendaService.celSelect.valor : 0).toFixed(2) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
   </div>
   <div class="repetition">
     <span class="fLabel" for="Repet">Repetição:</span>
