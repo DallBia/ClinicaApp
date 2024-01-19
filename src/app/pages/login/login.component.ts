@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
               private router: Router,
               public userService: UserService,
               public dialog: MatDialog,
+              public colaboradorService: ColaboradorService,
               public shared: SharedService,
 
     ) {
@@ -212,13 +213,12 @@ alterarSenha(email: string){
     alert('Você deve informar um e-mail válido.')
   }else{
     this.userService.btnEntrar = false;
-    this.userService.troca = 'Aguarde...'
     this.salvar(email);
   }
 }
 async salvar(email: string){
-
-
+if(this.userService.troca !== 'Aguarde...'){
+  this.userService.troca = 'Aguarde...'
 const senha = this.gerarSenha();
 
 const corpoX: string = "<p><strong><span style='color: blue; font-size: 24px;'> Caro usuário,</span></strong></p>"
@@ -233,23 +233,21 @@ const corpoX: string = "<p><strong><span style='color: blue; font-size: 24px;'> 
   + "basta utilizá-la normalmente, e desconsiderar este e-mail."
 
 
-const variavel = email + '|' + corpoX + '|' + senha
+  const variavel = email + '|' + senha
 
- const resp1 = await this.userService.AlteraSenha(variavel).subscribe(async (data) => {
-     const time1 = this.delay(500)
+    this.colaboradorService.TrocaSenha(variavel, corpoX).subscribe((data) => {
+      console.log(data.mensagem)
+    this.delay(2000)
 
-        alert('ALTERAÇÃO DE SENHA SOLICITADA!\nVocê receberá a senha provisória, no e-mail '
-        + email + '.\nA senha deverá ser trocada no próximo login.\n'
-        +'\nSomente após o usuário entrar no sistema e alterar a senha é que ele aparecerá como ATIVO no cadastro.')
+      alert('ALTERAÇÃO DE SENHA SOLICITADA!\nVocê receberá a senha provisória, no e-mail '
+      + email + '.\nA senha deverá ser trocada no próximo login.\n'
+      +'\nSomente após o usuário entrar no sistema e alterar a senha é que ele aparecerá como ATIVO no cadastro.')
 
-        location.reload()
+      location.reload()
     }, error => {
-     console.error('Erro no envio dos dados', error);
-     this.userService.troca = 'Erro no envio dos dados'
-     this.delay(2000);
-     location.reload();
+      console.error('Erro no upload', error);
     });
-
+  }
 }
 
 

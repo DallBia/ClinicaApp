@@ -284,6 +284,18 @@ export class ColaboradorService {
 
 
 
+    TrocaSenha(userName: string, password: string)  : Observable<Response<string>>{
+      const body = {
+        Usuario: userName,
+        Senha: password
+      };
+      const apiurl = `${environment.ApiUrl}/Colaborador/AlterarSenha`;
+      const resp = this.http.post<Response<string>>(apiurl, body);
+      console.log(resp)
+      return resp
+    }
+
+
     UpdateEquipe(Equipe: Colaborador) : Observable<Response<Colaborador[]>>{
       const apiurllogin = `${environment.ApiUrl}/Colaborador/Editar`;
       return this.http.put<Response<Colaborador[]>>(apiurllogin, Equipe);

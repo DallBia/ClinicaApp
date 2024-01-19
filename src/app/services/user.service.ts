@@ -122,6 +122,10 @@ export class UserService {
     return this.http.put<Response<Colaborador[]>>(`${this.apiurl}/Editar` , Equipe);
   }
 
+
+
+
+
   private EquipeAtual = new BehaviorSubject<User>(new User);
   EquipeAtual$ = this.EquipeAtual.asObservable();
   setEquipeAtual(name: User) {
@@ -198,10 +202,6 @@ export class UserService {
   }
 
 
-  AlteraSenha(email: string) : Observable<Response<Colaborador>>{
-    const apiurllogin = `${environment.ApiUrl}/Colaborador/Altera`;
-    return this.http.post<Response<Colaborador>>(apiurllogin, email);
-  }
 
 
 

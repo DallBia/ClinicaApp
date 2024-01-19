@@ -8,5 +8,5 @@ export class User {
   area?: string;
   perfil?: Role;
   deslig?: string;
-  prov?: string;
+  prov?: string | null;
 }
