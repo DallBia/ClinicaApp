@@ -432,8 +432,8 @@ private mensagem: any;
 
   validarPermissoes(){
 
-    this.vNovoFichaCli = this.perfil.validaPerfil(0,3);
-    this.vSalvarFichaCli = this.perfil.validaPerfil(0,4);
+    this.vNovoFichaCli = this.perfil.validaPerfil(0,1);
+    this.vSalvarFichaCli = this.perfil.validaPerfil(0,2);
 
 
   }
