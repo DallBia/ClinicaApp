@@ -175,6 +175,7 @@ export class ProntuarioService {
       }else{
       this.Ficha = 'FICHA';
       this.nomeCliente = '';
+      this.vSalva = false
     }
     if (resp == true){
       this.setProntuarioG(this.prontuario);
