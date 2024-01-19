@@ -61,7 +61,7 @@ formulario: any = {
    + this.formulario.email + ".</span></strong></p>"
    + "<p>Sua senha <b>provisória</b> é <strong><span style='color: blue; font-size: 18px;'>"
    + senha + "</span></strong></p>"
-   + "<p>Acesse o link do <a href='http://34.123.211.220'>aplicativo</a> e <b>altere a senha. </b>"
+   + "<p>Acesse o link do <a href=''https://app.clincasagrande.com.br''>aplicativo</a> e <b>altere a senha. </b>"
     + "Coloque uma senha que seja fácil para você decorar.</p>"
     + "<p>Para sua comodidade, salve o link na sua guia de marcadores favoritos.</p>"
     + "Depois, vá na guia <b>Cadastro de Equipe</b>, selecione seu nome através do filtro e "

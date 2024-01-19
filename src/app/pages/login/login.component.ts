@@ -227,7 +227,7 @@ const corpoX: string = "<p><strong><span style='color: blue; font-size: 24px;'> 
  + email + ".</span></strong></p>"
  + "<p>Foi gerada uma nova senha <b>provisória</b>: <strong><span style='color: blue; font-size: 18px;'>"
  + senha + "</span></strong></p>"
- + "<p>Acesse o link do <a href='http://35.232.35.159'>aplicativo</a> e <b> utilize-a para atualizar seu login. </b>"
+ + "<p>Acesse o link do <a href='https://app.clincasagrande.com.br'>aplicativo</a> e <b> utilize-a para atualizar seu login. </b>"
   + "Troque-a por uma senha que seja fácil para você decorar.</p>"
   + "<p>Caso você não tenha solicitado a alteração de senha, ou tenha se lembrado da senha anterior,</p>"
   + "basta utilizá-la normalmente, e desconsiderar este e-mail."
