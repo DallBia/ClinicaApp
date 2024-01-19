@@ -127,14 +127,19 @@ Insere (processedText: string) {
 }
 
   Enviar(){
-    this.prontuarioService.vSalva = false
-    if(this.prontuarioService.tipo!=='financeiro'){
-      let texto = this.processedText;
-      this.Insere(texto.toString());
+    if (this.prontuarioService.nCliente == 0){
+      alert ('Você deve selecionar um cliente na guia "FICHA DE CLIENTE" antes de atribuir uma entrada de Prontuário.')
     }else{
-      this.Insere('CONTROLE FINANCEIRO');
+      this.prontuarioService.vSalva = false
+      if(this.prontuarioService.tipo!=='financeiro'){
+        let texto = this.processedText;
+        this.Insere(texto.toString());
+      }else{
+        this.Insere('CONTROLE FINANCEIRO');
+      }
+      this.prontuarioService.vSalva = true
     }
-    this.prontuarioService.vSalva = true
+
 
   }
 

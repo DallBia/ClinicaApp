@@ -71,8 +71,12 @@ async inicio(){
 
 
   newInfo(opt: boolean){
+    if (this.prontuarioService.nCliente == 0){
+      alert ('Você deve selecionar um cliente na guia "FICHA DE CLIENTE" antes de atribuir uma entrada de Prontuário.')
+    }else{
     this.shared.MostraInfo = !opt;
     this.shared.texto = '';
+    }
   }
 
   adicionarEspaco() {
