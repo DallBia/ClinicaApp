@@ -1,3 +1,4 @@
+import { SharedService } from 'src/app/shared/shared.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
@@ -44,6 +45,7 @@ export class ColaboradorService {
               private fotoService: FileService,
               public finService:FinanceiroService,
               public perfil: PerfilService,
+              public shared: SharedService,
 
               ) { }
 
@@ -163,11 +165,7 @@ export class ColaboradorService {
     this.vNovoCadProf = this.perfil.validaPerfil(2,3);
     this.vSalvarCadProf = this.perfil.validaPerfil(2,4);
     this.vPerfilCadProf = this.perfil.validaPerfil(2,15);
-
-    console.log('Pode criar novo? ' + this.vNovoCadProf)
-    console.log('Pode Salvar? ' + this.vSalvarCadProf)
-    console.log('Pode Alterar Perfil? ' + this.vPerfilCadProf)
-
+    this.shared.apagaFicha = this.perfil.validaPerfil(0,12);
   }
 
 
@@ -194,6 +192,12 @@ export class ColaboradorService {
       const apiurllogin = `${environment.ApiUrl}/Colaborador/Editar`;
       return this.http.put<Response<Colaborador[]>>(apiurllogin, prof);
     }
+
+  DeleteUser(id: number) : Observable<Response<Colaborador[]>>{
+    const apiurllogin = `${environment.ApiUrl}/Colaborador`
+    return this.http.delete<Response<Colaborador[]>>(`${apiurllogin}/id/${id}`);
+
+}
 
 
 

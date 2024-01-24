@@ -162,6 +162,11 @@ public txtQtde: string = '';
     return this.http.post<Response<Cliente[]>>(`${this.apiurl}` , cliente);
   }
 
+  DeleteCliente(id: number) : Observable<Response<Cliente[]>>{
+          return this.http.delete<Response<Cliente[]>>(`${this.apiurl}/id/${id}`);
+
+  }
+
   UpdateCliente(cliente: Cliente) : Observable<Response<Cliente[]>>{
     return this.http.put<Response<Cliente[]>>(`${this.apiurl}/Editar` , cliente);
   }
@@ -434,7 +439,7 @@ private mensagem: any;
 
     this.vNovoFichaCli = this.perfil.validaPerfil(0,1);
     this.vSalvarFichaCli = this.perfil.validaPerfil(0,2);
-
+    this.shared.apagaFicha = this.perfil.validaPerfil(0,12);
 
   }
 

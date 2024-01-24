@@ -16,6 +16,7 @@ import { PerfilService } from 'src/app/services/perfil/perfil.service';
 import { UserService } from 'src/app/services';
 import { FileService } from 'src/app/services/foto-service.service';
 import { ModalArquivoComponent } from 'src/app/sharepage/arquivos/modal-arquivo/modal-arquivo.component';
+import { ModalConfirComponent } from 'src/app/sharepage/modal-confir/modal-confir.component';
 
 
 @Component({
@@ -202,13 +203,30 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
 
   cancela(){
-    // if (this.txtSalva == "Salvar"){
-    //   this.txtSalva = "Aguarde..."
-    //   this.btnSalva = true;
-    // }else{
-    //   this.btnSalva = false;
-    //   this.txtSalva= "Salvar"
-    // }
+  this.sharedService.textoModal = 'Excluir uma ficha é um procedimento IRREVERSÍVEL. Considere, em vez disso, desativar a ficha.'
+  this.sharedService.tituloModal = 'ATENÇÃO!'
+  this.sharedService.nbotoes = ['Sim, tenho certeza do que estou fazendo', 'Não, vou pensar melhor antes de excluir', 'Fechar']
+  const dialogRefConfirm = this.dialog.open(ModalConfirComponent, {
+
+  });
+  dialogRefConfirm.afterClosed().subscribe(result => {
+      if (this.sharedService.respostaModal[0] == 'S'){
+        this.excluir();
+      }
+  });
+  }
+
+  excluir(){
+    this.clienteService.DeleteCliente(this.nCliente).subscribe((data) => {
+      this.delay(300)
+      alert('Registro apagado!')
+      this.sharedService.ClienteAtual = 0;
+      location.reload()
+
+    }, error => {
+      alert('Houve algum erro ao excluir')
+      console.error('Erro no upload', error);
+    });
   }
 
   salvarPessoa(){

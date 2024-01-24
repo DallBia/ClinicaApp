@@ -21,7 +21,7 @@ export class ModalConfirComponent implements OnInit, OnDestroy{
 
   }
   ngOnInit(): void {
-
+    console.log(this.shared.nbotoes)
   }
 
   select(nome: string){

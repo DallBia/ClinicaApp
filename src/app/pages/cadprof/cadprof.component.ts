@@ -19,6 +19,8 @@ import { MeuModalComponent } from "../fichacliente/meu-modal/meu-modal.component
 import { Formacao } from "src/app/models/Formacaos";
 import { Response } from '../../models/Response';
 import { environment } from "src/environments/environment";
+import { ModalConfirComponent } from 'src/app/sharepage/modal-confir/modal-confir.component';
+
 
 @Component({
   selector: 'app-cadprof',
@@ -357,6 +359,39 @@ Salvar(){
 
     }, time);
   }
+
+  cancela(){
+    this.sharedService.textoModal = 'Excluir uma ficha é um procedimento IRREVERSÍVEL. Considere, em vez disso, desativar a ficha.'
+    this.sharedService.tituloModal = 'ATENÇÃO!'
+    this.sharedService.nbotoes = ['Sim, tenho certeza do que estou fazendo', 'Não, vou pensar melhor antes de excluir', 'Fechar']
+    const dialogRefConfirm = this.dialog.open(ModalConfirComponent, {
+
+    });
+    dialogRefConfirm.afterClosed().subscribe(result => {
+        if (this.sharedService.respostaModal[0] == 'S'){
+          this.excluir();
+        }
+    });
+    }
+
+    excluir(){
+      const n = parseInt(this.ColAt.ficha)
+      this.colaboradorService.DeleteUser(n).subscribe((data) => {
+        this.delay(300)
+        alert('Registro apagado!')
+        this.sharedService.ClienteAtual = 0;
+        location.reload()
+
+      }, error => {
+        alert('Houve algum erro ao excluir')
+        console.error('Erro no upload', error);
+      });
+    }
+
+
+
+
+
 }
 
 

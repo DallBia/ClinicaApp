@@ -36,6 +36,7 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   public User!:Colaborador;
   public nUser!: number;
   public UserAll!: any;
+  public btnApagar: boolean = false;
 
 
 
@@ -60,7 +61,8 @@ export class ProtclinComponent implements OnInit, OnDestroy{
       alert('Você não tem autorização para acessar esta página')
       this.router.navigate(['/inicio']);
     }
-
+    const nUser = window.sessionStorage.getItem('nUsr')
+    console.log('Profissional: ', nUser)
     this.shared.ListaPront = [];
     this.inicio()
   }

@@ -53,8 +53,8 @@
         </button>
     </div>
     <div class="btnFechar">
-        <button class="RosaEscuro" id="Cancelar">
-          Cancelar
+        <button class="RosaEscuro" id="Cancelar" (click)="cancela()" [disabled]="!this.shared.apagaFicha">
+          Excluir
         </button>
     </div>
   </div>

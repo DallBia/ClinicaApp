@@ -90,6 +90,8 @@ public docto: Documento = {
 }
 public Perfil: Tipo[] = [];
 public perfilAtual: number = 3;
+public apagaFicha: boolean = false;
+public apagaReg: boolean = false;
 
 
 //--- variável para ajudar no modal de confirmação:

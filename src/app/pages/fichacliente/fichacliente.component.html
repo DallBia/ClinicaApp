@@ -53,8 +53,8 @@
               </button>
           </div>
           <div class="btnFechar">
-              <button class="RosaEscuro" (click)="this.cancela()" id="Cancelar">
-                Cancelar
+              <button class="RosaEscuro" [disabled]="!this.sharedService.apagaFicha" (click)="this.cancela()" id="Cancelar">
+                Excluir
               </button>
           </div>
       </div>

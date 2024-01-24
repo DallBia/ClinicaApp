@@ -35,8 +35,8 @@
   border-top: solid 2px var(--cor-media);
   border-left: none;
   border-right: none;
-  font-size: 10pt;
+  font-size: 2vh;
   margin: 10px;
-  color: black;
+  color: (--cor-escura);
 
 }
