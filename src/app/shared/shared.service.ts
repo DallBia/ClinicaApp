@@ -191,7 +191,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
       uploadFile(file: File, name: string): Promise<Response<Tipo[]>> {
         return new Promise((resolve, reject) => {
             const formData: FormData = new FormData();
-            name = name + '%' + file.name
+            name = name + '|' + file.name
             formData.append('file', file, name);
             const url = `${environment.ApiUrl}/Image`;
 
@@ -249,7 +249,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
         }
 
         for (let i of data){
-          const info = i.nome.split('%');
+          const info = i.nome.split('|');
           const id = parseInt(info[0]);
           let tipoarquivo = '';
           switch (info[4]){
@@ -271,6 +271,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
           }
           let dia = info[7].substring(0,10)
 
+
           if(id == PessoaAtual && info[1] == tipoPessoa){
             const lin: Documento[] = [{
               id: i.id,
@@ -281,7 +282,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
               descricao: info[2],
               dtInclusao: dia,
               arquivo: info[5],
-              formato: tipoarquivo
+              formato: info[4]
             }]
             this.ListaArquivos = [...this.ListaArquivos, ...lin]
           }
@@ -312,6 +313,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
             resolve(response);
           },
           (error) => {
+            alert('Erro ao baixar o arquivo')
             console.error('Erro ao baixar arquivo:', error);
           }
         );

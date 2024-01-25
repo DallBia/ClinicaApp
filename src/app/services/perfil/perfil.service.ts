@@ -58,10 +58,10 @@ export class PerfilService {
     //   return true
     // }
 
-    validaPerfil(id: number, n: number): boolean{   //o id é o id que se deseja consultar (0 para nenhum, 1 para cliente e 2 pra Colaborador); o n é o item da Definição de perfil
+    validaPerfil(tipo: number, n: number, id?: number): boolean{   //o id é o id que se deseja consultar (0 para nenhum, 1 para cliente e 2 pra Colaborador); o n é o item da Definição de perfil
       let resp: boolean = true;
       let id0: string | null = '0';
-      switch (id){
+      switch (tipo){
         case (1):
           id0 = window.localStorage.getItem('nCli');
           break;
@@ -72,15 +72,15 @@ export class PerfilService {
           id0 = '0';
       }
       try{
-        id = id0 !== null ? parseInt(id0) : 0;
+        tipo = id0 !== null ? parseInt(id0) : 0;
       }catch{
-        id = 0
+        tipo = 0
       }
       try{
 
         const nId = window.sessionStorage.getItem('Perfil' + n.toString());
         const idUser = window.sessionStorage.getItem('nUsr');
-
+        const idU = id !== undefined ? id.toString() : '0'
         switch (nId){
           case ('S'):
             resp = true;
@@ -89,7 +89,7 @@ export class PerfilService {
             resp = false;
             break;
           case ('X'):
-            resp = idUser == id.toString() ? true : false;
+            resp = idUser == idU ? true : false;
             break;
           default:
             resp = false;

@@ -376,7 +376,7 @@ async BuscaAg(p: string){
       dataAnterior.setDate(dataAnterior.getDate() - 1);
 
       // Formatando como string no formato 'YYYY-MM-DD'
-      const dataFim = dataAnterior.toISOString().split('T')[0];
+      const dataFim = dataAnterior.toISOString();
       return dataFim
     }
 

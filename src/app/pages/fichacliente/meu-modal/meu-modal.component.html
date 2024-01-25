@@ -32,7 +32,7 @@
     </select>
   </div>
   <input type="file" #fileInput (change)="handleFileSelection($event)" style="display: none">
-<button class="btnAnexar" (click)="fileInput.click()">Abrir</button>
+<button class="btnAnexar" [disabled]="!desabilita" (click)="fileInput.click()">{{desabilita == false ? 'Aguarde...' : 'Abrir e salvar'}}</button>
 <!-- <button (click)="downloadArquivo()">Salvar</button> -->
 
   </div>

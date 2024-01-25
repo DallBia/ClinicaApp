@@ -78,6 +78,7 @@ async inicio(){
     }else{
     this.shared.MostraInfo = !opt;
     this.shared.texto = '';
+    this.prontuarioService.btnExclui = false;
     }
   }
 

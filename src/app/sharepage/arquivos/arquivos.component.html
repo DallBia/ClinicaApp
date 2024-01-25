@@ -10,7 +10,7 @@
       <th class="cel03" >Data</th>
     </thead>
     <tbody>
-      <tr class="lin" *ngFor="let i of this.shared.ListaArquivos" (click)="MostraInfo(i.id || 0, i.arquivo || 'Arquivo')">
+      <tr class="lin" *ngFor="let i of this.shared.ListaArquivos" (click)="MostraInfo(i.id || 0, i.arquivo || 'Arquivo', i.descricao || '(descrição)', i.formato || '(arquivo)')">
         <td class="cel01"><span class="material-symbols-outlined">{{i.tipo}}</span></td>
         <td class="cel02">{{i.nome}}</td>
         <td class="cel03">{{i.dtInclusao}}</td>

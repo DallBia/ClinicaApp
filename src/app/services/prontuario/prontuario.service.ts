@@ -31,7 +31,8 @@ export class ProntuarioService {
     public nomeCliente: string = '';
     public nome: string = '';
     public vSalva = true;
-
+    public btnExclui: boolean = false;
+    public idPront: number = 0;
 
 
  constructor(private http: HttpClient,
@@ -49,6 +50,14 @@ export class ProntuarioService {
   getProntuarioG(){
     return this.prontuarioG.value
   }
+
+
+
+  DeletePront(id: number) : Observable<Response<Prontuario[]>>{
+    return this.http.delete<Response<Prontuario[]>>(`${this.apiurl}/id/${id}`);
+}
+
+
 
   GetProntuario() : Promise<Response<Prontuario[]> | undefined>{
     return this.http.get<Response<Prontuario[]>>(this.apiurl).toPromise();
@@ -99,6 +108,18 @@ export class ProntuarioService {
 
 
 
+  async apagar(){
+    console.log(this.idPront)
+    this.DeletePront(this.idPront).subscribe((data) => {
+      this.delay(300)
+      alert('Registro apagado!')
+      location.reload()
+
+    }, error => {
+      alert('Houve algum erro ao excluir')
+      console.error('Erro no upload', error);
+    });
+  }
 
 
 
@@ -184,7 +205,11 @@ export class ProntuarioService {
 
     }
   }
+  delay(time:number) {
+    setTimeout(() => {
 
+    }, time);
+  }
 
 
 }

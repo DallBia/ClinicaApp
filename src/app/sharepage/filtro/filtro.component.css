@@ -7,7 +7,7 @@
 }
 .labelfrm{
 margin-right: 5px;
-font-size: 1.4vh;
+font-size: 1.8vh;
 }
 .ctrlformulario {
 margin-left: 1%;
@@ -15,18 +15,18 @@ height:50%;
 border-radius: 2px;
 border: solid 1px rgb(216, 194, 206);
 width: 65%;
-font-size: 1.4vh;
+font-size: 1.8vh;
 }
 input:focus {
 outline: none;
 box-shadow: 0 0 10px #ff66b2;
-font-size: 1.4vh;
+font-size: 1.8vh;
 }
 .ti-controles {
   height: 95%;
   width: 80%;
   padding: 1%;
-  font-size: 1.4vh;
+  font-size: 1.8vh;
 }
 
 .interna {
@@ -34,20 +34,20 @@ font-size: 1.4vh;
   width: 100%;
   padding: 1%;
   display: flex;
-  font-size: 1.4vh;
+  font-size: 1.8vh;
 }
 .ti-select {
   height: 90%;
   width: 100%;
   align-content:center;
   display: block;
-  font-size: 1.4vh;
+  font-size: 1.8vh;
 }
 .lin {
   height: 80%;
   width: 100%;
   display:flex;
-  font-size: 1.4vh;
+  font-size: 1.8vh;
 }
 .material-icons {
   font-size: 4.5vh;
@@ -68,5 +68,5 @@ font-size: 4.5vh;
   height: 80%;
   width: 15%;
   padding: 1%;
-  font-size: 1.4vh;
+  font-size: 1.8vh;
 }

@@ -16,6 +16,7 @@ import { FormacaoService } from 'src/app/services/formacao/formacao.service';
 import { jsPDF } from "jspdf";
 import { SharedService } from 'src/app/shared/shared.service';
 import { Tipo } from 'src/app/models/Tipo';
+import { PerfilService } from 'src/app/services/perfil/perfil.service';
 
 
 
@@ -31,6 +32,9 @@ export class FormProntComponent implements OnInit {
     subscription!: Subscription;
     private ListaPront: Prontuario[] = [];
 
+
+
+
     ngOnChanges(changes: SimpleChanges) {
 
     }
@@ -40,6 +44,7 @@ export class FormProntComponent implements OnInit {
     public shared: SharedService,
     private clienteService: ClienteService,
     private formacaoService: FormacaoService,
+    private perfilService: PerfilService,
     private prontuarioService: ProntuarioService) {
 
 
@@ -73,8 +78,16 @@ export class FormProntComponent implements OnInit {
         }catch{
           cliente = 0
         }
+        let nTipo = 0;
+        if (this.prontuarioService.tipo == 'clínico'){
+          nTipo = 6;
+        }
+        if (this.prontuarioService.tipo == 'administrativo'){
+          nTipo = 8;
+        }
       for (let i of this.ListaPront){
         if(i.idCliente == cliente && i.tipo == this.prontuarioService.tipo){
+          if (this.perfilService.validaPerfil(0, nTipo) == true){
           let nomeColab = '';
           let perfil = '';
           let nome = '';
@@ -125,22 +138,32 @@ export class FormProntComponent implements OnInit {
           this.shared.ListaPront = [...this.shared.ListaPront, ...ListaLin]
         }
       }
+      }
     }
 
 
 
-    Edita(texto: string | undefined, colab: string | undefined, cliente: string | undefined, dia: string | undefined, id: number){
+    Edita(texto: string | undefined, colab: string | undefined, cliente: string | undefined, dia: string | undefined, id: number, nColab: number){
       this.shared.MostraInfo = !this.shared.MostraInfo;
+
       if(this.shared.MostraInfo == false){
         this.shared.texto = '';
         this.shared.idTexto = 0;
-      }else{
 
+      }else{
+        let nTipo = 0;
+        if (this.prontuarioService.tipo == 'clínico'){
+          nTipo = 6;
+        }
+        if (this.prontuarioService.tipo == 'administrativo'){
+          nTipo = 8;
+        }
+        this.prontuarioService.idPront = id;
       const xtexto = texto !== undefined ? texto : '';
       const xcolab = colab !== undefined ? colab : '';
       const xcliente = cliente !== undefined ? cliente : '';
       const xdia = dia !== undefined ? dia : '';
-
+      this.prontuarioService.btnExclui = this.perfilService.validaPerfil(0, nTipo, nColab);
       const txt = xtexto + '\n(informação original de ' + xdia + ', por ' + xcolab + ')'
       this.shared.texto = txt;
       this.shared.idTexto = id;

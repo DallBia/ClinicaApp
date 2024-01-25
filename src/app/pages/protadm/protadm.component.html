@@ -32,14 +32,15 @@
       <button class="btnBranco" [disabled]="true">
         Anexar Documento
       </button>
-      <button class="btnBranco" [disabled]="true">
-        Ver Documento
-      </button>
+
       <button class="btnBranco" (click)="this.abrirModal()">
         Imprimir Relatório
       </button>
       <button class="btnBranco" [disabled]="true">
         Buscar neste Prontuário
+      </button>
+      <button class="btnBranco" [disabled]="!this.prontuarioService.btnExclui" (click)="this.prontuarioService.apagar()">
+        Excluir Entrada
       </button>
       <button class="btnBranco" [disabled]="!this.prontuarioService.vSalva" [style.color]="shared.MostraInfo ? 'white' : 'black'" [style.background-color]="shared.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(shared.MostraInfo)">
         {{shared.MostraInfo ? 'Cancelar nova informação' : 'Inserir nova informação'}}

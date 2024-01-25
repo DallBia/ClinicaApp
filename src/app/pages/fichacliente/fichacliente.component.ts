@@ -203,8 +203,8 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
 
   cancela(){
-  this.sharedService.textoModal = 'Excluir uma ficha é um procedimento IRREVERSÍVEL. Considere, em vez disso, desativar a ficha.'
   this.sharedService.tituloModal = 'ATENÇÃO!'
+  this.sharedService.textoModal = 'Excluir uma ficha é um procedimento IRREVERSÍVEL. Considere, em vez disso, desativar a ficha.'
   this.sharedService.nbotoes = ['Sim, tenho certeza do que estou fazendo', 'Não, vou pensar melhor antes de excluir', 'Fechar']
   const dialogRefConfirm = this.dialog.open(ModalConfirComponent, {
 

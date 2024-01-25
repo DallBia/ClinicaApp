@@ -38,7 +38,7 @@
         <button class="btnBranco" [disabled]="true">
           Buscar neste Prontuário
         </button>
-        <button class="btnBranco" [disabled]="!this.btnApagar">
+        <button class="btnBranco" [disabled]="!this.prontuarioService.btnExclui" (click)="this.prontuarioService.apagar()">
           Excluir Entrada
         </button>
         <button class="btnBranco" [disabled]="!this.prontuarioService.vSalva" [style.color]="shared.MostraInfo ? 'white' : 'black'" [style.background-color]="shared.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(shared.MostraInfo)">
