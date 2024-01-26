@@ -270,6 +270,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
             break;
           }
           let dia = info[7].substring(0,10)
+          //sdia = this.datas(new Date(dia).toISOString(), 'Tela')
 
 
           if(id == PessoaAtual && info[1] == tipoPessoa){
