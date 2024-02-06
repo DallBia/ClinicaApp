@@ -16,11 +16,11 @@
   </div>
   <div class="ti-check">
     <div>
-      <input type="checkbox" [(ngModel)]="this.AtivoCheck">
+      <input type="checkbox" [(ngModel)]="this.AtivoCheck" (click)="ativa('A',!this.AtivoCheck)">
       <span style="margin-left: 5px;" >Ativos</span>
     </div>
     <div>
-      <input type="checkbox" [(ngModel)]="this.InativoCheck">
+      <input type="checkbox" [(ngModel)]="this.InativoCheck" (click)="ativa('I',!this.InativoCheck)">
       <span style="margin-left: 5px;" >Inativos</span>
     </div>
   </div>

@@ -188,7 +188,7 @@ abrirModal(){
 
 
 
-Salvar(){
+async Salvar(){
   if (this.txtSalva == "Salvar"){
     this.txtSalva = "Aguarde..."
     const salvarAnterior = this.colaboradorService.vSalvarCadProf
@@ -252,19 +252,19 @@ Salvar(){
             areas = valorReforcoEsc ==true ? areas + 'Reforço escolar,' : areas;
 
             let areasRel: string = '';
-            areasRel = z.psicologia ==true ? areas + 'Psicologia,' : areasRel;
-            areasRel = z.fisiopadovan ==true ? areas + 'Fisio Padovan,' : areasRel;
-            areasRel = z.psicopedagogia ==true ? areas + 'Psicopedagogia,' : areasRel;
-            areasRel = z.fono ==true ? areas + 'Fonoaudiologia,' : areasRel;
-            areasRel = z.terapiaocup ==true ? areas + 'Terapia Ocup.,' : areasRel;
-            areasRel = z.psicomotr ==true ? areas + 'Psicomotricidade,' : areasRel;
-            areasRel = z.arteterapia ==true ? areas + 'Arteterapia,' : areasRel;
-            areasRel = z.neurofeedback ==true ? areas + 'Neurofeedback,' : areasRel;
-            areasRel = z.reforcoesc ==true ? areas + 'Reforço escolar,' : areasRel;
+            areasRel = z.psicologia ==true ? areasRel + 'Psicologia,' : areasRel;
+            areasRel = z.fisiopadovan ==true ? areasRel + 'Fisio Padovan,' : areasRel;
+            areasRel = z.psicopedagogia ==true ? areasRel + 'Psicopedagogia,' : areasRel;
+            areasRel = z.fono ==true ? areasRel + 'Fonoaudiologia,' : areasRel;
+            areasRel = z.terapiaocup ==true ? areasRel + 'Terapia Ocup.,' : areasRel;
+            areasRel = z.psicomotr ==true ? areasRel + 'Psicomotricidade,' : areasRel;
+            areasRel = z.arteterapia ==true ? areasRel + 'Arteterapia,' : areasRel;
+            areasRel = z.neurofeedback ==true ? areasRel + 'Neurofeedback,' : areasRel;
+            areasRel = z.reforcoesc ==true ? areasRel + 'Reforço escolar,' : areasRel;
 
 
-            const dados: Formacao = {
-              id: 0,
+            let dados = {
+              id: z.id,
               idFuncionario: Dados.id,
               dtConclusao: z.dtConclusao,
               nivel: z.nivel,
@@ -273,7 +273,7 @@ Salvar(){
               nomeFormacao: z.nomeFormacao,
               areasRelacionadas: areasRel,
             }
-            const r = this.formacaoService.UpdateFormacao(dados)
+            const r = await this.formacaoService.UpdateFormacao(dados)
             setTimeout(() => {
 
             }, 200);

@@ -76,13 +76,23 @@ delay(time:number) {
     return this.http.post<Response<Formacao[]>>(`${this.apiurl}`, formacao);
   }
 
-  UpdateFormacao(formacao: Formacao) : Observable<Response<Formacao[]>>{
-    return this.http.put<Response<Formacao[]>>(`${this.apiurl}/Editar` , formacao);
+  async UpdateFormacao(formacao: Formacao) : Promise<Formacao[]>{
+    console.log(formacao)
+
+      const apiurllogin = `${environment.ApiUrl}/Formacao/Editar`;
+      const response = await this.http.put<Response<Formacao[]>>(apiurllogin , formacao).toPromise();
+      if (response && response.dados !== undefined && response.sucesso) {
+        this.formacaos = response.dados
+        return response.dados;
+      } else {
+        throw new Error('Erro no Formação Service');
+      }
+
   }
 
-  updateFormacao(formacao: Formacao[]) : Observable<Response<Formacao[]>>{
-    return this.http.put<Response<Formacao[]>>(`${this.apiurl}/Editar` , formacao);
-}
+//   updateFormacao(formacao: Formacao[]) : Observable<Response<Formacao[]>>{
+//     return this.http.put<Response<Formacao[]>>(`${this.apiurl}/Editar` , formacao);
+// }
 
   private FormacaoAtual = new BehaviorSubject<Formacao>(this.Vazia[0]);
   FormacaoAtual$ = this.FormacaoAtual.asObservable();

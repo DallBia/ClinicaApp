@@ -51,6 +51,23 @@ export class FiltroComponent implements OnInit {
     this.formD = this.myForm.value;
   }
 
+  ativa(t: string,v: boolean){
+    let txt = '';
+    if (t == 'A'){
+      txt = v == true ? 'A' : '';
+      txt = this.InativoCheck == true ? txt + 'I' : txt;
+    }else{
+      txt = this.AtivoCheck == true ? 'A' : '';
+      txt = v == true ? txt + 'I' : txt;
+    }
+    if (this.shared.pagina == '/cadprof'){
+      this.colaboradorService.filtroAtivo = txt;
+      console.log(this.colaboradorService.filtroAtivo)
+    }else{
+      this.clienteService.filtroAtivo = txt;
+      console.log(this.clienteService.filtroAtivo)
+    }
+  }
   async aplicaFiltro(){
     if (this.shared.pagina == '/cadprof'){
       this.colaboradorService.tipo = this.opcaoSelecionada;

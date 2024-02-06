@@ -66,7 +66,8 @@ export class ClienteService {
 
   public tipo: string = 'tudo';
   public valor: string = 'tudo';
-  public param: string = 'tudo-tudo-0-P';
+  public param: string = 'tudo-tudo-0-P-A';
+  public filtroAtivo: string = 'A'
   public firstID: number = 0;
   public lastID: number = 0;
   public AfirstID: number = 0;
@@ -304,13 +305,13 @@ private mensagem: any;
 
 
   proximo(){
-    this.param = this.tipo + '-' + this.valor + '-' + this.lastID.toString() + '-P'
+    this.param = this.tipo + '-' + this.valor + '-' + this.lastID.toString() + '-P-' + this.filtroAtivo
     console.log(this.param)
     this.iniciar()
   }
 
   anterior(){
-    this.param = this.tipo + '-' + this.valor + '-' + this.firstID.toString() + '-A'
+    this.param = this.tipo + '-' + this.valor + '-' + this.firstID.toString() + '-A-' + this.filtroAtivo
     console.log(this.param)
     this.iniciar()
   }

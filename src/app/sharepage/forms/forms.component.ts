@@ -184,11 +184,11 @@ this.CarregaForm();
         let valorNeurofeedback = false;
         let valorReforcoEsc = false;
 
-        for (const area of areasRelacionadasArray) {
+        for (let area of areasRelacionadasArray) {
           if(area == 'Psicologia'){
             valorPsicologia = true;
           }
-          if(area == 'Fisioterapia Padovan'){
+          if(area == 'Fisio Padovan'){
             valorFisioPadovan = true;
           }
           if(area == 'Psicopedagogia'){
