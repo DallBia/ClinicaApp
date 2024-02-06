@@ -361,7 +361,8 @@ private ApiValor = `${environment.ApiUrl}/Valor`
   }
 
   datas(n: string, t?: string) : string{
-    if (t == null){
+    try{
+      if (t == null){
       if(n.length > 10){
         const ISO = n.split('T')[0]
         return ISO.split('-')[2] + '/' + ISO.split('-')[1] + '/' + ISO.split('-')[0];
@@ -380,6 +381,11 @@ private ApiValor = `${environment.ApiUrl}/Valor`
         }
       }
     }
+    }
+    catch{
+      return n
+    }
+
   }
 
   idades(n: string) : number {
