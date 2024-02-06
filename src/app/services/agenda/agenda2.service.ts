@@ -380,6 +380,13 @@ validaRept(agenda: Agenda[]): boolean {
     async UpdateAgenda(id: number, agenda: Agenda): Promise<Agenda[]> {
       try {
         agenda.diaDaSemana = '';
+        if (agenda.status !== undefined){
+          if (agenda.status.length < 2){
+            agenda.status = 'Pendente';
+          }
+        }else{
+          agenda.status = 'Pendente';
+        }
         console.log(agenda)
         const response = await this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}`, agenda).toPromise();
 
@@ -405,6 +412,14 @@ validaRept(agenda: Agenda[]): boolean {
   }
 
     async CreateAgenda(agenda: Agenda): Promise<Agenda[]> {
+      if (agenda.status !== undefined){
+        if (agenda.status.length < 2){
+          agenda.status = 'Pendente';
+        }
+      }else{
+        agenda.status = 'Pendente';
+      }
+
       console.log(agenda)
       try {
         const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda).toPromise();

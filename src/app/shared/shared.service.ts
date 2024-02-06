@@ -372,8 +372,12 @@ private ApiValor = `${environment.ApiUrl}/Valor`
       if (t[0] == 'T'){
         const ISO = n.split('T')[0]
         return ISO.split('-')[2] + '/' + ISO.split('-')[1] + '/' + ISO.split('-')[0];
-            }else{
-        return new Date(n.split('/')[2] + '-' + n.split('/')[1] + '-' + n.split('/')[0]).toISOString();
+      }else{
+        if (n[2] == '/'){
+          return new Date(n.split('/')[2] + '-' + n.split('/')[1] + '-' + n.split('/')[0]).toISOString();
+        }else{
+          return new Date(n).toISOString();
+        }
       }
     }
   }

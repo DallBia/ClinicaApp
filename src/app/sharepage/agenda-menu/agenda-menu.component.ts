@@ -197,7 +197,7 @@ async BuscaAg(p: string){
 
 
     async salvaSessao(){
-      if (this.perfilService.validaPerfil(0,12) == false){
+      if (this.perfilService.validaPerfil(0,11) == false){
         alert('Você não tem permissão para alterar agendas.')
       }else{
      let diff = true
@@ -334,7 +334,19 @@ async BuscaAg(p: string){
         }else{
           this.agendaService.celSelect.subtitulo = '';
         }
+        // AJUSTE DE DATA
+        this.agendaService.celSelect.diaF = this.shared.datas(this.agendaService.celSelect.diaF, 'Banco')
+        this.agendaService.celSelect.diaI = this.shared.datas(this.agendaService.celSelect.diaI, 'Banco')
+        this.agendaService.celSelect.dtAlt = this.shared.datas(this.agendaService.celSelect.dtAlt, 'Banco')
+        //----------------------------------------------------------------------------
+        // AJUSTE DE STATUS:
+        if (this.agendaService.celSelect.status.length < 2){
+          this.agendaService.celSelect.status = 'Pendente';
+        }
+        //-----------------------------------------------------------------------
+        //SALVA O FINANCEIRO CASO REALIZADA OU FALTA
 
+        //------------
         if(this.agendaService.celSelect.id == 0 || this.agendaService.celSelect.id == undefined){
           this.agendaService.celSelect.id = 0
           console.log(this.agendaService.celSelect)
