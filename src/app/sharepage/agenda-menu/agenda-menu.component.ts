@@ -13,6 +13,8 @@ import { ModalMultiComponent } from './modal-multi/modal-multi.component';
 import { Router } from '@angular/router';
 import { Perfil } from 'src/app/models/Perfils';
 import { PerfilService } from 'src/app/services/perfil/perfil.service';
+import { ClienteService } from 'src/app/services/cliente/cliente.service';
+import { Cliente } from 'src/app/models/Clientes';
 
 
 @Component({
@@ -26,6 +28,7 @@ export class AgendaMenuComponent implements OnInit {
       public agendaService: Agenda2Service,
       public foto: FileService,
       private perfilService: PerfilService,
+      public clienteService: ClienteService,
       public shared: SharedService,
       public userService: UserService,
       public financeiroService: FinanceiroService,
@@ -447,6 +450,24 @@ async BuscaAg(p: string){
       console.log(texto)
       try{
         const okCriaAgenda = await this.agendaService.UpdateAgenda(id, texto)
+        if (texto.idCliente!== undefined && texto.subtitulo !== undefined){
+          if (texto.idCliente !== 0){
+            let area = '';
+            for(let i of this.shared.ListaValores){
+              if (texto.subtitulo == i.nome){
+                area = i.nome;
+              }
+            }
+            if (area !== ''){
+              const respCliente = await this.clienteService.GetClientesById(texto.idCliente)
+            let cliente: Cliente = respCliente.dados
+            if (cliente.areaSession.includes(area) == false) {
+            cliente.areaSession = cliente.areaSession + texto.subtitulo + ','
+            const okCLiente = await this.clienteService.UpdateCliente(cliente)
+            }
+          }
+        }
+      }
         alert('Sessão atualizada!');
         this.delay(100);
         this.router.navigate(['/agenda']);
@@ -460,8 +481,26 @@ async BuscaAg(p: string){
     }
 
     async salvaAgenda(DadosEntrada: Agenda) {
-      console.log(DadosEntrada)
+       console.log(DadosEntrada)
       const okCriaAgenda = await this.agendaService.CreateAgenda(DadosEntrada)
+      if (DadosEntrada.idCliente!== undefined && DadosEntrada.subtitulo !== undefined){
+        if (DadosEntrada.idCliente !== 0){
+          let area = '';
+          for(let i of this.shared.ListaValores){
+            if (DadosEntrada.subtitulo == i.nome){
+              area = i.nome;
+            }
+          }
+          if (area !== ''){
+            const respCliente = await this.clienteService.GetClientesById(DadosEntrada.idCliente)
+          let cliente: Cliente = respCliente.dados
+          if (cliente.areaSession.includes(area) == false) {
+          cliente.areaSession = cliente.areaSession + DadosEntrada.subtitulo + ','
+          }
+          const okCLiente = await this.clienteService.updateCliente(cliente)
+        }
+      }
+    }
 
           const x = this.agendaService.celSelect.dtAlt !== undefined ? new Date(this.agendaService.celSelect.dtAlt) :new Date();
           this.dado.data = x.toISOString().split('T')[0]

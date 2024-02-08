@@ -171,6 +171,19 @@ public txtQtde: string = '';
   UpdateCliente(cliente: Cliente) : Observable<Response<Cliente[]>>{
     return this.http.put<Response<Cliente[]>>(`${this.apiurl}/Editar` , cliente);
   }
+  async updateCliente(cliente: Cliente) : Promise<Response<Cliente[]>>{
+    try{
+      const response = await this.http.put<Response<Cliente[]>>(`${this.apiurl}/Editar` , cliente).toPromise();
+      if (response && response.dados !== undefined && response.sucesso) {
+        return response;
+      } else {
+        throw new Error('Erro ao trazer Clientes (142): ');
+      }
+    } catch (error) {
+      console.error('Resposta inválida da API: ', error)
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    }
+  }
 
   GetClienteById(id: number) : Observable<Response<Cliente>>{
     return this.http.get<Response<Cliente>>(`${this.apiurl}/id/${id}`);
