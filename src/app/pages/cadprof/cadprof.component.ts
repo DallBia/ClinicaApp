@@ -186,9 +186,27 @@ abrirModal(){
 }
 
 
-
-
 async Salvar(){
+  this.txtSalva = "Aguarde..."
+  const Dados = this.formProf.submitE()
+  let r = true;
+  const resp = await this.colaboradorService.GetColabByTipo('email');
+
+  for (let i of resp){
+    if (i.id !== Dados.id && i.nome == Dados.email){
+      r = false
+    }
+  }
+  if (r==true){
+    this.txtSalva = "Salvar"
+    this.Salva()
+  }else{
+    alert('Este e-mail já está atribuído a outro profissional. Corrija o e-mail para salvar.')
+    this.txtSalva = "Salvar"
+  }
+}
+
+async Salva(){
   if (this.txtSalva == "Salvar"){
     this.txtSalva = "Aguarde..."
     const salvarAnterior = this.colaboradorService.vSalvarCadProf
@@ -318,6 +336,7 @@ async Salvar(){
 
   CliqueNovo(){
     this.userService.alertas = true;
+    this.colaboradorService.btn = false;
     const dialogRef = this.dialog.open(EquipeModalComponent, {
       disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
   });

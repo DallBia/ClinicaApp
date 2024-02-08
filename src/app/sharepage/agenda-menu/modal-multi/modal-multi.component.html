@@ -24,16 +24,16 @@
       <tbody>
           <tr *ngFor="let i of ListaAgenda">
             <td style="text-align: center; font-weight: bolder;">{{i.sessao}}</td>
-            <td><input type="text" id="prof-select{{ i }}" list="valores1"  class="fCampo" [(ngModel)]="i.profis" (blur)="buscaData(i.id)">
+            <td><input type="text" id="prof-select{{ i }}" list="valores1"  [disabled]="this.agenda.tipoDeAgendamento == 'Reservado' ? false : true" class="fCampo" [(ngModel)]="i.profis" (blur)="buscaData(i.id)">
               <datalist id="valores1">
-                <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+                <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" [disabled]="this.agenda.tipoDeAgendamento == 'Reservado' ? false : true"></option>
               </datalist></td>
-            <td><input type="date" id="dia-select{{ i }}" class="fCampo" [(ngModel)]="i.dia" (blur)="buscaHora(i.id)"></td>
-            <td><input type="text" id="hor-select{{ i }}" list="val1" class="fCampo" [(ngModel)]="i.hora" (blur)="buscaStatus(i.id)">
+            <td><input type="date" id="dia-select{{ i }}" class="fCampo" [(ngModel)]="i.dia" (blur)="buscaHora(i.id)" [disabled]="this.agenda.tipoDeAgendamento == 'Reservado' ? false : true"></td>
+            <td><input type="text" id="hor-select{{ i }}" list="val1" class="fCampo" [(ngModel)]="i.hora" (blur)="buscaStatus(i.id)" [disabled]="this.agenda.tipoDeAgendamento == 'Reservado' ? false : true">
               <datalist id="val1">
-                <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+                <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" [disabled]="this.agenda.tipoDeAgendamento == 'Reservado' ? false : true"></option>
               </datalist></td>
-            <td><input type="text" id="vlr-select{{ i }}" list="val1" class="fCampo" appCurrencyInput [(ngModel)]="i.valor" (blur)="ajustaValor(i.id)"></td>
+            <td><input type="text" id="vlr-select{{ i }}" list="val1" class="fCampo" appCurrencyInput [(ngModel)]="i.valor" (blur)="ajustaValor(i.id)" [disabled]="this.agenda.tipoDeAgendamento == 'Reservado' ? false : true"></td>
             <td *ngIf="i.status == '○'" class="nao">{{i.status}}</td>
             <td *ngIf="i.status == '●'" class="sim">{{i.status}}</td>
           </tr>

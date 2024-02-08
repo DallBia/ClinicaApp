@@ -48,7 +48,7 @@ export class ColaboradorService {
               public shared: SharedService,
 
               ) { }
-
+    public btn: boolean = false;
   public tipo: string = 'tudo';
   public valor: string = 'tudo'
   public param: string = 'tudo|tudo|0|P|A';

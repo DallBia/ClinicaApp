@@ -11,6 +11,9 @@ import { ColaboradorService } from 'src/app/services/colaborador/colaborador.ser
 })
 export class EquipeModalComponent {
 private id: number = 0;
+private validoEMAIL: boolean = false;
+private validoNOME: boolean = false;
+private validoPERFIL: boolean = false;
 
 formulario: any = {
   nomeEquipe: '',
@@ -31,11 +34,10 @@ formulario: any = {
     senhaHash:  '',
 }
 
-  public btn = false;
-  public txt = 'SALVAR'
+  public txt = '(preencha todos os dados)'
   constructor(
     public dialogRef: MatDialogRef<EquipeModalComponent>,
-    private colaboradorService: ColaboradorService,
+    public colaboradorService: ColaboradorService,
     private userService: UserService,
 
   ) {}
@@ -43,11 +45,61 @@ formulario: any = {
   ngOnInit(){
     this.userService.alertas = true;
     console.log(this.userService.alertas)
+    this.colaboradorService.btn = false;
   }
+
+
+
+async validaemail(email: string){
+  if (email.length >0){
+    this.validoEMAIL = true;
+    const resp = await this.colaboradorService.GetColabByTipo('email');
+
+    for (let i of resp){
+      if (i.nome == email){
+        this.validoEMAIL = false
+        alert('Este e-mail já está sendo usado por outro profissional.')
+      }
+    }
+    this.validar()
+  }
+
+}
+async validaperfil(perfil: string){
+  if (perfil.length >0){
+    this.validoPERFIL = true
+  }else{
+    this.validoPERFIL = false
+  }
+  this.validar()
+}
+async validanome(nome: string){
+  if (nome.length >0){
+    this.validoNOME = true
+  }else{
+    this.validoNOME = false
+  }
+  this.validar()
+}
+
+validar(){
+  if (this.validoEMAIL == true && this.validoNOME == true && this.validoPERFIL == true){
+    this.txt = 'SALVAR'
+    this.colaboradorService.btn = true;
+  }
+  else
+  {
+    this.txt = '(preencha todos os dados)';
+    this.colaboradorService.btn = false;
+  }
+}
+
+
+
 
   async salvar(){
     this.txt = 'Aguarde...'
-    this.btn = true;
+    this.colaboradorService.btn = false;
   const nomeX = this.formulario.nome;
   const destinatarioX: string = this.formulario.email;
   const assuntoX: string = 'Cadastro de novo funcionário';
@@ -130,12 +182,12 @@ formulario: any = {
           + this.formulario.email + '.\nA senha deverá ser trocada no primeiro login.\n'
           +'\nSomente após o usuário entrar no sistema e alterar a senha é que ele aparecerá como ATIVO no cadastro.')
           this.txt = 'Salvar'
-          this.btn = true
+          this.colaboradorService.btn = false
           location.reload()
       }, error => {
        console.error('Erro no salvamento do usuário', error);
        this.txt = 'Salvar'
-       this.btn = true
+       this.colaboradorService.btn = false
       });
 
 
@@ -143,7 +195,7 @@ formulario: any = {
   else{
     alert('Há informações em branco.')
     this.txt = 'Salvar'
-    this.btn = true
+    this.colaboradorService.btn = false
   }
 
 }

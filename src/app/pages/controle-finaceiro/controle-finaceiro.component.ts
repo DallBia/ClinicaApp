@@ -143,6 +143,7 @@ altCliFunc(){
     try{
       data = await this.shared.BuscaValores();
       const retorno001 = await this.finService.getFinanceiroById(this.finService.nCliente);
+
     }
     catch{
 

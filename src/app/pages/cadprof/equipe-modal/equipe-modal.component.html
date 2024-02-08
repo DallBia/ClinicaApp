@@ -5,15 +5,15 @@
 
           <div>
     <span class="fLabel">Nome do Funcionário:</span>
-    <input type="text" class="fCampo" [(ngModel)]="formulario.nome" name="Nome" placeholder="(insira o nome)" required>
+    <input type="text" class="fCampo" [(ngModel)]="formulario.nome" name="Nome" placeholder="(insira o nome)" (blur)="this.validanome(formulario.nome)" required>
   </div>
   <div>
     <span class="fLabel">E-mail:</span>
-    <input type="text" class="fCampo" [(ngModel)]="formulario.email" name="email" placeholder="(email)" required>
+    <input type="text" class="fCampo" [(ngModel)]="formulario.email" name="email" placeholder="(email)" (blur)="this.validaemail(formulario.email)" required>
   </div>
   <div>
     <span class="fLabel">Perfil:</span>
-    <select class="fCampo" style="width: 75%;" [(ngModel)]="formulario.idPerfil" name="nivel">
+    <select class="fCampo" style="width: 75%;" [(ngModel)]="formulario.idPerfil" name="nivel" (blur)="this.validaperfil(formulario.idPerfil)">
       <option>Diretoria</option>
       <option>Secretaria</option>
       <option>Coordenação</option>
@@ -32,7 +32,7 @@
   </span>
 
       <div class="botoes">
-        <button class="rosa" (click)="salvar()" [disabled]="this.btn">{{this.txt}}</button>
+        <button class="rosa" (click)="salvar()" [disabled]="!this.colaboradorService.btn">{{this.txt}}</button>
         <button class="escuro" (click)="fechar()">CANCELAR</button>
       </div>
     </div>
