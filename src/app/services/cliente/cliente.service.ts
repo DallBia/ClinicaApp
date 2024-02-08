@@ -182,6 +182,7 @@ public txtQtde: string = '';
     } catch (error) {
       console.error('Resposta inválida da API: ', error)
       throw error; // Você pode personalizar essa parte conforme sua necessidade
+
     }
   }
 

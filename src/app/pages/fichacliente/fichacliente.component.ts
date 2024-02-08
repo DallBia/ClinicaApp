@@ -381,6 +381,8 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
         }else{
 
           this.updateCliente(Tab)
+          this.txtSalva = "Salvar"
+            this.btnSalva = false;
         }
 
       }
@@ -409,6 +411,12 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
     }
 
   createCliente(cliente: Cliente){
+    cliente.proxses = null
+    cliente.dtNascim = cliente.dtNascim !== '' ? cliente.dtNascim : new Date().toISOString();
+    cliente.clienteDesde = cliente.clienteDesde !== '' ? cliente.clienteDesde : new Date().toISOString();
+    cliente.dtInclusao = cliente.dtInclusao !== '' ? cliente.dtInclusao : new Date().toISOString();
+
+
     this.clienteService.CreateCliente(cliente).subscribe((data) => {
       this.delay(300)
       this.userService.alertas = true;
@@ -419,11 +427,36 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
     }, error => {
       this.userService.alertas = true;
       console.error('Erro no upload', error);
+      this.btnSalva = false;
+        this.txtSalva = "Salvar"
     });
 
   }
 
-    updateCliente(cliente: Cliente){
+
+
+      delay(time:number) {
+        setTimeout(() => {
+
+        }, time);
+      }
+
+
+      async updateCliente(cliente: Cliente){
+        cliente.proxses = null
+      this.userService.alertas = true;
+      const r = await this.clienteService.updateCliente(cliente)
+         this.delay(300)
+         this.userService.alertas = true;
+        alert('Registro atualizado!')
+        this.btnSalva = false;
+        this.txtSalva = "Salvar"
+        location.reload()
+    }
+
+
+      /*
+      updateCliente(cliente: Cliente){
       this.userService.alertas = true;
       this.clienteService.UpdateCliente(cliente).subscribe((data) => {
          this.delay(300)
@@ -437,11 +470,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
         console.error('Erro no upload', error);
       });
     }
-      delay(time:number) {
-        setTimeout(() => {
-
-        }, time);
-      }
+      */
 
   onButtonClick(){
 
