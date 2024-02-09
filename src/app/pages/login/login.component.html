@@ -3,7 +3,7 @@
     <div>
         <p class="texto" (click)="teste(email.value)">Login (e-mail):</p>
         <input type="email" id="email" class="campo" #email>
-        <p class="texto">Senha:</p>
+        <p class="texto" (click)="obterConfiguracoesRegionais()">Senha:</p>
         <input [type]="visibilidadeSenha ? 'text' : 'password'" id="password" class="campo" #password >
         <span (mousedown)="toggleVisibilidadeSenha()" (mouseup)="toggleVisibilidadeSenha()">
           <i class="material-symbols-outlined" [ngClass]="{'fa-eye': visibilidadeSenha, 'fa-eye-slash': !visibilidadeSenha}">visibility</i>

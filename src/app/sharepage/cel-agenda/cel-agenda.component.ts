@@ -32,17 +32,27 @@ export class CelAgendaComponent implements OnInit{
 
   }
 
-novaData(event: string){
+  novaData(event: string){
+    const partes = event.split('-'); // Dividindo a string nos separadores '/'
 
-  const diaDaSemana = new Date(event).getDay();
-  //const diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-  const diasDaSemana = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
-  this.agenda.diaSemana = diasDaSemana[diaDaSemana];
-  this.agenda.dia = event
-  this.dia = event
-  this.ParImpar = this.agenda.calcSemanaSimNao(this.dia)  =='P' ? 'P' : 'I';
-  this.agenda.recarregar()
-  console.log(this.agenda.dia)
+    // Obtendo os valores do dia, mês e ano a partir das partes divididas
+    const dia = parseInt(partes[2], 10); // Convertendo para número inteiro
+    const mes = parseInt(partes[1], 10) - 1; // O mês em JavaScript é baseado em zero (janeiro é 0)
+    const ano = parseInt(partes[0], 10);
 
-}
+    // Criando o objeto Date com os valores extraídos
+    const data = new Date(ano, mes, dia);
+
+    const diaDaSemana = data.getDay();
+    //const diaDaSemana = new Date(event).getDay();
+    const diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+    //const diasDaSemana = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
+    this.agenda.diaSemana = diasDaSemana[diaDaSemana];
+    this.agenda.dia = event
+    this.dia = event
+    this.ParImpar = this.agenda.calcSemanaSimNao(this.dia)  =='P' ? 'P' : 'I';
+    this.agenda.recarregar()
+    console.log(this.agenda.dia)
+
+  }
 }

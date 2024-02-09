@@ -108,6 +108,17 @@ export class LoginComponent implements OnInit {
   }
 
 
+  obterConfiguracoesRegionais(): void {
+    // Configurações de região do navegador
+    const configuracoesRegionais = {
+      idioma: window.navigator.language,
+      plataforma: window.navigator.platform,
+
+      // Outras propriedades podem ser adicionadas conforme necessário
+    };
+
+    console.log('Configurações regionais:', configuracoesRegionais);
+  }
 
   async Dados1(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
