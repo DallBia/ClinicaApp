@@ -103,7 +103,7 @@ if (this.col == 0){
     if(this.lin == 0 || this.lin == 7){
       this.l1 = true;
       this.c1 = false;
-
+      this.corDeFundo = 'var(--cor-clara)'
     }else{
       this.corDeFundo = 'rgb(255, 255, 255)';
     }
@@ -158,6 +158,16 @@ AltHorario(lin: number, col: number){
 }
 
 chamar(lin: number, col: number){
+
+  window.localStorage.removeItem('AgAnt-id');
+  window.localStorage.removeItem('AgAnt-nome');
+  window.localStorage.removeItem('AgAnt-rept');
+  window.localStorage.removeItem('AgAnt-profis');
+  window.localStorage.removeItem('AgAnt-status');
+  window.localStorage.removeItem('AgAnt-diaI');
+  window.localStorage.removeItem('AgAnt-diaF');
+
+
   this.agendaService.hora = lin;
   this.agendaService.sala = col;
   let hora: string = '';

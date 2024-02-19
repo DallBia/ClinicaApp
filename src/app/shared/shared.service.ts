@@ -397,4 +397,8 @@ private ApiValor = `${environment.ApiUrl}/Valor`
     const diffYears = Math.floor(diffMillis / (1000 * 60 * 60 * 24 * 365.25));
     return (diffYears)
   }
+
+  converterValor(valor: number){
+
+  }
 }

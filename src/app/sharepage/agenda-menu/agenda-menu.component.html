@@ -14,7 +14,7 @@
     <!-- <div class="unidade" style="align-items: center; justify-content: center;display: flex;"><app-unidade></app-unidade></div> -->
     <div class="nome"*ngIf="this.agendaService.sala !== 0">SALA {{this.agendaService.sala}}</div>
     <div class="nome">{{this.agendaService.horario}}</div>
-    <div class="nome" style="font-weight: bold; color:var(--cor-media)">{{this.agendaService.celSelect.nome}}</div>
+    <div class="nome" (click)="validacoes()" style="font-weight: bold; color:var(--cor-media)">{{this.agendaService.celSelect.nome}}</div>
    </div>
 </div>
 <div class="inferior" *ngIf="this.agendaService.sala !== 0">

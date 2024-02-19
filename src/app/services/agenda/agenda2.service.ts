@@ -224,10 +224,41 @@ public botaoVer: string = '';
       throw error; // Você pode personalizar essa parte conforme sua necessidade
     });
   }
+
+
+public conflitos: Agenda[] = [];
+public sucesso: boolean = false;
+
+  async verifAgenda(vid: number, resto: string): Promise<Agenda[]> {
+    this.conflitos = [];
+    const v: Tipo = {
+      id: vid,
+      nome: resto,
+    }
+    try {
+      const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/Verif`, v).toPromise();
+      if (response && response.dados !== undefined && response.sucesso) {
+
+        this.conflitos = response.dados
+        console.log(response.mensagem)
+        console.log(this.conflitos)
+        this.sucesso = response.sucesso
+        return response.dados;
+      } else {
+        throw new Error(response?.mensagem);
+      }    } catch (error) {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    }
+  }
+
+
+
   async BuscarAgendaPorReserva(param: string): Promise<Agenda[]> {
     const data: Response<Agenda[]> = await this.getAgendaByReserva(param);
     return data.dados;
   }
+
+
 
   async BuscaAgenda(dia: string): Promise<boolean> {
     this.Cliente = this.clienteService.clienteVazio
@@ -241,7 +272,7 @@ public botaoVer: string = '';
     setTimeout(() => {
     }, 300);
     for (let i of this.agendaG){
-      if(i.unidade == this.un){
+
         const ntmp = this.listaHorarios.find((item: { horario: string | undefined; }) => item.horario === i.horario);
         const n = ntmp.n !== undefined ? ntmp.n  * 100: 0;
         const s = i.sala !== undefined ? i.sala : 0;
@@ -276,7 +307,7 @@ public botaoVer: string = '';
         if (verifRept == true){
           this.agendaDia = [...this.agendaDia, ...this.linTmp]
         }
-      }
+
     }
     this.agendaDiaAnt = this.agendaDia;
     this.atualizarAgendaDia(this.agendaDia)
@@ -286,7 +317,7 @@ public botaoVer: string = '';
 validaRept(agenda: Agenda[]): boolean {
   for (let i of agenda){
     const Rep = i.configRept.split('%')
-    if (Rep[0] == 'X' || Rep[0] == 'D'){
+    if (Rep[0] == 'X' || Rep[0] == 'U' || Rep[0] == 'D'){
       return true;
     }
     if (Rep[0] == 'S' && Rep[1] == this.diaSemana){
@@ -485,6 +516,7 @@ validaRept(agenda: Agenda[]): boolean {
 
   carregarCel(){
 
+
     this.Cliente = this.clienteService.clienteVazio
     this.celSelect = {
           id: 0,
@@ -617,6 +649,7 @@ validaRept(agenda: Agenda[]): boolean {
     if (this.celSelect.multi !== undefined && this.celSelect.multi !== null){
       this.botaoVer = this.celSelect.multi;
     }
+    this.salvaAnt();
   }
 
   carregarSala(){
@@ -667,6 +700,31 @@ validaRept(agenda: Agenda[]): boolean {
         this.horario = i.horario
       }
     }
+
+    this.salvaAnt();
+
+  }
+
+  salvaAnt(){
+    const id = this.celSelect.id !== undefined ? this.celSelect.id.toString() : '';
+    const status = this.celSelect.status !== undefined ? this.celSelect.status : '';
+    const rept = this.celSelect.repeticao !== undefined ? this.celSelect.repeticao : '';
+    const nome = this.celSelect.nome !== undefined ? this.celSelect.nome : '';
+    const profis = this.celSelect.profis !== undefined ? this.celSelect.profis : '';
+    const diaI = this.celSelect.diaI !== undefined ? this.celSelect.diaI : '';
+    const diaF = this.celSelect.diaF !== undefined ? this.celSelect.diaF : '';
+    const subt = this.celSelect.subtitulo !== undefined ? this.celSelect.subtitulo : '';
+    const val = this.celSelect.valor !== undefined && this.celSelect.valor !== null ? this.celSelect.valor?.toString() : '';
+
+    window.localStorage.setItem('AgAnt-id', id);
+    window.localStorage.setItem('AgAnt-status', status);
+    window.localStorage.setItem('AgAnt-rept', rept);
+    window.localStorage.setItem('AgAnt-nome', nome);
+    window.localStorage.setItem('AgAnt-profis', profis);
+    window.localStorage.setItem('AgAnt-diaI', diaI);
+    window.localStorage.setItem('AgAnt-diaF', diaF);
+    window.localStorage.setItem('AgAnt-subt', subt);
+    window.localStorage.setItem('AgAnt-valor', val);
 
   }
 

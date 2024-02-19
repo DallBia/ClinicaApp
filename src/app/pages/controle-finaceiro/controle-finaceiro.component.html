@@ -18,9 +18,10 @@
         </div>
         <div class="totais">
           <span class="tot01">TOTAIS:</span>
-          <span class="tot02">{{this.finService.entradas}}</span>
-          <span class="tot02">{{this.finService.saidas}}</span>
-          <span class="tot02" style="font-weight: bold;" >{{this.finService.saldo}}</span>
+          <span class="tot01">{{totalRegistros}} registros.</span>
+          <span class="tot02">{{totalValor  | currency:'BRL' }}</span>
+          <span class="tot02">{{totalPagto | currency:'BRL' }}</span>
+          <span class="tot02" style="font-weight: bold;" >{{diferenca | currency:'BRL' }}</span>
         </div>
 
         <!-- AQUI SÃO MOSTRADOS OS COMPONENTES PARA EDIÇÃO -->

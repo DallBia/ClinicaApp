@@ -9,13 +9,15 @@ import { Colaborador } from 'src/app/models/Colaboradors';
 import { Tipo } from 'src/app/models/Tipo';
 import { SharedService } from 'src/app/shared/shared.service';
 import { UserService } from '..';
+import { Agenda } from 'src/app/models/Agendas';
+import { TableFin } from 'src/app/models/Tables/TableFin';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FinanceiroService {
 
-  public tabFinanceira: Financeiro[] = []
+  public tabFinanceira: TableFin[] = []
   public MostraInfo: boolean = true;
   public Atual!: TableData;
   public User!:Colaborador;
@@ -33,7 +35,7 @@ export class FinanceiroService {
   public ListaFuncionario: Tipo[] = [];
   public Usuário: string = '';
   public info_numAtualizadoPor: number = 0;
-  public info_refAg: number = 0;
+  public info_refAg: string = '0';
   public info_Recibo: string = '';
 
 public entradas: string = 'R$ 0,00';
@@ -115,26 +117,12 @@ abrirEdicao(){
   }
 
 
-  async getFinanceiroById(id: number): Promise<Financeiro[]> {
-    try {
-      const response = await this.http.get<Response<Financeiro[]>>(`${this.apiUrl}/Cliente/${id}`).toPromise();
-      if (response && response.dados !== undefined && response.sucesso) {
-        this.tabFinanceira = response.dados;
-        this.calcularBalanco()
-        return response.dados;
-      } else {
-        throw new Error('Erro no getFinanceiro by ID.');
-      }
-    } catch (error) {
-      throw error; // Você pode personalizar essa parte conforme sua necessidade
-    }
-  }
 
 calcularBalanco(){
   let entradas = 0;
   let saidas = 0;
   for (let i of this.tabFinanceira){
-    if (i.valor == -1000009){
+    if (i.valor == null){
       i.valor = 0;
     }
     if(i.valor > 0){
@@ -169,8 +157,24 @@ formataNum(num: number): string{
   this.info_AtualizadoPor = this.Usuário;
   this.info_DataAt = '';
   this.info_numAtualizadoPor = 0;
-  this.info_refAg = 0;
+  this.info_refAg = '0';
   this.idLinha = 0;
   this.info_Recibo = '';
+  }
+
+  async chamarFin(dado: Tipo): Promise<Agenda[]> {
+    const api = `${environment.ApiUrl}/Agenda/AgendaByFin`;
+    try {
+      const response = await this.http.post<Response<Agenda[]>>(`${api}` , dado).toPromise();
+      if (response && response.dados !== undefined && response.sucesso) {
+        console.log('Trazendo agenda:')
+        console.log(response.dados)
+        return response.dados;
+      } else {
+        throw new Error('Erro no Create do Financeiro.');
+      }
+    } catch (error) {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    }
   }
 }

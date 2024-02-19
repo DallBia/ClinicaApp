@@ -67,6 +67,8 @@ export class HomeComponent implements OnInit {
 
     window.sessionStorage.setItem('nCli','0')
     window.sessionStorage.setItem('nCol','0')
+    console.log('Perfis zerados')
+    console.log(window.sessionStorage.getItem('nCli'))
     this.Carregar();
     const r = this.perfilService.guardaPerfil();
 

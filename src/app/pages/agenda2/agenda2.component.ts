@@ -57,7 +57,13 @@ export class Agenda2Component implements OnInit, OnDestroy{
 
 
   ngOnDestroy(){
-
+    window.localStorage.removeItem('AgAnt-id');
+    window.localStorage.removeItem('AgAnt-nome');
+    window.localStorage.removeItem('AgAnt-rept');
+    window.localStorage.removeItem('AgAnt-profis');
+    window.localStorage.removeItem('AgAnt-status');
+    window.localStorage.removeItem('AgAnt-diaI');
+    window.localStorage.removeItem('AgAnt-diaF');
   }
 
 

@@ -17,6 +17,9 @@ import { FinanceiroService } from 'src/app/services/financeiro/financeiro.servic
 import { Financeiro } from 'src/app/models/Financeiro';
 import { HeaderService } from 'src/app/sharepage/navbar/header.service';
 import { PerfilService } from 'src/app/services/perfil/perfil.service';
+import { Tipo } from 'src/app/models/Tipo';
+import { TableFin } from 'src/app/models/Tables/TableFin';
+import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
 
 @Component({
   selector: 'app-controle-finaceiro',
@@ -43,7 +46,10 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
   public btnTab: string = 'Tabela de Valores'
   public btnCliFunc: string = '(Clínica->Funcionário)'
   public tela1: string = 'cli'
-
+  public totalRegistros: number = 0;
+  public totalValor: number = 0;
+  public totalPagto: number = 0;
+  public diferenca: number = 0;
 
   constructor(private colaboradorService: ColaboradorService,
     public clienteService: ClienteService,
@@ -55,6 +61,7 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
     public shared: SharedService,
     private userService: UserService,
     public finService: FinanceiroService,
+    public agenda: Agenda2Service,
     ) {
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.finService.nCliente = nameC
@@ -97,52 +104,194 @@ altCliFunc(){
 
 
   ngOnInit() {
-
     if(this.perfilService.validaPerfil(0,9) == false){
-      alert('Você não tem autorização para acessar esta página')
-      this.router.navigate(['/inicio']);
-    }
+            alert('Você não tem autorização para acessar esta página')
+            this.router.navigate(['/inicio']);
+          }
 
 
-    this.finService.zerar();
     this.finService.tabFinanceira = [];
-    this.subscription = this.clienteService.ClienteA$.subscribe(
-      nameC => this.finService.nCliente = nameC
-    )
-    this.subscription = this.userService.EquipeA$.subscribe(
-      nameC => this.nUser = nameC
-    )
+    this.BuscaAg()
+    console.log('Concluído')
 
-    this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-      this.finService.Atual = clienteAtual;
-    });
 
-    this.UserAll = this.colaboradorService.GetColaborador();
-// this.delay(300);
-    const Funcionarios = this.colaboradorService.GetEquipeMinimal()
-    if(this.finService.nCliente !== 0){
-        this.Ficha = this.finService.Atual.Ficha;
-      this.NomeCliente = this.finService.Atual.nome.toUpperCase();
-      this.idFoto = '../../../assets/img/Clientes/' + this.Ficha + '.jpg'
-      console.log(this.finService.nCliente)
-      }else{
-      this.Ficha = 'FICHA';
-      this.NomeCliente = '';
 
-    }
-    this.finService.MostraInfo = false;
-    //this.newInfo(this.finService.MostraInfo);
+//     if(this.perfilService.validaPerfil(0,9) == false){
+//       alert('Você não tem autorização para acessar esta página')
+//       this.router.navigate(['/inicio']);
+//     }
 
-    const dados = this.BuscaValores()
-    this.Carregar(dados);
+
+//     this.finService.zerar();
+//     this.finService.tabFinanceira = [];
+//     this.subscription = this.clienteService.ClienteA$.subscribe(
+//       nameC => this.finService.nCliente = nameC
+//     )
+//     this.subscription = this.userService.EquipeA$.subscribe(
+//       nameC => this.nUser = nameC
+//     )
+
+//     this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
+//       this.finService.Atual = clienteAtual;
+//     });
+
+//     this.UserAll = this.colaboradorService.GetColaborador();
+// // this.delay(300);
+//     const Funcionarios = this.colaboradorService.GetEquipeMinimal()
+//     if(this.finService.nCliente !== 0){
+//         this.Ficha = this.finService.Atual.Ficha;
+//       this.NomeCliente = this.finService.Atual.nome.toUpperCase();
+//       this.idFoto = '../../../assets/img/Clientes/' + this.Ficha + '.jpg'
+//       console.log(this.finService.nCliente)
+//       }else{
+//       this.Ficha = 'FICHA';
+//       this.NomeCliente = '';
+
+//     }
+//     this.finService.MostraInfo = false;
+//     //this.newInfo(this.finService.MostraInfo);
+
+//     const dados = this.BuscaValores()
+//     this.Carregar(dados);
 
   }
+
+
+  async BuscaAg(){
+    let id = '0';
+
+    const idTmp = window.sessionStorage.getItem('nCli');
+    id = idTmp == null ? '0' : idTmp;
+    const dia = new Date().toISOString();
+    const dado: Tipo = {
+      id: parseInt(id),
+      nome: dia
+    }
+    if (id !== '0'){
+    const r = await this.finService.chamarFin(dado)
+        let n: number = 0;
+        let data = new Date();
+        for (let i of r){
+          let proxData = '';
+          if (i.repeticao !== 'Unica'){
+            let resp = false
+            while (resp == false){
+              resp = this.calcDia(data.toISOString(), i.configRept)
+              if (resp == false){
+                data.setDate(data.getDate() + 1);
+              }else{
+                const val = i.configRept.split('%')
+                const dt = this.shared.datas(data.toISOString().split('T')[0], 'Tela')
+                proxData = dt + ' (' + this.semana + '/rept ' + val[0] + ')'
+                data = new Date();
+                console.log(i.id + ' - ' + proxData)
+              }
+            }
+          }else{
+            if (i.multi == null){
+              const dt = i.diaI !== undefined ? i.diaI : new Date().toISOString().split('T')[0];
+              proxData = this.shared.datas(dt, 'Tela') + ' (' + i.diaDaSemana + ')'
+            }else{
+              let nMulti = ''
+              const dt = i.diaI !== undefined ? i.diaI : new Date().toISOString().split('T')[0];
+              if (i.historico !== undefined){
+                const indiceAbreParenteses = i.historico.indexOf("(");
+                const indiceFechaParenteses = i.historico.indexOf(")");
+
+                // Verifique se ambos os parênteses foram encontrados
+                if (indiceAbreParenteses !== -1 && indiceFechaParenteses !== -1) {
+                    // Extraia a substring entre os parênteses
+                    nMulti = i.historico.substring(indiceAbreParenteses + 1, indiceFechaParenteses);
+                  }
+
+
+              proxData = this.shared.datas(dt, 'Tela') + ' (' + i.diaDaSemana + '/multi ' + nMulti +')'
+            }
+          }
+          }
+          const num1 = i.valor !== undefined && i.valor !== null? i.valor : 0;
+          const vlr1 = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'}).format(num1);
+            let ordem = proxData.substring(0, 10);
+            ordem = ordem.substring(6,9) +  ordem.substring(3,4) + ordem.substring(0,1) + i.horario
+          const lin: TableFin = {
+            id: n,
+            idAgenda: i.id !== undefined ? i.id : 0,
+            idFinanceiro: 0,
+            selecionada: false,
+            dia: proxData,
+            hora: i.horario !== undefined ? i.horario : '-',
+            servico: i.subtitulo !== undefined ? i.subtitulo : '-',
+            profis: i.profis !== undefined ? i.profis : '-',
+            valor: num1,
+            multi: i.multi,
+            pago: 0,
+            dtPago: '-',
+            recibo: '0',
+            descricao: 'string',
+            presenca: i.status !== undefined ? i.status : '---',
+            ordem: ordem !== undefined ? ordem : '',
+          }
+          let verif = false
+          for (let x of this.finService.tabFinanceira){
+            if (lin.dia == x.dia
+              && lin.hora == x.hora){
+                if (lin.id > x.id){
+                  x = lin
+                }
+                verif = true
+              }
+          }
+          if (verif == false){
+            n += 1
+            this.finService.tabFinanceira.push(lin)
+            this.totalValor += lin.valor;
+            this.totalPagto += lin.pago;
+          }
+        }
+        this.finService.tabFinanceira.sort((a, b) => a.ordem.localeCompare(b.ordem));
+        this.totalRegistros = n;
+        this.diferenca = this.totalValor - this.totalPagto
+    }
+
+  }
+
+
+private semana = '-'
+
+calcDia(dia0: string, valid: string): boolean{
+  const val = valid.split('%')
+  let resp = true;
+  const dia = new Date(dia0).toISOString().split('T')[0]
+  const diaDaSemana = new Date(dia).getDay();
+  const diasDaSemana = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
+  this.semana = diasDaSemana[diaDaSemana];
+  const pi = this.agenda.calcSemanaSimNao(dia)  =='P' ? 'P' : 'I';
+  switch (val[0]){
+    case 'S':
+      resp = val[1] == this.semana ? true : false;
+      break;
+    case 'Q':
+      resp = val[1] == this.semana && pi == val[2] ? true : false;
+      break;
+    default:
+      resp = true
+      break;
+  }
+  return resp
+}
+
+
+
+
+
 
   async BuscaValores(){
     let data = 'nada por enquanto 2'
     try{
       data = await this.shared.BuscaValores();
-      const retorno001 = await this.finService.getFinanceiroById(this.finService.nCliente);
+      //const retorno001 = await this.finService.getFinanceiroById(this.finService.nCliente);
 
     }
     catch{
@@ -166,7 +315,6 @@ altCliFunc(){
   receberPagto(valor: string){
     if (this.finService.info_Valor !== undefined){
 
-      // let valorOriginal: any = this.finService.info_Valor.substring(3, 18)
       let valorOriginal = parseFloat(this.finService.info_Valor.replace(/[^\d,]/g, '').replace(',', '.'));
       let valorPagto = parseFloat(this.finService.info_GeraPagto.replace(/[^\d,]/g, '').replace(',', '.'));
       let origNumerico: number = !Number.isNaN(valorOriginal) ? valorOriginal : 0;
@@ -225,19 +373,20 @@ altCliFunc(){
         data: data,
         valor: valor,
         selecionada: false,
+        saldo: 0,
         refAgenda:this.finService.info_refAg,
         recibo: this.finService.info_Recibo,
       }
       if(this.finService.idLinha){
         const result = await this.finService.updateFinanceiro(dado)
         const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
-        this.finService.getFinanceiroById(id)
+        //this.finService.getFinanceiroById(id)
         alert('Dados atualizados!')
         this.router.navigate(['/controleFinaceiro']);
       }else{
         const result = await this.finService.createFinanceiro(dado)
         const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
-        this.finService.getFinanceiroById(id)
+        //this.finService.getFinanceiroById(id)
         alert('Dados inseridos com sucesso!')
         this.router.navigate(['/controleFinaceiro']);
       }

@@ -4,10 +4,11 @@ export interface Financeiro{
   idCliente: number;
   idFuncAlt: number;
   nome: string;
-  descricao: string;
   data: string;
-  valor: number;
+  descricao: string;
+  valor: number | null;
+  saldo: number;
   selecionada: boolean;
   recibo: string;
-  refAgenda: number;
+  refAgenda: string;
 }

@@ -15,6 +15,7 @@ import { Perfil } from 'src/app/models/Perfils';
 import { PerfilService } from 'src/app/services/perfil/perfil.service';
 import { ClienteService } from 'src/app/services/cliente/cliente.service';
 import { Cliente } from 'src/app/models/Clientes';
+import { is } from 'date-fns/locale';
 
 
 @Component({
@@ -197,14 +198,221 @@ async BuscaAg(p: string){
 
     }
 
+    verProfCli(): string{
+        if (this.agendaService.celSelect.horario !== 'manhã' && this.agendaService.celSelect.horario !== 'tarde'){
+          return 'C'
+        }
+        else
+        {
+          return 'E'
+        }
+    }
+    verSubst(prof: string | undefined): string{
+      if (prof !== undefined){
+        if (prof !==''){
+          if(window.localStorage.getItem('AgAnt-nome') !== null){
+          if (window.localStorage.getItem('AgAnt-nome') !== ''){
+            if (this.agendaService.celSelect.repeticao == 'Cancelar Repetição'){
+              return 'Exclusão'
+            }else{
+              return 'Substituição'
+            }
+          }else{
+            return 'Inserção'
+          }
+          }else{
+            return 'Inserção'
+          }
+        }else{
+          return 'Exclusão'
+        }
+      }else{
+        return 'Exclusão'
+      }
+    }
 
 
+    private ok: boolean = false;
+    async validacoes(){
+      const pessoa = this.verProfCli()
+      const alter = this.verSubst(this.agendaService.celSelect.nome)
+      const rept = this.agendaService.celSelect.repeticao
+      let dSem = ''
+      let pi = ''
+      let sessao = '';
+        let dataFim = new Date().toISOString();
+        let dataIni = new Date().toISOString();
+        let status = 'Pendente'
+      try{
+        switch (this.agendaService.celSelect.repeticao){
+          case 'Sessão única':
+            sessao = 'Unica';
+            status = this.agendaService.celSelect.status !== undefined ? this.agendaService.celSelect.status : 'Pendente';
+            this.agendaService.celSelect.configRept = "X";
+            dataFim = this.agendaService.dia
+            dataIni = this.agendaService.dia
+            break;
+          case 'Diária':
+            sessao = 'Diaria';
+            this.agendaService.celSelect.configRept = "D%" + this.agendaService.dia.substring(0,2) + '%' + this.agendaService.parImpar
+            dataFim = '2100-01-01'
+            dataIni = this.agendaService.celSelect.diaI !== undefined && this.agendaService.celSelect.diaI !== '' ? this.agendaService.celSelect.diaI : this.agendaService.dia
+            break;
+          case 'Semanal':
+            sessao = 'Semanal';
+            this.agendaService.celSelect.configRept = "S%" + this.agendaService.diaSemana + '%' + this.agendaService.parImpar
+            dataFim = '2100-01-01'
+            dataIni = this.agendaService.celSelect.diaI !== undefined && this.agendaService.celSelect.diaI !== '' ? this.agendaService.celSelect.diaI : this.agendaService.dia
+            break;
+          case 'Quinzenal':
+            sessao = 'Quinzenal';
+            this.agendaService.celSelect.configRept = "Q%" + this.agendaService.diaSemana + '%' + this.agendaService.parImpar
+            dataFim = '2100-01-01'
+            dataIni = this.agendaService.celSelect.diaI !== undefined && this.agendaService.celSelect.diaI !== '' ? this.agendaService.celSelect.diaI : this.agendaService.dia
+            break;
+          case 'Mensal':
+            sessao = 'Mensal';
+            this.agendaService.celSelect.configRept = "M%" + this.agendaService.diaSemana + '%' + this.agendaService.dia.substring(0,2)
+            dataFim = '2100-01-01'
+            dataIni = this.agendaService.celSelect.diaI !== undefined && this.agendaService.celSelect.diaI !== '' ? this.agendaService.celSelect.diaI : this.agendaService.dia
+            break;
+          case 'Cancelar Repetição':
+            sessao = 'Cancelar';
+            dataFim = this.diaAnterior(this.agendaService.dia)
+            dataIni = this.agendaService.celSelect.diaI !== undefined && this.agendaService.celSelect.diaI !== '' ? this.agendaService.celSelect.diaI : this.agendaService.dia
+            break;
+          default:
+            sessao = 'Unica';
+            dataFim = this.agendaService.dia
+            status = this.agendaService.celSelect.status !== undefined ? this.agendaService.celSelect.status : 'Pendente';
+            dataIni = this.agendaService.celSelect.diaI !== undefined && this.agendaService.celSelect.diaI !== '' ? this.agendaService.celSelect.diaI : this.agendaService.dia
+        }
+        dSem = this.agendaService.celSelect.configRept.split('%')[1] == undefined ? '' : this.agendaService.celSelect.configRept.split('%')[1]
+        pi = this.agendaService.celSelect.configRept.split('%')[2] == undefined ? '' : this.agendaService.celSelect.configRept.split('%')[2]
+      }catch{}
+      let texto01: string = '';
+      const Xsala = this.agendaService.celSelect.sala !== undefined ? this.agendaService.celSelect.sala.toString() : '0'
+      const Xhora = this.agendaService.celSelect.horario
+      const Xid = this.agendaService.celSelect.id !== undefined ? this.agendaService.celSelect.id.toString() : '0'
+      const Yid = this.agendaService.celSelect.id !== undefined ? this.agendaService.celSelect.id : 0;
+      const Xdia = this.agendaService.dia
+      const h = this.agendaService.celSelect
+      const Xdado = Xsala + '%' + Xhora + '%' + Xid + '%' + Xdia
+      const r = await this.agendaService.verifAgenda(Yid,Xdado)
+      for (let i of this.agendaService.conflitos){
+        let txt = ''
+        const r2 = i.configRept.split('%')
+        /* SE FOR EQUIPE (DONO DA SALA):*/
+        if (pessoa == 'E'){   // é dono da sala
+          switch (alter[0]){
+            case 'I':
+              switch (rept){
+                case 'Diária':
+                  let iDiaI = i.diaI !== undefined && i.diaI !== null ? new Date(i.diaI) : new Date();
+                  let iDiaF = i.diaF !== undefined && i.diaF !== null ? new Date(i.diaF) : new Date();
+                  let hDiaI = new Date(dataIni)
+                  let hDiaF = new Date(dataFim)
+                //Primeiro, vejo se a mesma sala já está ou estará ocupada por outro profissional:
+                  if(i.sala == h.sala
+                        && i.horario == h.horario
+                        && i.idCliente !== h.idCliente
+                        && iDiaI < hDiaF){
+                    const varI = i.configRept.split('%')
+                    let hRep = ''
+                    let hSem = ''
+                    let hData = ''
+                    switch (varI[0]){
+                      case 'D':
+                        hRep = 'diária'
+                        hData = ', de ' + iDiaI.toLocaleDateString() + ' a ' + iDiaF.toLocaleDateString()
+                        break;
+                      case 'S':
+                        hRep = 'semanal'
+                        hSem = ' às ' + varI[1]
+                        hData = ', de ' + iDiaI.toLocaleDateString() + ' a ' + iDiaF.toLocaleDateString()
+                        break;
+                      case 'Q':
+                        hRep = 'quinzenal'
+                        hSem = ' às ' + varI[1] + varI[2] == 'P' ? ' pares (brancas)' : 'ímpares (vermelhas)'
+                        hData = ', de ' + iDiaI.toLocaleDateString() + ' a ' + iDiaF.toLocaleDateString()
+                        break;
+                      default:
+                        hRep: 'pontual (sessão única)'
+                        hData = ', em ' + iDiaI.toLocaleDateString()
+                        break;
+                    }
+                    txt = txt + 'O funcionário ' + i.nome + ' já está nesta sala em sessão ' + hRep + hSem + hData + '.\n'
+                  }
+                //Agora, vejo se o mesmo profissional já está em outra sala no(s) mesmo(s) dia(s):
+                  if (i.sala !== h.sala
+                        && i.horario == h.horario
+                        && i.idCliente == h.idCliente
+                        && iDiaI < hDiaF){
+                          txt = txt + 'O funcionário ' + h.nome + ' já está na sala ' + i.sala + ' entre os dias '
+
+                  }
+                  break;
+                case 'Semanal':
+
+                  break;
+                case 'Quinzenal':
+
+                  break;
+                case 'Cancelar Repetição':
+
+                  break;
+                default:
+
+                  break;
+              }
+              break;
+            case 'E':
+
+              break;
+            case 'S':
+
+              break;
+            default:
+              break;
+          }
+
+        }else{ // é cliente
+
+        }
+
+        texto01 = texto01 + txt
+      }
+      console.log(texto01)
+    }
+
+    compara(a: Agenda, b: Agenda){
+      /* SE FOR EQUIPE (DONO DA SALA):*/
+
+      /*SE FOR UMA SESSÃO DE REPETIÇÃO QUE NÃO CASAR COM AS REPETIÇÕES DO DONO DA SALA */
+
+    }
+
+
+
+
+
+
+
+
+
+public diff: boolean = true
     async salvaSessao(){
+      /* validações*/
+
+
+       /* fim das validações*/
+
+
       if (this.perfilService.validaPerfil(0,11) == false){
         alert('Você não tem permissão para alterar agendas.')
       }else{
-     let diff = true
-      if (diff == true){
+
+      if (this.diff == true){
         let sessao = '';
         let dataFim = new Date().toISOString();
         let dataIni = new Date().toISOString();
@@ -224,19 +432,19 @@ async BuscaAg(p: string){
             }
           }
         }
-        if (this.agendaService.celSelect.status == 'Sala' || this.agendaService.celSelect.status == 'Pendente'){
+        if (this.agendaService.celSelect.status == 'Sala' || this.agendaService.celSelect.status == 'Pendente' || this.agendaService.celSelect.status == ''){
           status = this.agendaService.celSelect.status
           switch (this.agendaService.celSelect.repeticao){
             case 'Sessão única':
               sessao = 'Unica';
               status = this.agendaService.celSelect.status !== undefined ? this.agendaService.celSelect.status : 'Pendente';
-              this.agendaService.celSelect.configRept = "X";
+              this.agendaService.celSelect.configRept = "U%" + this.agendaService.diaSemana + '%' + this.agendaService.parImpar;
               dataFim = this.agendaService.dia
               dataIni = this.agendaService.dia
               break;
             case 'Diária':
               sessao = 'Diaria';
-              this.agendaService.celSelect.configRept = "D%" + this.agendaService.dia.substring(0,2) + '%' + this.agendaService.parImpar
+              this.agendaService.celSelect.configRept = "D%" + this.agendaService.diaSemana + '%' + this.agendaService.parImpar;
               dataFim = '2100-01-01'
               dataIni = this.agendaService.celSelect.diaI !== undefined && this.agendaService.celSelect.diaI !== '' ? this.agendaService.celSelect.diaI : this.agendaService.dia
               break;
@@ -265,12 +473,14 @@ async BuscaAg(p: string){
               break;
             default:
               sessao = 'Unica';
+              this.agendaService.celSelect.configRept = "U%" + this.agendaService.diaSemana + '%' + this.agendaService.parImpar;
               dataFim = this.agendaService.dia
               status = this.agendaService.celSelect.status !== undefined ? this.agendaService.celSelect.status : 'Pendente';
               dataIni = this.agendaService.celSelect.diaI !== undefined && this.agendaService.celSelect.diaI !== '' ? this.agendaService.celSelect.diaI : this.agendaService.dia
           }
         }else{
           sessao = 'Unica';
+          this.agendaService.celSelect.configRept = "U%" + this.agendaService.diaSemana + '%' + this.agendaService.parImpar;
           dataFim = this.agendaService.dia;
           dataIni = this.agendaService.dia;
           status = this.agendaService.celSelect.status !== undefined ? this.agendaService.celSelect.status : 'Pendente';
@@ -285,11 +495,15 @@ async BuscaAg(p: string){
 
         const horaFormatada = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
         const Usr = this.userService.getUserA().getValue();
-
-        if (this.cellAnt.status == ''|| this.cellAnt.status == 'Vago'){
-          texto = 'Agendamento de ' + this.agendaService.celSelect.subtitulo + '. ';
-          this.agendaService.celSelect.status == 'Pendente';
+        if (this.agendaService.celSelect.horario == 'manhã'|| this.agendaService.celSelect.horario == 'tarde'){
+          this.agendaService.celSelect.status == 'Sala';
+        }else{
+          if (this.cellAnt.status == ''|| this.cellAnt.status == 'Vago'){
+            texto = 'Agendamento de ' + this.agendaService.celSelect.subtitulo + '. ';
+            this.agendaService.celSelect.status == 'Pendente';
+          }
         }
+
         if(this.agendaService.celSelect.status == 'Vago'){
           texto = 'Sessão anterior Excluída.';
           status = 'Vago'
@@ -350,29 +564,30 @@ async BuscaAg(p: string){
         //SALVA O FINANCEIRO CASO REALIZADA OU FALTA
 
         //------------
+
         if(this.agendaService.celSelect.id == 0 || this.agendaService.celSelect.id == undefined){
           this.agendaService.celSelect.id = 0
           console.log(this.agendaService.celSelect)
           this.salvaAgenda(this.agendaService.celSelect)
         }
         else{
+          if(this.agendaService.celSelect.horario !== 'manhã' && this.agendaService.celSelect.horario !== 'tarde'){
+            //const resp = await this.buscaFinanceiro(this.agendaService.celSelect.id)
+            if(this.dado.idCliente == this.agendaService.celSelect.idCliente){
+              this.dado.data = new Date(this.agendaService.celSelect.dtAlt).toISOString();
+              this.dado.valor = this.agendaService.celSelect.valor !== undefined && this.agendaService.celSelect.valor !== null ? this.agendaService.celSelect.valor : 0;
+              this.dado.idFuncAlt = this.agendaService.celSelect.idFuncAlt
+              const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.diaI
+              this.dado.descricao = texto
+              console.log(this.dado)
+              //const ok = this.updateFin(this.dado)
+            }
+          }
           if (this.agendaService.celSelect.repeticao == 'Unica' && reptOriginal !== 'Unica'){
             this.agendaService.celSelect.id = 0
             console.log(this.agendaService.celSelect)
             this.salvaAgenda(this.agendaService.celSelect)
           }else{
-            if(this.agendaService.celSelect.horario !== 'manhã' && this.agendaService.celSelect.horario !== 'tarde'){
-              const resp = await this.buscaFinanceiro(this.agendaService.celSelect.id)
-              if(this.dado.idCliente == this.agendaService.celSelect.idCliente){
-                this.dado.data = new Date(this.agendaService.celSelect.dtAlt).toISOString();
-                this.dado.valor = this.agendaService.celSelect.valor !== undefined && this.agendaService.celSelect.valor !== null ? this.agendaService.celSelect.valor : 0;
-                this.dado.idFuncAlt = this.agendaService.celSelect.idFuncAlt
-                const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.diaI
-                this.dado.descricao = texto
-                console.log(this.dado)
-                const ok = this.updateFin(this.dado)
-              }
-            }
             this.updateAgenda(this.agendaService.celSelect.id, this.agendaService.celSelect)
           }
 
@@ -402,10 +617,11 @@ async BuscaAg(p: string){
       nome: '',
       descricao: '',
       data: '',
-      valor: -1000009,
+      saldo: 0,
+      valor: null,
       selecionada: false,
       recibo: '',
-      refAgenda: 0,
+      refAgenda: '0',
     }
     async buscaFinanceiro(id: number){
         try{
@@ -415,6 +631,7 @@ async BuscaAg(p: string){
             this.dado.idFuncAlt = (await resp).idFuncAlt
             this.dado.nome = (await resp).nome
             this.dado.descricao = (await resp).descricao
+
             this.dado.valor = (await resp).valor
             this.dado.selecionada = (await resp).selecionada
             this.dado.recibo = (await resp).recibo
@@ -442,7 +659,7 @@ async BuscaAg(p: string){
     }
 
     teste(){
-
+        this.validacoes()
       }
 
 
@@ -484,7 +701,7 @@ async BuscaAg(p: string){
        console.log(DadosEntrada)
       const okCriaAgenda = await this.agendaService.CreateAgenda(DadosEntrada)
       if (DadosEntrada.idCliente!== undefined && DadosEntrada.subtitulo !== undefined){
-        if (DadosEntrada.idCliente !== 0){
+        if (DadosEntrada.idCliente !== 0 && DadosEntrada.status !== 'Sala'){
           let area = '';
           for(let i of this.shared.ListaValores){
             if (DadosEntrada.subtitulo == i.nome){
@@ -501,7 +718,7 @@ async BuscaAg(p: string){
         }
       }
     }
-
+        if(DadosEntrada.status !== 'Sala'){
           const x = this.agendaService.celSelect.dtAlt !== undefined ? new Date(this.agendaService.celSelect.dtAlt) :new Date();
           this.dado.data = x.toISOString().split('T')[0]
           this.dado.valor = this.agendaService.celSelect.valor !== undefined && this.agendaService.celSelect.valor !== null ? this.agendaService.celSelect.valor : 0;
@@ -523,10 +740,11 @@ async BuscaAg(p: string){
               i.horario == this.agendaService.celSelect.horario &&
               i.unidade == this.agendaService.celSelect.unidade
                 ){
-                  this.dado.refAgenda = i.id !== undefined ? i.id : 0;
+                  this.dado.refAgenda = i.id !== undefined ? i.id.toString() : '0';
                 }
           }
           const ok = await this.createFin(this.dado)
+        }
           alert('Sessão gravada!');
           this.delay(100);
           this.router.navigate(['/agenda']);
