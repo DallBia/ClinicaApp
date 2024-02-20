@@ -1,3 +1,4 @@
+import { Tipo } from 'src/app/models/Tipo';
 import { DadosformComponent } from './../dadosform/dadosform.component';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -541,7 +542,7 @@ public diff: boolean = true
         this.agendaService.celSelect.idFuncAlt = usrId
         this.agendaService.celSelect.diaI = dataIni//new Date(dataIni).toISOString();
         this.agendaService.celSelect.diaF = dataFim //new Date(dataFim).toISOString();
-        this.agendaService.celSelect.unidade = 1;
+        this.agendaService.celSelect.unidade = this.agendaService.celSelect.valor !== null && this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 1;
         this.agendaService.celSelect.horario = this.agendaService.horario;
         this.agendaService.celSelect.sala = this.agendaService.sala;
         this.agendaService.celSelect.dtAlt = new Date().toISOString();
@@ -562,6 +563,22 @@ public diff: boolean = true
         }
         //-----------------------------------------------------------------------
         //SALVA O FINANCEIRO CASO REALIZADA OU FALTA
+        if(this.agendaService.celSelect.status == 'Realizado' || this.agendaService.celSelect.status == 'Falta'){
+          if (this.agendaService.celSelect.unidade > 0){
+            const dado: Tipo = {
+              id: this.agendaService.celSelect.idCliente,
+              nome: this.agendaService.celSelect.unidade + '|' + this.agendaService.celSelect.id + '|' + this.agendaService.celSelect.idFuncAlt
+            }
+            const rFin = await this.financeiroService.validarSaldo(dado);
+            try{
+              const vlr = parseFloat(rFin)
+              this.agendaService.celSelect.unidade = vlr;
+            }catch{
+            }
+
+          }
+
+        }
 
         //------------
 
@@ -590,7 +607,6 @@ public diff: boolean = true
           }else{
             this.updateAgenda(this.agendaService.celSelect.id, this.agendaService.celSelect)
           }
-
         }
       }
     }

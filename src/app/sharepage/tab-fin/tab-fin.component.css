@@ -7,7 +7,18 @@
 .linha{
 border-bottom: solid 1px  pink;
 }
-
+.pendente {
+  color: blue;
+}
+.pg {
+  color: rgb(122, 122, 122);
+}
+.realizado {
+  color: green;
+}
+.falta {
+  color: red;
+}
 .t01{
   font-family: 'Roboto', monospace;
   width: 55%;

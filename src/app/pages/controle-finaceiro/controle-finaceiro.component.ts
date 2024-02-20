@@ -171,6 +171,9 @@ altCliFunc(){
     const r = await this.finService.chamarFin(dado)
         let n: number = 0;
         let data = new Date();
+
+    const fin = await this.finService.getFinanceiroByCliente(parseInt(id))
+
         for (let i of r){
           let proxData = '';
           if (i.repeticao !== 'Unica'){
@@ -182,7 +185,7 @@ altCliFunc(){
               }else{
                 const val = i.configRept.split('%')
                 const dt = this.shared.datas(data.toISOString().split('T')[0], 'Tela')
-                proxData = dt + ' (' + this.semana + '/rept ' + val[0] + ')'
+                proxData = dt + ' (' + this.semana + ':rept ' + val[0] + ')'
                 data = new Date();
                 console.log(i.id + ' - ' + proxData)
               }
@@ -202,19 +205,34 @@ altCliFunc(){
                 if (indiceAbreParenteses !== -1 && indiceFechaParenteses !== -1) {
                     // Extraia a substring entre os parênteses
                     nMulti = i.historico.substring(indiceAbreParenteses + 1, indiceFechaParenteses);
+                    nMulti = nMulti.replace(' de ','/')
                   }
 
 
-              proxData = this.shared.datas(dt, 'Tela') + ' (' + i.diaDaSemana + '/multi ' + nMulti +')'
+              proxData = this.shared.datas(dt, 'Tela') + ' (' + i.diaDaSemana + ':pct ' + nMulti +')'
             }
           }
           }
           const num1 = i.valor !== undefined && i.valor !== null? i.valor : 0;
-          const vlr1 = new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'}).format(num1);
+          const vlr1 = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(num1);
             let ordem = proxData.substring(0, 10);
             ordem = ordem.substring(6,9) +  ordem.substring(3,4) + ordem.substring(0,1) + i.horario
+            let prof = i.profis !== undefined && i.profis !== null ? i.profis : '-'
+            prof = prof.length > 15 ? prof.substring(0,12) + '...' : prof;
+            let recibo = '-'
+            let dadopagto = ''
+            let saldo = 0;
+            for (let l of fin){
+              if (l.refAgenda == i.id?.toString()){
+                recibo = recibo + l.recibo;
+                const vlr = l.valor !== undefined && l.valor !== null ? l.valor : 0;
+                let d = l.data;
+                d = d.substring(8,10) + '/' + d.substring(5,7) + '/' + d.substring(0,4)
+                const dadopg = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(vlr) + '-' + d;
+                dadopagto = dadopagto + dadopg + '-'
+                saldo = saldo + l.saldo;
+              }
+            }
           const lin: TableFin = {
             id: n,
             idAgenda: i.id !== undefined ? i.id : 0,
@@ -223,12 +241,12 @@ altCliFunc(){
             dia: proxData,
             hora: i.horario !== undefined ? i.horario : '-',
             servico: i.subtitulo !== undefined ? i.subtitulo : '-',
-            profis: i.profis !== undefined ? i.profis : '-',
+            profis: prof,
             valor: num1,
             multi: i.multi,
-            pago: 0,
-            dtPago: '-',
-            recibo: '0',
+            pago: saldo,
+            dtPago: dadopagto,
+            recibo: recibo,
             descricao: 'string',
             presenca: i.status !== undefined ? i.status : '---',
             ordem: ordem !== undefined ? ordem : '',
@@ -243,10 +261,38 @@ altCliFunc(){
                 verif = true
               }
           }
+
           if (verif == false){
             n += 1
             this.finService.tabFinanceira.push(lin)
             this.totalValor += lin.valor;
+            this.totalPagto += lin.pago;
+          }
+        }
+        for (let l of fin){
+          if (l.refAgenda == 'pg'){
+            let d = l.data;
+                d = d.substring(8,10) + '/' + d.substring(5,7) + '/' + d.substring(0,4)
+            const lin: TableFin = {
+              id: n,
+              idAgenda: 0,
+              idFinanceiro: l.id !== undefined ? l.id : 0,
+              selecionada: false,
+              dia: d,
+              hora: '-',
+              servico: l.descricao,
+              profis: '-',
+              valor: l.valor !== null ? l.valor : 0,
+              multi: '-',
+              pago: l.saldo,
+              dtPago: new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(l.saldo) + ' (saldo)',
+              recibo: l.recibo,
+              descricao: l.descricao,
+              presenca: '---',
+              ordem: 'PG' + new Date().toISOString(),
+            }
+            n += 1
+            this.finService.tabFinanceira.push(lin)
             this.totalPagto += lin.pago;
           }
         }
@@ -352,9 +398,6 @@ calcDia(dia0: string, valid: string): boolean{
     if(this.finService.MostraInfo == false){
       alert ('Não há nada a ser salvo por enquanto...')
     }else{
-
-
-
       const valorNumerico = this.finService.info_Valor.replace(/[^\d,]/g, '');
       const valorPontoFlutuante = valorNumerico.replace(',', '.');
       const resultado = parseFloat(valorPontoFlutuante);

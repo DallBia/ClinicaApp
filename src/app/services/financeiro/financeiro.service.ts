@@ -100,7 +100,19 @@ abrirEdicao(){
       throw error; // Você pode personalizar essa parte conforme sua necessidade
     }
   }
+  async getFinanceiroByCliente(id: number): Promise<Financeiro[]> {
+    try {
+      const response = await this.http.get<Response<Financeiro[]>>(`${this.apiUrl}/Cliente/${id}`).toPromise();
 
+      if (response && response.dados !== undefined && response.sucesso) {
+        return response.dados;
+      } else {
+        throw new Error('Erro no getFinanceiro by Agenda.');
+      }
+    } catch (error) {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    }
+  }
 
   async getFinanceiroByAgenda(id: number): Promise<Financeiro> {
     try {
@@ -115,6 +127,21 @@ abrirEdicao(){
       throw error; // Você pode personalizar essa parte conforme sua necessidade
     }
   }
+
+  async validarSaldo(valor: Tipo): Promise<string> {
+    try {
+      const response = await this.http.put<Response<Financeiro>>(`${this.apiUrl}/Saldo` , valor).toPromise();
+
+      if (response && response.dados !== undefined && response.sucesso) {
+        return response.mensagem;
+      } else {
+        throw new Error('Erro no update do Financeiro');
+      }
+    } catch (error) {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    }
+  }
+
 
 
 

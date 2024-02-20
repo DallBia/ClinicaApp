@@ -1,4 +1,4 @@
-<table style="width: 100%;">
+  <table style="width: 100%;">
   <thead class="cabeçalho">
     <th>X</th>
     <th>Dia</th>
@@ -17,10 +17,13 @@
       <td>{{l.hora}}</td>
       <td>{{l.servico}}</td>
       <td>{{l.profis}}</td>
-      <td>{{l.presenca}}</td>
-      <td>{{l.valor | currency:'BRL' }}</td>
-      <td>{{l.pago | currency:'BRL' }} - {{l.dtPago | date:'dd/MM/yyyy' }} </td>
-      <td>{{l.recibo}}</td>
+      <td *ngIf="l.presenca == 'Pendente'" class="pendente">{{l.presenca}}</td>
+      <td *ngIf="l.presenca == 'Falta'" class="falta">{{l.presenca}}</td>
+      <td *ngIf="l.presenca == 'Realizado'" class="realizado">{{l.presenca}}</td>
+      <td *ngIf="l.presenca == '---'" class="pg">{{l.presenca}}</td>
+      <td style="text-align: right;">{{l.valor | currency:'BRL' }}</td>
+      <td style="text-align: right;">{{l.dtPago }} </td>
+      <td style="text-align: right;">{{l.recibo}}</td>
     </tr>
   </tbody>
 </table>
