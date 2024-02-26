@@ -29,22 +29,20 @@
       <div class="bloco-input" *ngIf="this.finService.MostraInfo">
         <div class="inp-sup" style="top: 0;">
           <div class="cjt1">
-            <span class="cjtLbl">Movimento</span>
+            <span class="cjtLbl">Cliente</span>
             <input class="cjtInp" [(ngModel)]="this.finService.info_Movimento">
           </div>
           <div class="cjt2">
-            <span class="cjtLbl">Valor</span>
-            <span class="cjtLbl2" (click)="this.finService.AltCD()" [style.color]="this.finService.info_Credito ? 'white' : 'black'" [style.background-color]="this.finService.info_Credito ? 'var(--cor-media)' : 'white'">Custo</span>
-            <span class="cjtLbl2" (click)="this.finService.AltCD()" [style.color]="!this.finService.info_Credito ? 'white' : 'black'" [style.background-color]="!this.finService.info_Credito ? 'var(--cor-media)' : 'white'">Pagto</span>
+            <span class="cjtLbl">Valor do Serviço</span>
             <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info_Valor" appCurrency>
           </div>
           <div class="cjt2" style="width: 15%;">
-            <span class="cjtLbl">Data</span>
+            <span class="cjtLbl">Data da sessão </span>
             <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info_Data">
           </div>
           <div class="cjt2">
-            <span class="cjtLbl">Atualizado por:</span>
-            <span class="cjtLbl2">{{this.finService.info_AtualizadoPor}}</span>
+            <span class="cjtLbl">Serviço:</span>
+            <input class="cjtInp" (disabled)="true">
           </div>
         </div>
         <div class="inp-sup" style="top: 50%;">
@@ -52,13 +50,17 @@
             <span class="cjtLbl">Descrição</span>
             <input class="cjtInp" [(ngModel)]="this.finService.info_Descricao">
           </div>
-          <div class="cjt2" style="width: 15%;" *ngIf="this.finService.idLinha > 0">
-            <span class="cjtLbl">Gerar Pagamento</span>
-            <input class="cjtInp" appCurrencyInput [(ngModel)]="this.finService.info_GeraPagto" (focus)="receberPagto(this.finService.info_Valor)" [ngModelOptions]="{updateOn: 'blur'}">
+          <div class="cjt2">
+            <span class="cjtLbl">Pagamento</span>
+            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info_Valor" appCurrency>
           </div>
           <div class="cjt2" style="width: 15%;">
-            <span class="cjtLbl">Data</span>
-            <input class="cjtInp" appDateMask [(ngModel)]="this.finService.info_DataAt">
+            <span class="cjtLbl">Data pagto</span>
+            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info_Data">
+          </div>
+          <div class="cjt2">
+            <span class="cjtLbl">Recibo:</span>
+            <input class="cjtInp">
           </div>
         </div>
       </div>
@@ -66,8 +68,32 @@
   </div>
 
   <div class="lado-direito">
-    <div class="superior-d">
-      <!-- <app-filtro style="width: 100%; height: 100%; font-size:medium;" ></app-filtro> -->
+    <div class="superior-d" style="padding-left: 5px; padding-right: 5px;">
+
+      <div class="interno">
+        <div>
+          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro001"><span style="font-size: 1.5vh;">Apenas cliente atual</span>
+        </div>
+        <div>
+          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro002"><span style="font-size: 1.5vh;">Mostrar Pagtos efetuados</span>
+        </div>
+
+      </div>
+      <div class="interno">
+        <span style="font-size: 1.5vh;">Data: de </span><input type="date" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro003">
+        <span style="font-size: 1.5vh;"> até</span><input type="date" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro004">
+      </div>
+      <div class="interno">
+        <div>
+          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro005"><span style="font-size: 1.5vh;">Inc. Pendente</span>
+        </div>
+        <div>
+          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro006"><span style="font-size: 1.5vh;">Inc. pagos</span>
+        </div>
+        <div>
+          <span style="background-color: rgb(138, 1, 74); color:rgb(246, 203, 222); border-radius: 5px; padding-left: 10px; padding-right: 10px;" (click)="this.finService.Filtra()">FILTRAR</span>
+        </div>
+      </div>
     </div>
     <div class="e-foto">
       <img *ngIf="this.clienteService.ClienteA.getValue() !== 0" [src]="this.finService.Atual.foto" id="minhaImagem" class="id-Foto">

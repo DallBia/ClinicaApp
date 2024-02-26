@@ -38,6 +38,13 @@ export class FinanceiroService {
   public info_refAg: string = '0';
   public info_Recibo: string = '';
 
+  public filtro001: boolean = true; //checa se é só o cliente selecionado
+  public filtro002: boolean = false; //checa se mostra pagtos efetuados
+  public filtro003: string = ''; // data inicial
+  public filtro004: string = ''; // data final
+  public filtro005: boolean = false; //checa se mostra em aberto
+  public filtro006: boolean = false; //checa se mostra pagos
+
 public entradas: string = 'R$ 0,00';
 public saidas: string = 'R$ 0,00';
 public saldo: string = 'R$ 0,00';
@@ -67,6 +74,15 @@ AltCD(){
 }
 abrirEdicao(){
 
+}
+
+Filtra(){
+  console.log(this.filtro001)
+  console.log(this.filtro002)
+  console.log(this.filtro003)
+  console.log(this.filtro004)
+  console.log(this.filtro005)
+  console.log(this.filtro006)
 }
 
   private apiUrl = `${environment.ApiUrl}/Financeiro`;

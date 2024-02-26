@@ -109,7 +109,7 @@ altCliFunc(){
             this.router.navigate(['/inicio']);
           }
 
-
+    this.finService.MostraInfo = false;
     this.finService.tabFinanceira = [];
     this.BuscaAg()
     console.log('Concluído')
@@ -162,10 +162,18 @@ altCliFunc(){
 
     const idTmp = window.sessionStorage.getItem('nCli');
     id = idTmp == null ? '0' : idTmp;
-    const dia = new Date().toISOString();
+
+    const diaI = this.finService.filtro003 !== '' ? new Date(this.finService.filtro003).toISOString() : new Date('1900-01-01').toISOString();
+    const diaF = this.finService.filtro004 !== '' ? new Date(this.finService.filtro004).toISOString() : new Date('2100-01-01').toISOString();
+    let f01 = this.finService.filtro001 == true ? 'T' : 'F';
+    const f02 = this.finService.filtro002 == true ? 'T' : 'F';
+    const f05 = this.finService.filtro005 == true ? 'T' : 'F';
+    const f06 = this.finService.filtro006 == true ? 'T' : 'F';
+    f01 = id !== '0' ? f01 : 'F';
+    const info = f01 + '|' + f02 + '|' + diaI + '|' + diaF + '|' + f05 + '|' + f06 + '|'
     const dado: Tipo = {
       id: parseInt(id),
-      nome: dia
+      nome: info
     }
     if (id !== '0'){
     const r = await this.finService.chamarFin(dado)
@@ -176,6 +184,7 @@ altCliFunc(){
 
         for (let i of r){
           let proxData = '';
+          this.NomeCliente = i.nome !== undefined ? i.nome : this.NomeCliente;
           if (i.repeticao !== 'Unica'){
             let resp = false
             while (resp == false){
@@ -300,7 +309,6 @@ altCliFunc(){
         this.totalRegistros = n;
         this.diferenca = this.totalValor - this.totalPagto
     }
-
   }
 
 

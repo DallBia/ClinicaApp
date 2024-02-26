@@ -394,7 +394,26 @@ async BuscaAg(p: string){
     }
 
 
-
+  haDonoSala(): boolean{
+    let resp = false
+    this.agendaService.celSelect.profis = '';
+    if (this.agendaService.celSelect.horario !== 'manhã' && this.agendaService.celSelect.horario !== 'tarde'){
+      let hora = this.agendaService.celSelect.horario?.substring(0,2) !== undefined ? this.agendaService.celSelect.horario?.substring(0,2) : '00';
+      let periodo = parseInt(hora) > 12 ? 'tarde' : 'manhã'
+      for (let a of this.agendaService.agendaDia){
+        if (a.sala == this.agendaService.celSelect.sala && a.horario == 'manhã'){
+          this.agendaService.celSelect.profis = a.nome
+        }
+      }
+      for (let a of this.agendaService.agendaDia){
+        if (a.sala == this.agendaService.celSelect.sala && a.horario == periodo){
+          this.agendaService.celSelect.profis = a.nome
+        }
+      }
+    }
+    resp = this.agendaService.celSelect.profis !== '' && this.agendaService.celSelect.profis !== undefined ? true : false;
+    return resp;
+  }
 
 
 
@@ -412,12 +431,26 @@ public diff: boolean = true
       if (this.perfilService.validaPerfil(0,11) == false){
         alert('Você não tem permissão para alterar agendas.')
       }else{
+        if(this.agendaService.celSelect.horario !== 'manhã' && this.agendaService.celSelect.horario !== 'tarde'){
+           this.diff = this.haDonoSala()
+        }
 
-      if (this.diff == true){
+
+        if (this.diff == true){
         let sessao = '';
         let dataFim = new Date().toISOString();
         let dataIni = new Date().toISOString();
         let status = 'Pendente'
+        if (this.agendaService.celSelect.horario !== 'manhã' && this.agendaService.celSelect.horario !== 'tarde'){
+          let hora = this.agendaService.celSelect.horario?.substring(0,2) !== undefined ? this.agendaService.celSelect.horario?.substring(0,2) : '00';
+          let periodo = parseInt(hora) > 12 ? 'tarde' : 'manhã'
+          for (let a of this.agendaService.agendaDia){
+            if (a.sala == this.agendaService.celSelect.sala && a.horario == periodo){
+              this.agendaService.celSelect.profis = a.nome
+            }
+          }
+        }
+
         const reptOriginal = this.agendaService.celSelect.repeticao
         this.agendaService.celSelect.idCliente = 0;
          if (this.agendaService.celSelect.status == 'Sala'){
@@ -558,9 +591,11 @@ public diff: boolean = true
         this.agendaService.celSelect.dtAlt = this.shared.datas(this.agendaService.celSelect.dtAlt, 'Banco')
         //----------------------------------------------------------------------------
         // AJUSTE DE STATUS:
+
         if (this.agendaService.celSelect.status.length < 2){
           this.agendaService.celSelect.status = 'Pendente';
         }
+
         //-----------------------------------------------------------------------
         //SALVA O FINANCEIRO CASO REALIZADA OU FALTA
         if(this.agendaService.celSelect.status == 'Realizado' || this.agendaService.celSelect.status == 'Falta'){
@@ -608,6 +643,8 @@ public diff: boolean = true
             this.updateAgenda(this.agendaService.celSelect.id, this.agendaService.celSelect)
           }
         }
+      }else{
+        alert('Não há um profissional nesta sala para atender o Cliente.')
       }
     }
     }
@@ -728,7 +765,7 @@ public diff: boolean = true
             const respCliente = await this.clienteService.GetClientesById(DadosEntrada.idCliente)
           let cliente: Cliente = respCliente.dados
           if (cliente.areaSession.includes(area) == false) {
-          cliente.areaSession = cliente.areaSession + DadosEntrada.subtitulo + ','
+          cliente.areaSession = cliente.areaSession + DadosEntrada.subtitulo + ', '
           }
           const okCLiente = await this.clienteService.updateCliente(cliente)
         }

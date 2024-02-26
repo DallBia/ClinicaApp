@@ -6,6 +6,7 @@
 
 .linha{
 border-bottom: solid 1px  pink;
+font-size: 1.7vh;
 }
 .pendente {
   color: blue;
