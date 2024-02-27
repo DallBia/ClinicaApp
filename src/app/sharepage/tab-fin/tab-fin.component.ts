@@ -33,21 +33,7 @@ destacarLinha(l:any) {
           sel.valor = 0;
         }
         sel.selecionada = true;
-        // for(let i of this.finService.ListaFuncionario){
-        //   if(i.id == sel.idFuncAlt){
-        //     this.finService.info_AtualizadoPor = i.nome;
-        //     this.finService.info_numAtualizadoPor = i.id;
-        //   }
-        // }
-        // this.finService.idLinha = l;
-        // this.finService.info_Movimento = sel.nome
-        // const valor2 = sel.valor*(-1);
-        // this.finService.info_Valor = sel.valor < 0 ? valor2.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : sel.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        // this.finService.info_Credito = sel.valor < 0 ? false : true;
-        // this.finService.info_Data = new Date(sel.data).toLocaleDateString();
-        // this.finService.info_Descricao = sel.descricao
-        // this.finService.info_Recibo = sel.recibo
-        // this.finService.info_refAg = sel.refAgenda
+        this.finService.newInfo(false);
       }
 
       this.finService.MostraInfo = true;

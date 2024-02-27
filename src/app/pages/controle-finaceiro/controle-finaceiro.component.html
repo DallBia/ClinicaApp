@@ -6,7 +6,7 @@
         <button class="Novo">{{this.Ficha}}</button>
       </div>
       <div class="se-right" >
-        <label class="Nome">{{this.NomeCliente}}</label>
+        <label class="Nome">{{this.finService.NomeCliente}}</label>
       </div>
     </div>
     <div class="inferior-e">
@@ -30,37 +30,40 @@
         <div class="inp-sup" style="top: 0;">
           <div class="cjt1">
             <span class="cjtLbl">Cliente</span>
-            <input class="cjtInp" [(ngModel)]="this.finService.info_Movimento">
+            <input class="cjtInp" type="text" list="valores1" [(ngModel)]="finService.NomeCliente">
+            <datalist id="valores1">
+              <option *ngFor="let valor of finService.ListaCliente" [value]="valor.nome"></option>
+            </datalist>
           </div>
           <div class="cjt2">
             <span class="cjtLbl">Valor do Serviço</span>
-            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info_Valor" appCurrency>
+            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info.valor" appCurrency>
           </div>
           <div class="cjt2" style="width: 15%;">
             <span class="cjtLbl">Data da sessão </span>
-            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info_Data">
+            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info.dia">
           </div>
           <div class="cjt2">
             <span class="cjtLbl">Serviço:</span>
-            <input class="cjtInp" (disabled)="true">
+            <input class="cjtInp" (disabled)="true" [(ngModel)]="this.finService.info.servico">
           </div>
         </div>
         <div class="inp-sup" style="top: 50%;">
           <div class="cjt1">
             <span class="cjtLbl">Descrição</span>
-            <input class="cjtInp" [(ngModel)]="this.finService.info_Descricao">
+            <input class="cjtInp" [(ngModel)]="this.finService.info.descricao">
           </div>
           <div class="cjt2">
             <span class="cjtLbl">Pagamento</span>
-            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info_Valor" appCurrency>
+            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info.pago" appCurrency>
           </div>
           <div class="cjt2" style="width: 15%;">
             <span class="cjtLbl">Data pagto</span>
-            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info_Data">
+            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info.dtPago">
           </div>
           <div class="cjt2">
             <span class="cjtLbl">Recibo:</span>
-            <input class="cjtInp">
+            <input class="cjtInp" [(ngModel)]="this.finService.info.recibo">
           </div>
         </div>
       </div>
@@ -112,7 +115,7 @@
       <button class="btnBranco" (click)="this.altTab()">
         {{this.btnTab}}
       </button>
-      <button class="btnBranco" [style.color]="this.finService.MostraInfo ? 'white' : 'black'" [style.background-color]="this.finService.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(this.finService.MostraInfo)">
+      <button class="btnBranco" [style.color]="this.finService.MostraInfo ? 'white' : 'black'" [style.background-color]="this.finService.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="finService.newInfo(this.finService.MostraInfo)">
         {{this.finService.MostraInfo ? 'Cancelar nova informação' : 'Inserir nova informação'}}
       </button>
       <button class="Salvar" (disabled)="!this.finService.MostraInfo" (click)="this.Enviar()">

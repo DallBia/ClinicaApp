@@ -161,7 +161,9 @@ altCliFunc(){
     let id = '0';
 
     const idTmp = window.sessionStorage.getItem('nCli');
+
     id = idTmp == null ? '0' : idTmp;
+    this.finService.idUser = parseInt(id)
 
     const diaI = this.finService.filtro003 !== '' ? new Date(this.finService.filtro003).toISOString() : new Date('1900-01-01').toISOString();
     const diaF = this.finService.filtro004 !== '' ? new Date(this.finService.filtro004).toISOString() : new Date('2100-01-01').toISOString();
@@ -366,22 +368,24 @@ calcDia(dia0: string, valid: string): boolean{
       }
     }
   }
+
+
   receberPagto(valor: string){
     if (this.finService.info_Valor !== undefined){
 
-      let valorOriginal = parseFloat(this.finService.info_Valor.replace(/[^\d,]/g, '').replace(',', '.'));
-      let valorPagto = parseFloat(this.finService.info_GeraPagto.replace(/[^\d,]/g, '').replace(',', '.'));
-      let origNumerico: number = !Number.isNaN(valorOriginal) ? valorOriginal : 0;
-      let pagtoNumerico: number = !Number.isNaN(valorPagto) ? valorPagto : 0;
+      // let valorOriginal = parseFloat(this.finService.info_Valor.replace(/[^\d,]/g, '').replace(',', '.'));
+      // let valorPagto = parseFloat(this.finService.info_GeraPagto.replace(/[^\d,]/g, '').replace(',', '.'));
+      // let origNumerico: number = !Number.isNaN(valorOriginal) ? valorOriginal : 0;
+      // let pagtoNumerico: number = !Number.isNaN(valorPagto) ? valorPagto : 0;
 
-      if (origNumerico > 0 && pagtoNumerico == 0){
-        this.finService.info_GeraPagto = this.finService.info_Valor
-        let dt =  new Date().toISOString();
-        dt = dt.substring(0,10)
-        let dt2 = dt.split('-')
-        dt = dt2[2] + '/' + dt2[1] + '/' + dt2[0]
-        this.finService.info_DataAt = dt;
-      }
+      // if (origNumerico > 0 && pagtoNumerico == 0){
+      //   this.finService.info_GeraPagto = this.finService.info_Valor
+      //   let dt =  new Date().toISOString();
+      //   dt = dt.substring(0,10)
+      //   let dt2 = dt.split('-')
+      //   dt = dt2[2] + '/' + dt2[1] + '/' + dt2[0]
+      //   this.finService.info_DataAt = dt;
+      // }
     }
   }
 
@@ -390,57 +394,25 @@ calcDia(dia0: string, valid: string): boolean{
 
 
 
-  newInfo(opt: boolean){
-    if (this.finService.Atual.id == 0){
-      alert ('Você deve primeiro selecionar um cliente na guia FICHA DE CLIENTES')
-    }else{
-      this.finService.MostraInfo = !opt;
-      if(this.finService.MostraInfo == false){
-        this.finService.tabFinanceira.forEach(s => s.selecionada = false);
-        this.finService.zerar();
-      }
-    }
-  }
 
   async Enviar(){
     if(this.finService.MostraInfo == false){
       alert ('Não há nada a ser salvo por enquanto...')
     }else{
-      const valorNumerico = this.finService.info_Valor.replace(/[^\d,]/g, '');
-      const valorPontoFlutuante = valorNumerico.replace(',', '.');
-      const resultado = parseFloat(valorPontoFlutuante);
-      let valor = isNaN(resultado) ? 0 : resultado;
-      if(this.finService.info_Credito == false){
-        valor =  valor*(-1)
-      }
-      const novaData = this.finService.info_Data.split('/');
-      const data = novaData[2]+'-'+novaData[1]+'-'+novaData[0]
-      const dado: Financeiro = {
-        id: this.finService.idLinha,
-        idCliente: this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0,
-        idFuncAlt: this.finService.info_numAtualizadoPor !== undefined ? this.finService.info_numAtualizadoPor : 0,
-        nome: this.finService.info_Movimento,
-        descricao: this.finService.info_Descricao,
-        data: data,
-        valor: valor,
-        selecionada: false,
-        saldo: 0,
-        refAgenda:this.finService.info_refAg,
-        recibo: this.finService.info_Recibo,
-      }
-      if(this.finService.idLinha){
-        const result = await this.finService.updateFinanceiro(dado)
-        const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
-        //this.finService.getFinanceiroById(id)
-        alert('Dados atualizados!')
-        this.router.navigate(['/controleFinaceiro']);
-      }else{
-        const result = await this.finService.createFinanceiro(dado)
-        const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
-        //this.finService.getFinanceiroById(id)
-        alert('Dados inseridos com sucesso!')
-        this.router.navigate(['/controleFinaceiro']);
-      }
+
+      // if(this.finService.idLinha){
+      //   const result = await this.finService.updateFinanceiro(dado)
+      //   const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
+      //   //this.finService.getFinanceiroById(id)
+      //   alert('Dados atualizados!')
+      //   this.router.navigate(['/controleFinaceiro']);
+      // }else{
+      //   const result = await this.finService.createFinanceiro(dado)
+      //   const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
+      //   //this.finService.getFinanceiroById(id)
+      //   alert('Dados inseridos com sucesso!')
+      //   this.router.navigate(['/controleFinaceiro']);
+      // }
     }
   }
 
