@@ -22,7 +22,13 @@ export class TabFinComponent {
 
   }
 destacarLinha(l:any) {
-  if (this.finService.Atual.id == 0){
+  let id = 0;
+    const idA = window.sessionStorage.getItem('nCli');
+      if (idA !== null){
+        id = idA !== '' ? parseInt(idA) : 0;
+      }
+      let agend = 0;
+  if (id == 0){
     alert ('Você deve primeiro selecionar um cliente na guia FICHA DE CLIENTES')
   }else{
     this.finService.tabFinanceira.forEach(s => s.selecionada = false);// Desmarcar todas as outras linhas

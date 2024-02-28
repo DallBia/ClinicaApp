@@ -234,7 +234,7 @@ margin-bottom: 10px;
 .cjt1 {
   margin-left:5px;
   height: 40%;
-  width: 50%;
+  width: 30%;
   vertical-align: top;
 
 }
@@ -266,4 +266,12 @@ margin-bottom: 10px;
   border: solid 1px var(--cor-clara);
   width: 95%;
 
+}
+.cjtInp2 {
+  font-size: medium;
+  border: solid 1px var(--cor-media);
+  width: 95%;
+  border-radius: 5px;
+  color: var(--cor-escura);
+  background-color: var(--cor-clara);
 }

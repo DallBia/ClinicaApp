@@ -37,33 +37,42 @@
           </div>
           <div class="cjt2">
             <span class="cjtLbl">Valor do Serviço</span>
-            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info.valor" appCurrency>
+            <input class="cjtInp" [disabled]="true" appCurrencyInput [(ngModel)]="finService.info_Valor" appCurrency>
           </div>
           <div class="cjt2" style="width: 15%;">
             <span class="cjtLbl">Data da sessão </span>
-            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info.dia">
+            <input class="cjtInp" [disabled]="true" appDateMask [(ngModel)]="this.finService.info_Data">
           </div>
           <div class="cjt2">
             <span class="cjtLbl">Serviço:</span>
-            <input class="cjtInp" (disabled)="true" [(ngModel)]="this.finService.info.servico">
+            <input class="cjtInp" [disabled]="true" [(ngModel)]="this.finService.info_Movimento">
+          </div>
+          <div class="cjt2">
+            <span class="cjtLbl">Atualizado por:</span>
+            <input class="cjtInp" [disabled]="true" [(ngModel)]="this.finService.info_idUser">
           </div>
         </div>
         <div class="inp-sup" style="top: 50%;">
           <div class="cjt1">
             <span class="cjtLbl">Descrição</span>
-            <input class="cjtInp" [(ngModel)]="this.finService.info.descricao">
+            <input class="cjtInp" [(ngModel)]="this.finService.info_Descricao">
           </div>
           <div class="cjt2">
             <span class="cjtLbl">Pagamento</span>
-            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info.pago" appCurrency>
+            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info_Saldo" appCurrency (blur)="AtualizaData()">
           </div>
           <div class="cjt2" style="width: 15%;">
             <span class="cjtLbl">Data pagto</span>
-            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info.dtPago">
+            <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info_DataAt">
           </div>
           <div class="cjt2">
             <span class="cjtLbl">Recibo:</span>
-            <input class="cjtInp" [(ngModel)]="this.finService.info.recibo">
+            <input class="cjtInp" [(ngModel)]="this.finService.info_Recibo">
+          </div>
+          <div class="cjt2">
+            <span class="cjtLbl">Clique p/ retirar o Pagto:</span>
+            <br>
+            <button class="cjtInp2">Retirar o Pagamento</button>
           </div>
         </div>
       </div>
@@ -75,10 +84,10 @@
 
       <div class="interno">
         <div>
-          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro001"><span style="font-size: 1.5vh;">Apenas cliente atual</span>
+          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro001"><span style="font-size: 1.5vh;">- Apenas cliente atual</span>
         </div>
         <div>
-          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro002"><span style="font-size: 1.5vh;">Mostrar Pagtos efetuados</span>
+          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro002"><span style="font-size: 1.5vh;">- Mostrar Pagtos efetuados</span>
         </div>
 
       </div>
@@ -88,13 +97,13 @@
       </div>
       <div class="interno">
         <div>
-          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro005"><span style="font-size: 1.5vh;">Inc. Pendente</span>
+          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro005"><span style="font-size: 1.5vh;">- Inc. Pendente</span>
         </div>
         <div>
-          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro006"><span style="font-size: 1.5vh;">Inc. pagos</span>
+          <input type="checkbox" style="font-size: 1.5vh;" [(ngModel)]="this.finService.filtro006"><span style="font-size: 1.5vh;">- Inc. pagos</span>
         </div>
         <div>
-          <span style="background-color: rgb(138, 1, 74); color:rgb(246, 203, 222); border-radius: 5px; padding-left: 10px; padding-right: 10px;" (click)="this.finService.Filtra()">FILTRAR</span>
+          <button style="background-color: rgb(138, 1, 74); color:rgb(246, 203, 222); border-radius: 5px; padding-left: 10px; padding-right: 10px;" (click)="this.finService.Filtra()">FILTRAR</button>
         </div>
       </div>
     </div>

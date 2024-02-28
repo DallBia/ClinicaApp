@@ -2,6 +2,7 @@ export interface TableFin{
   id: number,
   idAgenda: number,
   idFinanceiro: number,
+  idCliente: number,
   selecionada: boolean,
   dia: string,
   hora: string,

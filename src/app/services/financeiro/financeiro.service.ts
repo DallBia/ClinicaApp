@@ -17,6 +17,9 @@ import { TableFin } from 'src/app/models/Tables/TableFin';
 })
 export class FinanceiroService {
 
+  public var_Espera = false;
+
+
 
   public NomeCliente: string = ''
   public tabFinanceira: TableFin[] = []
@@ -26,6 +29,7 @@ export class FinanceiroService {
   public nCliente!: number;
   public info_Movimento: string = '';
   public info_Valor: number = 0;
+  public info_Saldo: number = 0;
   public info_Credito: boolean = true;
   public info_Debito: boolean = false;
   public info_Data: string = '';
@@ -44,25 +48,20 @@ export class FinanceiroService {
   public info_idUser: number = 0;
   public idUser: number = 0;
   public cliente: string = '';
-
-  public info: TableFin = {
+  public infoVazia: Financeiro = {
     id: 0,
-  idAgenda: 0,
-  idFinanceiro: 0,
-  selecionada: false,
-  dia: '',
-  hora: '',
-  servico: '',
-  profis: '',
-  valor: 0,
-  pago: 0,
-  dtPago: '',
-  recibo: '',
-  descricao: '',
-  presenca: '',
-  multi: '',
-  ordem: '',
+    idCliente: 0,
+    idFuncAlt: 0,
+    nome:  '',
+    data:  '',
+    descricao:  '',
+    valor: 0,
+    saldo: 0,
+    selecionada: false,
+    recibo:  '',
+    refAgenda:  '',
   }
+  public info: Financeiro = this.infoVazia
 
 
 
@@ -132,6 +131,9 @@ Filtra(){
   console.log(this.filtro004)
   console.log(this.filtro005)
   console.log(this.filtro006)
+  if (this.var_Espera == false){
+    alert('Desculpe, ainda estou implementando. Por enquanto, só é possível observar um cliente por vez. Previsão de ajuste: 29/02')
+  }
 }
 
   private apiUrl = `${environment.ApiUrl}/Financeiro`;
@@ -165,6 +167,7 @@ Filtra(){
       throw error; // Você pode personalizar essa parte conforme sua necessidade
     }
   }
+
   async getFinanceiroByCliente(id: number): Promise<Financeiro[]> {
     try {
       const response = await this.http.get<Response<Financeiro[]>>(`${this.apiUrl}/Cliente/${id}`).toPromise();
@@ -215,24 +218,63 @@ Filtra(){
         id = idA !== '' ? parseInt(idA) : 0;
       }
       const r = this.trazClientes('nome')
-
+      let agend = 0;
     if (id == 0){
       alert ('Você deve primeiro selecionar um cliente na guia FICHA DE CLIENTES')
     }else{
       this.MostraInfo = !opt;
+      this.zerar();
       if(this.MostraInfo == false){
         this.tabFinanceira.forEach(s => s.selecionada = false);
-        this.zerar();
       }else{
         for (let a of this.tabFinanceira){
           if (a.selecionada == true){
-            this.info = a;
+            agend = a.idAgenda
+            this.info_Data = a.dia.substring(0,10);
+            this.info_Descricao = a.descricao;
+            this.info_Recibo = a.recibo;
+            this.info_Valor = a.valor;
+            this.info_Movimento = a.servico;
+            this.info_Saldo = a.pago;
+            this.idLinha = a.id;
+            this.info = {
+              id: a.id,
+              idCliente: 0,
+              idFuncAlt: 0,
+              nome:  '',
+              data: a.dia,
+              descricao: a.descricao,
+              valor: a.valor,
+              saldo: a.pago,
+              selecionada: false,
+              recibo:  a.recibo,
+              refAgenda: a.idAgenda.toString(),
+            }
           }
         }
       }
     }
+    if (agend !== 0){
+      const nome = this.getCliente(agend)
+    }
+    console.log(this.info)
   }
 
+  async getCliente(id: number): Promise<any> {
+    const api = `${environment.ApiUrl}/Agenda`;
+
+      const response = await this.http.get<Response<Agenda>>(`${api}/Id/${id}`).toPromise();
+      if (response !== undefined) {
+        const resp = response.dados
+        this.info.idCliente = resp.idCliente !== undefined ? resp.idCliente : 0;
+        this.info.nome  = resp.nome !== undefined ? resp.nome : ''
+        this.NomeCliente = resp.nome !== undefined ? resp.nome : '(nome não encontrado)'
+        return "ok";
+      } else {
+        return '(erro)'
+      }
+
+  }
 
 calcularBalanco(){
   let entradas = 0;
@@ -262,20 +304,21 @@ formataNum(num: number): string{
   return divid
 }
   zerar(){
-    this.info_idUser = this.idUser;
-  this.info_Movimento = '';
-  this.info_Valor = 0;
-  this.info_Credito = true;
-  this.info_Debito = false;
-  this.info_Data = '';
-  this.info_GeraPagto = '';
-  this.info_Descricao = '';
-  this.info_AtualizadoPor = this.Usuário;
-  this.info_DataAt = '';
-  this.info_numAtualizadoPor = 0;
-  this.info_refAg = '0';
-  this.idLinha = 0;
-  this.info_Recibo = '';
+    //this.info_idUser = this.idUser;
+    this.info_Movimento = '';
+    this.info_Valor = 0;
+    this.info_Credito = true;
+    this.info_Debito = false;
+    this.info_Data = '';
+    this.info_GeraPagto = '';
+    this.info_Descricao = '';
+    this.info_AtualizadoPor = this.Usuário;
+    this.info_DataAt = '';
+    this.info_numAtualizadoPor = 0;
+    this.info_refAg = '0';
+    this.idLinha = 0;
+    this.info_Recibo = '';
+    this.info = this.infoVazia
 
   }
 

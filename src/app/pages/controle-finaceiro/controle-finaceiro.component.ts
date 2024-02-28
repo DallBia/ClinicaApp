@@ -36,7 +36,6 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
   // nCliente!: number;
   // Atual!: TableData;
   public Ficha: string = 'FICHA';
-  public NomeCliente: string = '';
 
   public idFoto: string = '';
   // public User!:Colaborador;
@@ -113,47 +112,6 @@ altCliFunc(){
     this.finService.tabFinanceira = [];
     this.BuscaAg()
     console.log('Concluído')
-
-
-
-//     if(this.perfilService.validaPerfil(0,9) == false){
-//       alert('Você não tem autorização para acessar esta página')
-//       this.router.navigate(['/inicio']);
-//     }
-
-
-//     this.finService.zerar();
-//     this.finService.tabFinanceira = [];
-//     this.subscription = this.clienteService.ClienteA$.subscribe(
-//       nameC => this.finService.nCliente = nameC
-//     )
-//     this.subscription = this.userService.EquipeA$.subscribe(
-//       nameC => this.nUser = nameC
-//     )
-
-//     this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-//       this.finService.Atual = clienteAtual;
-//     });
-
-//     this.UserAll = this.colaboradorService.GetColaborador();
-// // this.delay(300);
-//     const Funcionarios = this.colaboradorService.GetEquipeMinimal()
-//     if(this.finService.nCliente !== 0){
-//         this.Ficha = this.finService.Atual.Ficha;
-//       this.NomeCliente = this.finService.Atual.nome.toUpperCase();
-//       this.idFoto = '../../../assets/img/Clientes/' + this.Ficha + '.jpg'
-//       console.log(this.finService.nCliente)
-//       }else{
-//       this.Ficha = 'FICHA';
-//       this.NomeCliente = '';
-
-//     }
-//     this.finService.MostraInfo = false;
-//     //this.newInfo(this.finService.MostraInfo);
-
-//     const dados = this.BuscaValores()
-//     this.Carregar(dados);
-
   }
 
 
@@ -161,10 +119,16 @@ altCliFunc(){
     let id = '0';
 
     const idTmp = window.sessionStorage.getItem('nCli');
-
+    const r = this.finService.trazClientes('nome')
     id = idTmp == null ? '0' : idTmp;
     this.finService.idUser = parseInt(id)
 
+    for (let a of this.finService.ListaCliente){
+      if (a.id == this.finService.idUser){
+        this.finService.NomeCliente = a.nome;
+        break;
+      }
+    }
     const diaI = this.finService.filtro003 !== '' ? new Date(this.finService.filtro003).toISOString() : new Date('1900-01-01').toISOString();
     const diaF = this.finService.filtro004 !== '' ? new Date(this.finService.filtro004).toISOString() : new Date('2100-01-01').toISOString();
     let f01 = this.finService.filtro001 == true ? 'T' : 'F';
@@ -178,7 +142,7 @@ altCliFunc(){
       nome: info
     }
     if (id !== '0'){
-    const r = await this.finService.chamarFin(dado)
+    const r = await this.finService.chamarFin(dado) // traz todas as agendas de acordo com o fitro
         let n: number = 0;
         let data = new Date();
 
@@ -186,7 +150,7 @@ altCliFunc(){
 
         for (let i of r){
           let proxData = '';
-          this.NomeCliente = i.nome !== undefined ? i.nome : this.NomeCliente;
+          this.finService.NomeCliente = i.nome !== undefined ? i.nome : this.finService.NomeCliente;
           if (i.repeticao !== 'Unica'){
             let resp = false
             while (resp == false){
@@ -233,6 +197,7 @@ altCliFunc(){
             let recibo = '-'
             let dadopagto = ''
             let saldo = 0;
+            let descr = '';
             for (let l of fin){
               if (l.refAgenda == i.id?.toString()){
                 recibo = recibo + l.recibo;
@@ -240,11 +205,13 @@ altCliFunc(){
                 let d = l.data;
                 d = d.substring(8,10) + '/' + d.substring(5,7) + '/' + d.substring(0,4)
                 const dadopg = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(vlr) + '-' + d;
-                dadopagto = dadopagto + dadopg + '-'
+                dadopagto = dadopagto + dadopg + '-';
+                descr = l.descricao;
                 saldo = saldo + l.saldo;
               }
             }
           const lin: TableFin = {
+            idCliente: this.finService.idUser,
             id: n,
             idAgenda: i.id !== undefined ? i.id : 0,
             idFinanceiro: 0,
@@ -258,7 +225,7 @@ altCliFunc(){
             pago: saldo,
             dtPago: dadopagto,
             recibo: recibo,
-            descricao: 'string',
+            descricao: descr,
             presenca: i.status !== undefined ? i.status : '---',
             ordem: ordem !== undefined ? ordem : '',
           }
@@ -286,6 +253,7 @@ altCliFunc(){
                 d = d.substring(8,10) + '/' + d.substring(5,7) + '/' + d.substring(0,4)
             const lin: TableFin = {
               id: n,
+              idCliente: this.finService.idUser,
               idAgenda: 0,
               idFinanceiro: l.id !== undefined ? l.id : 0,
               selecionada: false,
@@ -340,7 +308,10 @@ calcDia(dia0: string, valid: string): boolean{
 
 
 
+AtualizaData(){
 
+  this.finService.info_DataAt = new Date().toLocaleDateString()
+}
 
 
   async BuscaValores(){
@@ -396,24 +367,52 @@ calcDia(dia0: string, valid: string): boolean{
 
 
   async Enviar(){
+    if (this.finService.var_Espera == true){
+
+
+
     if(this.finService.MostraInfo == false){
       alert ('Não há nada a ser salvo por enquanto...')
     }else{
+      console.log(this.finService.NomeCliente)
+      for (const x of this.finService.ListaCliente){
+        if (x.nome == this.finService.NomeCliente){
+          this.finService.info.idCliente = x.id
+          console.log(this.finService.info.idCliente)
+        }
+      }
+        this.finService.info.data = this.finService.info_DataAt.substring(0,10);
+        this.finService.info.data = new Date(this.finService.info.data).toISOString()
+        this.finService.info.saldo = this.finService.info_Saldo;
+        this.finService.info.descricao = this.finService.info_Descricao;
+        this.finService.info.recibo = this.finService.info_Recibo;
 
-      // if(this.finService.idLinha){
-      //   const result = await this.finService.updateFinanceiro(dado)
-      //   const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
-      //   //this.finService.getFinanceiroById(id)
-      //   alert('Dados atualizados!')
-      //   this.router.navigate(['/controleFinaceiro']);
-      // }else{
-      //   const result = await this.finService.createFinanceiro(dado)
-      //   const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
-      //   //this.finService.getFinanceiroById(id)
-      //   alert('Dados inseridos com sucesso!')
-      //   this.router.navigate(['/controleFinaceiro']);
-      // }
+      const dado = this.finService.info
+      let valid = true;
+      valid = this.finService.info.idCliente !== 0 ? valid : false;
+      valid = this.finService.info_DataAt !== '' ? valid : false;
+      valid = this.finService.info.saldo !== 0 ? valid : false;
+      valid = this.finService.info.recibo !== '' ? valid : false;
+      if (valid == true){
+        if(dado.id !== 0){    //indica que estamos alterando um registro da tabela, e não inserindo um novo
+          const result = await this.finService.updateFinanceiro(dado)
+          const id = this.finService.idUser !== undefined ? this.finService.idUser : 0;
+          //this.finService.getFinanceiroById(id)
+          alert('Dados atualizados!')
+          this.router.navigate(['/controleFinaceiro']);
+        }else{
+          const result = await this.finService.createFinanceiro(dado)
+          const id = this.finService.idUser !== undefined ? this.finService.idUser : 0;
+          //this.finService.getFinanceiroById(id)
+          alert('Dados inseridos com sucesso!')
+          this.router.navigate(['/controleFinaceiro']);
+        }
+      }
     }
+  }
+  else{
+    alert('Desculpe, estou ajustando os pagamentos. Previsão de término para 29/02...')
+  }
   }
 
 
